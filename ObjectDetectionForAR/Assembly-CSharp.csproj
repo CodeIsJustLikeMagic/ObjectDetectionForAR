@@ -67,11 +67,26 @@
     <Compile Include="Assets\Scripts\ResultsLabel.cs" />
     <Compile Include="Assets\Scripts\VisionManager.cs" />
     <None Include="Assets\Secure\authorizationKey.txt" />
+    <Reference Include="Unity.XR.Management">
+      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.Management.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Subsystem.Registration">
+      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.Subsystem.Registration.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.XR.ARSubsystems">
+      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.ARSubsystems.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.XR.ARSubsystems.Editor">
+      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.ARSubsystems.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.XR.InteractionSubsystems">
+      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.InteractionSubsystems.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
@@ -85,38 +100,23 @@
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.XR.Management">
-      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.Management.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Subsystem.Registration">
-      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.Subsystem.Registration.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.XR.ARSubsystems">
-      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.ARSubsystems.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.XR.ARSubsystems.Editor">
-      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.ARSubsystems.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.XR.InteractionSubsystems">
-      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.InteractionSubsystems.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.XR.Management.Editor">
       <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.Management.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Rider.Editor">
+      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.WindowsMixedReality.Editor">
       <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.WindowsMixedReality.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.XR.WindowsMixedReality">
       <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/Unity.XR.WindowsMixedReality.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>C:/ObjectDetectionForAR/ObjectDetectionForAR/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
