@@ -5,12 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/HelloCube.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 0
     path: Assets/Scenes/helloWorld.unity
     guid: 608fdccd31c97c944a1f149924a467b8
+  - enabled: 1
+    path: Assets/Scenes/TakeImage.unity
+    guid: ac9dfaf20bceb514c82ce2ca5454cf9e
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ba4dbd235ed941bb8fdb5a40ab00f22,
       type: 2}

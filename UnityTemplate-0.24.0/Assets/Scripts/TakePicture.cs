@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
 using System.Threading;
-
+using MagicLeap.Core.StarterKit;
 
 public class TakePicture : MonoBehaviour
 {
@@ -11,6 +11,8 @@ public class TakePicture : MonoBehaviour
     private MLInput.Controller _controller;
     private MLPrivilegeRequesterBehavior _privRequester = null;
     private bool _granted = false;
+
+
     private object _cameraLockObject = new object();
 
     private bool _isCameraConnected = false;
@@ -22,18 +24,36 @@ public class TakePicture : MonoBehaviour
     private bool _privilegesBeingRequested = false;
 
     private Thread _captureThread = null;
-
-    void Start()
+    
+    void Awake()
     {
-        MLInput.Start();
-        _controller = MLInput.GetController(MLInput.Hand.Left);
-        MLInput.OnControllerButtonUp += OnButtonUp;
+        //get privileges
+        _privRequester = GetComponent<MLPrivilegeRequesterBehavior>();
+        _privRequester.OnPrivilegesDone += HandlePrivilegesDone;
     }
 
-    private void OnDestroy()
+    void HandlePrivilegesDone(MLResult result)
     {
+        if (!result.IsOk)
+        {
+            Debug.Log("we didnt get privileges");
+        }
+        Debug.Log("we got privileges");
+        _granted = true;
+        StartCapture(); //enables camera and callbacks
+    }
+
+    void OnDestroy()
+    {
+        //clean up privileges
+        if (_privRequester != null)
+        {
+            _privRequester.OnPrivilegesDone -= HandlePrivilegesDone;
+        }
+        //clean up input
         MLInput.OnControllerButtonUp -= OnButtonUp;
         MLInput.Stop();
+        //clean up camera use
         lock (_cameraLockObject)
         {
             if (_isCameraConnected)
@@ -45,6 +65,74 @@ public class TakePicture : MonoBehaviour
             }
         }
     }
+    #region input
+    void Start()
+    {
+        //get user input. we are using bumper and trigger
+        MLInput.Start();
+        _controller = MLInput.GetController(MLInput.Hand.Left);
+        if(_controller == null)
+        {
+            Debug.Log("Controller not found. Did you start Lab?");
+            enabled = false;
+        } 
+        MLInput.OnControllerButtonUp += OnButtonUp;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        CheckTrigger();
+    }
+
+    bool pressed = false;
+
+    void OnButtonUp(byte controllerId, MLInput.Controller.Button button)
+    {
+        if (button == MLInput.Controller.Button.Bumper)
+        {
+            Debug.Log("bumper released");
+            TakeImage();
+        }
+    }
+
+    void CheckTrigger()
+    {
+        if (_controller.TriggerValue > 0.2f)
+        {
+            if (pressed == false)
+            {
+                Debug.Log("pressed Trigger");
+                TakeImage();
+            }
+            pressed = true;
+        }
+        else
+        {
+            pressed = false;
+        }
+    }
+    #endregion input
+    #region camera
+    /// <summary>
+    /// Once privileges have been granted, enable the camera and callbacks.
+    /// </summary>
+    private void StartCapture()
+    {
+        if (!_hasStarted)
+        {
+            lock (_cameraLockObject)
+            {
+                EnableMLCamera();
+
+#if PLATFORM_LUMIN
+                MLCamera.OnRawImageAvailable += OnCaptureRawImageComplete;
+#endif
+            }
+
+            _granted = true;
+        }
+    }
 
     /// <summary>
     /// Connects the MLCamera component and instantiates a new instance
@@ -54,7 +142,11 @@ public class TakePicture : MonoBehaviour
     {
         lock (_cameraLockObject)
         {
+            MLResult reslult = MLCamera.Start();
+            MLCamera.Connect();
+            return;
             MLResult result = MLCamera.Start();
+            Debug.Log("camerastart");
             if (result.IsOk)
             {
                 result = MLCamera.Connect();
@@ -87,65 +179,9 @@ public class TakePicture : MonoBehaviour
         }
 #endif
     }
+    #endregion camera
 
-    void HandlePrivilegesDone(MLResult result)
-    {
-        if(!result.IsOk)
-        {
-            Debug.Log("Error: Priv Request Failed");
-        }
-        else
-        {
-            Debug.Log("Success.Priv granted");
-            _granted = true;
-
-            lock (_cameraLockObject)
-            {
-                EnableMLCamera();
-                MLCamera.OnRawImageAvailable += OnCaptureRawImageComplete;
-            }
-        }
-    }
-    private void Awake()
-    {
-        _privRequester = GetComponent<MLPrivilegeRequesterBehavior>();
-        _privRequester.OnPrivilegesDone += HandlePrivilegesDone;
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        CheckTrigger();
-    }
-
-    bool pressed = false;
-
-    void OnButtonUp(byte controllerId, MLInput.Controller.Button button)
-    {
-        if (button == MLInput.Controller.Button.Bumper)
-        {
-            Debug.Log("bumper released");
-            TakeImage();
-        }
-    }
-
-    void CheckTrigger()
-    {
-        if(_controller.TriggerValue > 0.2f)
-        {
-            if(pressed == false)
-            {
-                Debug.Log("pressed Trigger");
-                TakeImage();
-            }
-            pressed = true;
-        }
-        else
-        {
-            pressed = false;
-        }
-    }
-
-    void TakeImage()
+    void TakeImage() //called by button presses
     {
         if (_granted)
         {
@@ -163,6 +199,7 @@ public class TakePicture : MonoBehaviour
     {
         if (_captureThread == null || (!_captureThread.IsAlive))
         {
+            Debug.Log("starting image take thread");
             ThreadStart captureThreadStart = new ThreadStart(CaptureThreadWorker);
             _captureThread = new Thread(captureThreadStart);
             _captureThread.Start();
@@ -178,6 +215,7 @@ public class TakePicture : MonoBehaviour
     /// </summary>
     private void CaptureThreadWorker()
     {
+        Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);
         lock (_cameraLockObject)
         {
             if (MLCamera.IsStarted && _isCameraConnected)
@@ -202,7 +240,7 @@ public class TakePicture : MonoBehaviour
             _isCapturing = false;
         }
 
-        Debug.Log("Image Done");
+        Debug.Log("Image Done !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         // Initialize to 8x8 texture so there is no discrepency
         // between uninitalized captures and error texture
         //has image now
