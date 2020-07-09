@@ -11,7 +11,8 @@ public class TakePicture : MonoBehaviour
     private MLInput.Controller _controller;
     private MLPrivilegeRequesterBehavior _privRequester = null;
     private bool _granted = false;
-
+    [SerializeField, Tooltip("Object to set new images on.")]
+    private GameObject _previewObject = null;
 
     private object _cameraLockObject = new object();
 
@@ -142,9 +143,6 @@ public class TakePicture : MonoBehaviour
     {
         lock (_cameraLockObject)
         {
-            MLResult reslult = MLCamera.Start();
-            MLCamera.Connect();
-            return;
             MLResult result = MLCamera.Start();
             Debug.Log("camerastart");
             if (result.IsOk)
@@ -239,11 +237,20 @@ public class TakePicture : MonoBehaviour
         {
             _isCapturing = false;
         }
-
-        Debug.Log("Image Done !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         // Initialize to 8x8 texture so there is no discrepency
         // between uninitalized captures and error texture
-        //has image now
+        Texture2D texture = new Texture2D(8, 8);
+        bool status = texture.LoadImage(imageData);
+
+        if (status && (texture.width != 8 && texture.height != 8))
+        {
+            _previewObject.SetActive(true);
+            Renderer renderer = _previewObject.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.mainTexture = texture;
+            }
+        }
     }
 }
 
