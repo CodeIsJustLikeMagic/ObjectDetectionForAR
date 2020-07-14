@@ -812,6 +812,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1715430708}
   - component: {fileID: 1715430707}
+  - component: {fileID: 1715430709}
+  - component: {fileID: 1715430710}
   m_Layer: 0
   m_Name: AzureTester
   m_TagString: Untagged
@@ -826,7 +828,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715430706}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e769f162352ac7842a3d577e395fb381, type: 3}
   m_Name: 
@@ -845,6 +847,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1715430709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715430706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 813483c713a5d7a47be19836dcc4f080, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1715430710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715430706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6a8fedc464edf4ebb28db4f2e33a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7787310927216301221
 PrefabInstance:
   m_ObjectHideFlags: 0

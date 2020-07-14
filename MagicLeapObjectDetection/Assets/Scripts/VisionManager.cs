@@ -38,14 +38,15 @@ public class VisionManager : MonoBehaviour
         Debug.Log("VisionManagerExists");
         // allows this instance to behave like a singleton
         instance = this;
-        string path = "C:/ObjectDetectionForAR/ObjectDetectionForAR/Assets/Secure/authorizationKey.txt";
+        string path = "C:/ObjectDetectionForAR/Secure/authorizationKey.txt";
         StreamReader reader = new StreamReader(path);
         authorizationKey = reader.ReadToEnd();
+        Debug.Log("autoizationKey " + authorizationKey);
 
         
     }
 
-    public void processResponse(String jsonResponse)
+    public void processResponse(string jsonResponse)
     {
         Debug.Log("process Response");
         // The response will be in Json format
@@ -68,7 +69,7 @@ public class VisionManager : MonoBehaviour
                 Debug.Log(tag.name + " " + tag.confidence);
             }
             //ResultsLabel.instance.SetTagsToLastLabel(tagsDictionary);
-            ResultAsText.instance.show();
+            ResultAsText.instance.Show(jsonResponse);
         }
     }
 
@@ -96,9 +97,8 @@ public class VisionManager : MonoBehaviour
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
-
-                processResponse(jsonResponse);
-                //processResponse(jsonResponse)
+                ResultAsText.instance.Show(jsonResponse);
+                //processResponse(jsonResponse);
 
             }
             catch (Exception exception)
@@ -139,8 +139,9 @@ public class VisionManager : MonoBehaviour
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
-
-                processResponse(jsonResponse);
+                ResultAsText.instance.Show(jsonResponse);
+                //processResponse(jsonResponse);
+                Debug.Log("hello");
 
             }
             catch (Exception exception)

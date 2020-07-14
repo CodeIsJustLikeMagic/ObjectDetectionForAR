@@ -16,8 +16,9 @@ public class ResultAsText : MonoBehaviour
         output = GameObject.FindObjectOfType<Text>();
     }
 
-    public void show()
+    public void Show(System.String json)
     {
-        output.text = "hello, its me!";
+        Debug.Log("show");
+        output.text = json;
     }
 }
