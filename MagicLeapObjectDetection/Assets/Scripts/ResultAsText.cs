@@ -21,4 +21,8 @@ public class ResultAsText : MonoBehaviour
         Debug.Log("show");
         output.text = json;
     }
+    public void Add(System.String json)
+    {
+        output.text = output.text + "\n" + json;
+    }
 }

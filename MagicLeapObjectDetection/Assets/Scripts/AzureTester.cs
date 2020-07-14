@@ -17,7 +17,17 @@ public class AzureTester : MonoBehaviour
 
             string filePath = Path.Combine(Application.persistentDataPath, filename);
             Debug.Log(filePath);
-            StartCoroutine(VisionManager.instance.AnalyseImageFromFile(filename));
+            byte[] imageBytes = GetImageAsByteArray(filePath);
+            StartCoroutine(VisionManager.instance.AnalyseImage(imageBytes));
         }
+    }
+    /// <summary>
+    /// Returns the contents of the specified file as a byte array.
+    /// </summary>
+    private static byte[] GetImageAsByteArray(string imageFilePath)
+    {
+        FileStream fileStream = new FileStream(imageFilePath, FileMode.Open, FileAccess.Read);
+        BinaryReader binaryReader = new BinaryReader(fileStream);
+        return binaryReader.ReadBytes((int)fileStream.Length);
     }
 }

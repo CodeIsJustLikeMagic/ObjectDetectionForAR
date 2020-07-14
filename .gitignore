@@ -5,3 +5,7 @@ ObjectDetectionForAR/.vs
 privatekey.zip
 objectdetectionbthesis.cert
 objectdetectionbthesis.privkey
+MagicLeapObjectDetection/Assets/Resources/authorizationKey.txt
+MagicLeapObjectDetection/Assets/Resources/authorizationKey.txt.meta
+MagicLeapObjectDetection/Assets/Secure/authorizationKey.txt
+MagicLeapObjectDetection/Assets/Secure/authorizationKey.txt.meta

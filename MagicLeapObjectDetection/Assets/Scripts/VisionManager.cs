@@ -38,7 +38,7 @@ public class VisionManager : MonoBehaviour
         Debug.Log("VisionManagerExists");
         // allows this instance to behave like a singleton
         instance = this;
-        string path = "C:/ObjectDetectionForAR/Secure/authorizationKey.txt";
+        string path = "C:/ObjectDetectionForAR/MagicLeapObjectDetection/Assets/Secure/authorizationKey.txt";
         StreamReader reader = new StreamReader(path);
         authorizationKey = reader.ReadToEnd();
         Debug.Log("autoizationKey " + authorizationKey);
@@ -75,9 +75,12 @@ public class VisionManager : MonoBehaviour
 
     public IEnumerator AnalyseImage(byte[] imageBytes)
     {
+        ResultAsText.instance.Show(authorizationKey);
+        ResultAsText.instance.Add("AnalyseImage");
         WWWForm webForm = new WWWForm();
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(visionAnalysisEndpoint, webForm))
         {
+            ResultAsText.instance.Add("made a UnityWebRequest thing");
             unityWebRequest.SetRequestHeader("Content-Type", "application/octet-stream");
             unityWebRequest.SetRequestHeader(ocpApimSubscriptionKeyHeader, authorizationKey);
 
@@ -91,18 +94,18 @@ public class VisionManager : MonoBehaviour
             yield return unityWebRequest.SendWebRequest();
 
             long responseCode = unityWebRequest.responseCode;
-
             try
             {
+                ResultAsText.instance.Add("responseCode " + responseCode);
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
-                ResultAsText.instance.Show(jsonResponse);
+                ResultAsText.instance.Add(jsonResponse);
                 //processResponse(jsonResponse);
-
             }
             catch (Exception exception)
             {
+                ResultAsText.instance.Show("Json exception.Message: " + exception.Message);
                 Debug.Log("Json exception.Message: " + exception.Message);
             }
 
@@ -115,42 +118,9 @@ public class VisionManager : MonoBehaviour
     public IEnumerator AnalyseImageFromFile(string TestImagePath)
     {
         Debug.Log("VisionProcess Image from File");
-        WWWForm webForm = new WWWForm();
-        using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(visionAnalysisEndpoint, webForm))
-        {
-            // gets a byte array out of the saved image
-            imageBytes = GetImageAsByteArray(TestImagePath);
-            unityWebRequest.SetRequestHeader("Content-Type", "application/octet-stream");
-            unityWebRequest.SetRequestHeader(ocpApimSubscriptionKeyHeader, authorizationKey);
-
-            // the download handler will help receiving the analysis from Azure
-            unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
-
-            // the upload handler will help uploading the byte array with the request
-            unityWebRequest.uploadHandler = new UploadHandlerRaw(imageBytes);
-            unityWebRequest.uploadHandler.contentType = "application/octet-stream";
-
-            yield return unityWebRequest.SendWebRequest();
-
-            long responseCode = unityWebRequest.responseCode;
-
-            try
-            {
-                string jsonResponse = null;
-                jsonResponse = unityWebRequest.downloadHandler.text;
-                Debug.Log(jsonResponse);
-                ResultAsText.instance.Show(jsonResponse);
-                //processResponse(jsonResponse);
-                Debug.Log("hello");
-
-            }
-            catch (Exception exception)
-            {
-                Debug.Log("Json exception.Message: " + exception.Message);
-            }
-
-            yield return null;
-        }
+        imageBytes = GetImageAsByteArray(TestImagePath);
+        AnalyseImage(imageBytes);
+        yield return null;
     }
 
     /// <summary>
