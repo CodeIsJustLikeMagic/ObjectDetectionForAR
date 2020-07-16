@@ -38,9 +38,12 @@ public class VisionManager : MonoBehaviour
         Debug.Log("VisionManagerExists");
         // allows this instance to behave like a singleton
         instance = this;
-        string path = "C:/ObjectDetectionForAR/MagicLeapObjectDetection/Assets/Secure/authorizationKey.txt";
-        StreamReader reader = new StreamReader(path);
-        authorizationKey = reader.ReadToEnd();
+        TextAsset txt = (TextAsset)Resources.Load("authorizationKey", typeof(TextAsset));
+        authorizationKey = txt.text;
+
+        //string path = "Assets/Secure/authorizationKey.txt";
+        //StreamReader reader = new StreamReader(path);
+        //authorizationKey = reader.ReadToEnd();
         Debug.Log("autoizationKey " + authorizationKey);
 
         
