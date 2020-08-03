@@ -18,7 +18,7 @@ public class AzureTester : MonoBehaviour
             string filePath = Path.Combine(Application.persistentDataPath, filename);
             Debug.Log(filePath);
             byte[] imageBytes = GetImageAsByteArray(filePath);
-            StartCoroutine(VisionManager.instance.AnalyseImage(imageBytes));
+            StartCoroutine(VisionManager.instance.AnalyseImage(imageBytes, Camera.main.cameraToWorldMatrix));
         }
     }
     /// <summary>

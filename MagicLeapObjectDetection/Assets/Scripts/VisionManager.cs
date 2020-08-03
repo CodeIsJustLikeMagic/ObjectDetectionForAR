@@ -29,24 +29,17 @@ public class VisionManager : MonoBehaviour
     // you must insert your service key here!    
     private string authorizationKey = ""; //Todo: this key is the opposite of secure
     private const string ocpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-    private string visionAnalysisEndpoint = "westeurope.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Tags";   // This is where you need to update your endpoint, if you set your location to something other than west-us.
+    private string visionAnalysisEndpoint = "westeurope.api.cognitive.microsoft.com/vision/v2.0/detect";   // This is where you need to update your endpoint, if you set your location to something other than west-us.
     internal byte[] imageBytes;
 
     internal string imagePath;
     private void Awake()
     {
         Debug.Log("VisionManagerExists");
-        // allows this instance to behave like a singleton
         instance = this;
         TextAsset txt = (TextAsset)Resources.Load("authorizationKey", typeof(TextAsset));
         authorizationKey = txt.text;
-
-        //string path = "Assets/Secure/authorizationKey.txt";
-        //StreamReader reader = new StreamReader(path);
-        //authorizationKey = reader.ReadToEnd();
-        Debug.Log("autoizationKey " + authorizationKey);
-
-        
+        Debug.Log("autoizationKey " + authorizationKey);//keeping api a secret
     }
 
     public void processResponse(string jsonResponse)
@@ -76,24 +69,21 @@ public class VisionManager : MonoBehaviour
         }
     }
 
-    public IEnumerator AnalyseImage(byte[] imageBytes)
+    public IEnumerator AnalyseImage(byte[] imageBytes, Matrix4x4 cameraToWorldMatrix)
     {
-        ResultAsText.instance.Show(authorizationKey);
-        ResultAsText.instance.Add("AnalyseImage");
+        //ResultAsText.instance.Show(authorizationKey);
+        ResultAsText.instance.Show("AnalyseImage");
         WWWForm webForm = new WWWForm();
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(visionAnalysisEndpoint, webForm))
         {
             ResultAsText.instance.Add("made a UnityWebRequest thing");
             unityWebRequest.SetRequestHeader("Content-Type", "application/octet-stream");
             unityWebRequest.SetRequestHeader(ocpApimSubscriptionKeyHeader, authorizationKey);
-
             // the download handler will help receiving the analysis from Azure
             unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
-
             // the upload handler will help uploading the byte array with the request
             unityWebRequest.uploadHandler = new UploadHandlerRaw(imageBytes);
             unityWebRequest.uploadHandler.contentType = "application/octet-stream";
-
             yield return unityWebRequest.SendWebRequest();
 
             long responseCode = unityWebRequest.responseCode;
@@ -104,6 +94,7 @@ public class VisionManager : MonoBehaviour
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
                 ResultAsText.instance.Add(jsonResponse);
+                HandleResult.instance.HandleJson(jsonResponse, cameraToWorldMatrix);
                 //processResponse(jsonResponse);
             }
             catch (Exception exception)
@@ -111,18 +102,16 @@ public class VisionManager : MonoBehaviour
                 ResultAsText.instance.Show("Json exception.Message: " + exception.Message);
                 Debug.Log("Json exception.Message: " + exception.Message);
             }
-
             yield return null;
         }
     }
-
 
 
     public IEnumerator AnalyseImageFromFile(string TestImagePath)
     {
         Debug.Log("VisionProcess Image from File");
         imageBytes = GetImageAsByteArray(TestImagePath);
-        AnalyseImage(imageBytes);
+        AnalyseImage(imageBytes, Camera.main.cameraToWorldMatrix);
         yield return null;
     }
 

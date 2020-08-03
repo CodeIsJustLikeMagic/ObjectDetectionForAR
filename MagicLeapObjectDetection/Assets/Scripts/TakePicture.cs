@@ -24,6 +24,8 @@ public class TakePicture : MonoBehaviour
     private bool _hasStarted = false;
    
     private Thread _captureThread = null;
+
+    public Camera worldCamera = null;
     
     void Awake()
     {
@@ -68,15 +70,22 @@ public class TakePicture : MonoBehaviour
     #region input
     void Start()
     {
-        //get user input. we are using bumper and trigger
-        MLInput.Start();
-        _controller = MLInput.GetController(MLInput.Hand.Left);
-        if(_controller == null)
+        try
         {
-            Debug.Log("Controller not found. Did you start Lab?");
-            enabled = false;
-        } 
-        MLInput.OnControllerButtonUp += OnButtonUp;
+            //get user input. we are using bumper and trigger
+            MLInput.Start();
+            _controller = MLInput.GetController(MLInput.Hand.Left);
+            if (_controller == null)
+            {
+                Debug.Log("Controller not found. Did you start Lab?");
+                enabled = false;
+            }
+            MLInput.OnControllerButtonUp += OnButtonUp;
+        }catch (System.Exception e)
+        {
+            Debug.Log("coudnlt find Controller");
+        }
+        
     }
 
     // Update is called once per frame
@@ -98,6 +107,10 @@ public class TakePicture : MonoBehaviour
 
     void CheckTrigger()
     {
+        if(_controller == null)
+        {
+            return;
+        }
         if (_controller.TriggerValue > 0.2f)
         {
             if (pressed == false)
@@ -187,6 +200,7 @@ public class TakePicture : MonoBehaviour
 
         }
     }
+    
     /// <summary>
     /// Captures a still image using the device's camera and returns
     /// the data path where it is saved.
@@ -206,13 +220,16 @@ public class TakePicture : MonoBehaviour
             Debug.Log("Previous thread has not finished, unable to begin a new capture just yet.");
         }
     }
-
+    public Matrix4x4 m;
     /// <summary>
     /// Worker function to call the API's Capture function
+    /// capture the actual image
     /// </summary>
     private void CaptureThreadWorker()
     {
-        Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);
+        m = Camera.main.cameraToWorldMatrix;
+        Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);//uses magic leap camera
+
         lock (_cameraLockObject)
         {
             if (MLCamera.IsStarted && _isCameraConnected)
@@ -238,7 +255,7 @@ public class TakePicture : MonoBehaviour
         }
         // Initialize to 8x8 texture so there is no discrepency
         // between uninitalized captures and error texture
-        StartCoroutine(VisionManager.instance.AnalyseImage(imageData));
+        StartCoroutine(VisionManager.instance.AnalyseImage(imageData, m));
         Texture2D texture = new Texture2D(8, 8);
         bool status = texture.LoadImage(imageData);
 
