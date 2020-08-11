@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class SphereTest : MonoBehaviour
 {
-    public GameObject sphere;
-    // Start is called before the first frame update
-    void Start()
+    public static SphereTest instance;
+    void Awake()
     {
-        
+        instance = this;
     }
+    public GameObject sphere;
+    Vector3 p;
 
-    // Update is called once per frame
     void Update()//move sphere to somewhere within the camera view
     {
         Matrix4x4 m = Camera.main.cameraToWorldMatrix;
-        Vector3 p = m.MultiplyPoint(new Vector3(1.0F, 0, -1.0F));
+        p = m.MultiplyPoint(new Vector3(0, 0, -0.4F));
         sphere.transform.position = p;
+    }
+
+    public void ShowPos()
+    {
+        ResultAsText.instance.Show(p.ToString());
     }
 }

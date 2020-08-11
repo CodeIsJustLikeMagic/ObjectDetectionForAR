@@ -94,7 +94,7 @@ public class VisionManager : MonoBehaviour
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
                 ResultAsText.instance.Add(jsonResponse);
-                HandleResult.instance.HandleJson(jsonResponse, cameraToWorldMatrix);
+                HandleResult.instance.HandleJson(imageBytes, jsonResponse, cameraToWorldMatrix);
                 //processResponse(jsonResponse);
             }
             catch (Exception exception)

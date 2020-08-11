@@ -24,8 +24,7 @@ public class TakePicture : MonoBehaviour
     private bool _hasStarted = false;
    
     private Thread _captureThread = null;
-
-    public Camera worldCamera = null;
+    
     
     void Awake()
     {
@@ -96,12 +95,13 @@ public class TakePicture : MonoBehaviour
 
     bool pressed = false;
 
+    //on bumper press
     void OnButtonUp(byte controllerId, MLInput.Controller.Button button)
     {
         if (button == MLInput.Controller.Button.Bumper)
         {
             Debug.Log("bumper released");
-            TakeImage();
+            SphereTest.instance.ShowPos();
         }
     }
 
@@ -267,6 +267,7 @@ public class TakePicture : MonoBehaviour
             {
                 renderer.material.mainTexture = texture;
             }
+
         }
     }
 }
