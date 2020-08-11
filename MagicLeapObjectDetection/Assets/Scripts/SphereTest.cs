@@ -15,12 +15,15 @@ public class SphereTest : MonoBehaviour
     void Update()//move sphere to somewhere within the camera view
     {
         Matrix4x4 m = Camera.main.cameraToWorldMatrix;
-        p = m.MultiplyPoint(new Vector3(0, 0, -0.4F));
+        p = m.MultiplyPoint(new Vector3(-0.29F, 0.216F, -0.3803704F));
         sphere.transform.position = p;
+        HandleResult.instance.cast(600, 600, m);
+
     }
 
     public void ShowPos()
     {
         ResultAsText.instance.Show(p.ToString());
+        
     }
 }
