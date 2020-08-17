@@ -38,8 +38,10 @@ public class TakePicture : MonoBehaviour
         if (!result.IsOk)
         {
             Debug.Log("we didnt get privileges");
+            ResultAsText.instance.Add("we didnt get privileges");
         }
         Debug.Log("we got privileges");
+        ResultAsText.instance.Add("we got privileges");
         _granted = true;
         StartCapture(); //enables camera and callbacks
     }
@@ -195,7 +197,7 @@ public class TakePicture : MonoBehaviour
     {
         if (_granted)
         {
-            Debug.Log("take image do");
+            ResultAsText.instance.Add("take image do");
             TriggerAsyncCapture();
 
         }
@@ -221,6 +223,7 @@ public class TakePicture : MonoBehaviour
         }
     }
     public Matrix4x4 m;
+    MLRaycast.QueryParams _raycastParams;
     /// <summary>
     /// Worker function to call the API's Capture function
     /// capture the actual image
@@ -228,6 +231,7 @@ public class TakePicture : MonoBehaviour
     private void CaptureThreadWorker()
     {
         m = Camera.main.cameraToWorldMatrix;
+        _raycastParams = Raycast.instance.CreateRaycastParams();
         Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);//uses magic leap camera
 
         lock (_cameraLockObject)

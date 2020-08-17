@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.MagicLeap;
 
 public class HandleResult : MonoBehaviour
 {
-    public Transform positionIndicator;
     public static HandleResult instance;
     public Renderer converter = null;
     void Awake()
@@ -40,7 +40,7 @@ public class HandleResult : MonoBehaviour
 
     private List<string> labelsTexts = new List<string>();
 
-    public void HandleJson(byte[] imageBytes, System.String jsonResponse, Matrix4x4 cameraToWorldMatrix)
+    public void HandleJson(byte[] imageBytes, System.String jsonResponse, Matrix4x4 cameraToWorldMatrix, MLRaycast.QueryParams raycastParams)
     { 
         jsonResponse = jsonResponse.Replace("object", "objectName");
         DetectionResponse det = new DetectionResponse();
@@ -52,16 +52,13 @@ public class HandleResult : MonoBehaviour
             Debug.Log(obj.objectName);
             int x = obj.rectangle.x;
             int y = obj.rectangle.y;
-            Debug.Log("Creating labelPrefab");
-            Vector3 p = cameraToWorldMatrix.MultiplyPoint(new Vector3(x, y, 0));
-            Transform l = Instantiate(positionIndicator, p, Quaternion.identity);
-            Debug.Log("Creating Done");
-            ResultAsText.instance.Add(p.ToString() + " " + obj.objectName);
+            ResultAsText.instance.Add(obj.objectName);
             labelsTexts.Add(obj.objectName);
-            cast(x, y, cameraToWorldMatrix);
+            cast(x, y, cameraToWorldMatrix, raycastParams,spherePrefab);
             //Gizmos.color = Color.yellow;
             //Gizmos.DrawSphere(p, 0.2F);
         }
+        markEdges(cameraToWorldMatrix, raycastParams);
         ShowImage(imageBytes);
     }
 
@@ -85,21 +82,37 @@ public class HandleResult : MonoBehaviour
         }
     }
     public GameObject spherePrefab;
-    public float xmin = 0;
-    public float xmax = 1920;
-    public float ymin = 0;
-    public float ymax = 1080;
+    public GameObject redsphere;
+    public GameObject bluespherePrefab;
+    private float xmin = 0;
+    private float xmax = 1920;
+    private float ymin = 0;
+    private float ymax = 1080;
 
-    public float umin = -0.29F;
-    public float umax = 0.29F;
-    public float vmin = -0.216F;
-    public float vmax = 0.216F;
-    public void cast(float x, float y, Matrix4x4 m)
+    private float umin = -0.155F;//0.29F;
+    private float umax = 0.155F;
+    private float vmin = 0.1F;//-0.216F;
+    private float vmax = -0.1F;
+    public void markEdges(Matrix4x4 m)
     {
+        markEdges(m, Raycast.instance.CreateRaycastParams());
+    }
+    public void markEdges(Matrix4x4 m, MLRaycast.QueryParams raycastParams)
+    {
+        cast(xmin, ymin, m, raycastParams,bluespherePrefab);
+        cast(xmin, ymax, m, raycastParams, bluespherePrefab);
+        cast(xmax, ymin, m, raycastParams, bluespherePrefab);
+        cast(xmax, ymax, m, raycastParams, bluespherePrefab);
+        //Instantiate(bluespherePrefab, m.MultiplyPoint(new Vector3(-0.15F, -0.1F, -0.4F)), Quaternion.identity);
+    }
+    public void cast(float x, float y, Matrix4x4 m, MLRaycast.QueryParams raycastParams ,GameObject sphere)
+    {
+        //Debug.Log("ymin "+ymin);
         //move pointer basen on photo pixel position (1080/1920)
         if (x > xmax || x < xmin || y > ymax || y < ymin)
         {
             ResultAsText.instance.Add(x + " " + y + " is out of view, skipped");
+            Debug.Log(x + " " + y + " is out of view, skipped");
             return;
         }
         Vector3 p = m.MultiplyPoint(new Vector3(u(x), v(y), -0.4F));
@@ -108,12 +121,14 @@ public class HandleResult : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(p); //care the camera might not look in the right spot anymore! todo
         if (Physics.Raycast(ray, out hit)){
             Transform objectHit = hit.transform;
-            GameObject sphere = Instantiate(spherePrefab, objectHit.position, Quaternion.identity);
+            Instantiate(redsphere, objectHit.position, Quaternion.identity);
+            Debug.Log("raycast hit with world. added red sphere " + objectHit.position);
+            ResultAsText.instance.Add("raycast hit with world. added red sphere "+objectHit.position);
         }
-        GameObject sphere2 = Instantiate(spherePrefab, p, Quaternion.identity);
-        ResultAsText.instance.Add(x + " " + y + " object marked");
+        GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity);
+        ResultAsText.instance.Add(u(x) + " " + u(y) + " object marked");
+        //Debug.Log(x+" "+y+" "+u(x) + " " + u(y) + " object marked");
         //sphere.transform.position = p;
-
     }
     private float u(float x)
     {

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.XR.MagicLeap;
 
 public class VisionManager : MonoBehaviour
 {
@@ -69,7 +70,7 @@ public class VisionManager : MonoBehaviour
         }
     }
 
-    public IEnumerator AnalyseImage(byte[] imageBytes, Matrix4x4 cameraToWorldMatrix)
+    public IEnumerator AnalyseImage(byte[] imageBytes, Matrix4x4 cameraToWorldMatrix, MLRaycast.QueryParams raycastParams)
     {
         //ResultAsText.instance.Show(authorizationKey);
         ResultAsText.instance.Show("AnalyseImage");
@@ -94,7 +95,7 @@ public class VisionManager : MonoBehaviour
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
                 ResultAsText.instance.Add(jsonResponse);
-                HandleResult.instance.HandleJson(imageBytes, jsonResponse, cameraToWorldMatrix);
+                HandleResult.instance.HandleJson(imageBytes, jsonResponse, cameraToWorldMatrix, raycastParams);
                 //processResponse(jsonResponse);
             }
             catch (Exception exception)
@@ -111,7 +112,7 @@ public class VisionManager : MonoBehaviour
     {
         Debug.Log("VisionProcess Image from File");
         imageBytes = GetImageAsByteArray(TestImagePath);
-        AnalyseImage(imageBytes, Camera.main.cameraToWorldMatrix);
+        AnalyseImage(imageBytes, Camera.main.cameraToWorldMatrix, Raycast.instance.CreateRaycastParams());
         yield return null;
     }
 
