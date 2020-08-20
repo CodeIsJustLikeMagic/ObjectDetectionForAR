@@ -222,16 +222,14 @@ public class TakePicture : MonoBehaviour
             Debug.Log("Previous thread has not finished, unable to begin a new capture just yet.");
         }
     }
-    public Matrix4x4 m;
-    MLRaycast.QueryParams _raycastParams;
+    private CameraPosition cpos;
     /// <summary>
     /// Worker function to call the API's Capture function
     /// capture the actual image
     /// </summary>
     private void CaptureThreadWorker()
     {
-        m = Camera.main.cameraToWorldMatrix;
-        _raycastParams = Raycast.instance.CreateRaycastParams();
+        cpos = new CameraPosition(Camera.main);
         Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);//uses magic leap camera
 
         lock (_cameraLockObject)
@@ -259,7 +257,7 @@ public class TakePicture : MonoBehaviour
         }
         // Initialize to 8x8 texture so there is no discrepency
         // between uninitalized captures and error texture
-        StartCoroutine(VisionManager.instance.AnalyseImage(imageData, m));
+        StartCoroutine(VisionManager.instance.AnalyseImage(imageData, cpos));
         Texture2D texture = new Texture2D(8, 8);
         bool status = texture.LoadImage(imageData);
 

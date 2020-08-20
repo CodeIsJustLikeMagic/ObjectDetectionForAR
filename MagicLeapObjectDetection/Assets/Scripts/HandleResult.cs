@@ -38,14 +38,13 @@ public class HandleResult : MonoBehaviour
 
     }
 
-    private List<string> labelsTexts = new List<string>();
 
-    public void HandleJson(byte[] imageBytes, System.String jsonResponse, Matrix4x4 cameraToWorldMatrix, MLRaycast.QueryParams raycastParams)
+
+    public void HandleJson(byte[] imageBytes, System.String jsonResponse, CameraPosition cpos)
     { 
         jsonResponse = jsonResponse.Replace("object", "objectName");
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
-        Debug.Log("process Response");
         ResultAsText.instance.Show(" Handle Json");
         foreach (DetectedObject obj in det.objectNames)
         {
@@ -53,12 +52,9 @@ public class HandleResult : MonoBehaviour
             int x = obj.rectangle.x;
             int y = obj.rectangle.y;
             ResultAsText.instance.Add(obj.objectName);
-            labelsTexts.Add(obj.objectName);
-            cast(x, y, cameraToWorldMatrix, raycastParams,spherePrefab);
-            //Gizmos.color = Color.yellow;
-            //Gizmos.DrawSphere(p, 0.2F);
+            Cast(x, y, cpos,spherePrefab, obj.objectName);
         }
-        markEdges(cameraToWorldMatrix, raycastParams);
+        //markEdges(cpos);
         ShowImage(imageBytes);
     }
 
@@ -95,18 +91,19 @@ public class HandleResult : MonoBehaviour
     private float vmax = -0.1F;
     public void markEdges(Matrix4x4 m)
     {
-        markEdges(m, Raycast.instance.CreateRaycastParams());
+        markEdges(new CameraPosition(Camera.main));
     }
-    public void markEdges(Matrix4x4 m, MLRaycast.QueryParams raycastParams)
+    public void markEdges(CameraPosition cpos)
     {
-        cast(xmin, ymin, m, raycastParams,bluespherePrefab);
-        cast(xmin, ymax, m, raycastParams, bluespherePrefab);
-        cast(xmax, ymin, m, raycastParams, bluespherePrefab);
-        cast(xmax, ymax, m, raycastParams, bluespherePrefab);
+        Cast(xmin, ymin, cpos,bluespherePrefab,"edge up left");
+        Cast(xmin, ymax, cpos, bluespherePrefab,"edge down left");
+        Cast(xmax, ymin, cpos, bluespherePrefab,"edge up right");
+        Cast(xmax, ymax, cpos, bluespherePrefab,"edge down right");
         //Instantiate(bluespherePrefab, m.MultiplyPoint(new Vector3(-0.15F, -0.1F, -0.4F)), Quaternion.identity);
     }
-    public void cast(float x, float y, Matrix4x4 m, MLRaycast.QueryParams raycastParams ,GameObject sphere)
+    public void Cast(float x, float y, CameraPosition cpos,GameObject sphere, string name)
     {
+        LabelCreater.instance.AddLabel(name);
         //Debug.Log("ymin "+ymin);
         //move pointer basen on photo pixel position (1080/1920)
         if (x > xmax || x < xmin || y > ymax || y < ymin)
@@ -115,28 +112,22 @@ public class HandleResult : MonoBehaviour
             Debug.Log(x + " " + y + " is out of view, skipped");
             return;
         }
-        Vector3 p = m.MultiplyPoint(new Vector3(u(x), v(y), -0.4F));
+        Vector3 p = cpos.cameratoWorldMatrix.MultiplyPoint(new Vector3(U(x), V(y), -0.4F));
 
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(p); //care the camera might not look in the right spot anymore! todo
-        if (Physics.Raycast(ray, out hit)){
-            Transform objectHit = hit.transform;
-            Instantiate(redsphere, objectHit.position, Quaternion.identity);
-            Debug.Log("raycast hit with world. added red sphere " + objectHit.position);
-            ResultAsText.instance.Add("raycast hit with world. added red sphere "+objectHit.position);
-        }
-        GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity);
-        ResultAsText.instance.Add(u(x) + " " + u(y) + " object marked");
+        Raycast.instance.StartCast(Raycast.instance.CreateRaycastParams(cpos.ctransform, p));
+
+        //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity); show point on clipping plane
+        ResultAsText.instance.Add(U(x) + " " + U(y) + " "+name +" object marked");
         //Debug.Log(x+" "+y+" "+u(x) + " " + u(y) + " object marked");
         //sphere.transform.position = p;
     }
-    private float u(float x)
+    private float U(float x)
     {
         float slope = ((umax - umin) / (xmax - xmin));
         float b = umin - slope * xmin;
         return slope * x + b;
     }
-    private float v(float y)
+    private float V(float y)
     {
         float slope = ((vmax - vmin) / (ymax - ymin));
         float b = vmin - slope * ymin;
