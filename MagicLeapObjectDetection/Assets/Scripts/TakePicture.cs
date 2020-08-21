@@ -8,13 +8,12 @@ using MagicLeap.Core.StarterKit;
 public class TakePicture : MonoBehaviour
 {
     // Start is called before the first frame update
-    private MLInput.Controller _controller;
+    public static TakePicture instance;
     private MLPrivilegeRequesterBehavior _privRequester = null;
     private bool _granted = false;
     [SerializeField, Tooltip("Object to set new images on.")]
     private GameObject _previewObject = null;
     
-
     private object _cameraLockObject = new object();
 
     private bool _isCameraConnected = false;
@@ -25,12 +24,12 @@ public class TakePicture : MonoBehaviour
    
     private Thread _captureThread = null;
     
-    
     void Awake()
     {
         //get privileges
         _privRequester = GetComponent<MLPrivilegeRequesterBehavior>();
         _privRequester.OnPrivilegesDone += HandlePrivilegesDone;
+        instance = this;
     }
 
     void HandlePrivilegesDone(MLResult result)
@@ -53,9 +52,7 @@ public class TakePicture : MonoBehaviour
         {
             _privRequester.OnPrivilegesDone -= HandlePrivilegesDone;
         }
-        //clean up input
-        MLInput.OnControllerButtonUp -= OnButtonUp;
-        MLInput.Stop();
+
         //clean up camera use
         lock (_cameraLockObject)
         {
@@ -68,66 +65,7 @@ public class TakePicture : MonoBehaviour
             }
         }
     }
-    #region input
-    void Start()
-    {
-        try
-        {
-            //get user input. we are using bumper and trigger
-            MLInput.Start();
-            _controller = MLInput.GetController(MLInput.Hand.Left);
-            if (_controller == null)
-            {
-                Debug.Log("Controller not found. Did you start Lab?");
-                enabled = false;
-            }
-            MLInput.OnControllerButtonUp += OnButtonUp;
-        }catch (System.Exception e)
-        {
-            Debug.Log("coudnlt find Controller");
-        }
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        CheckTrigger();
-    }
-
-    bool pressed = false;
-
-    //on bumper press
-    void OnButtonUp(byte controllerId, MLInput.Controller.Button button)
-    {
-        if (button == MLInput.Controller.Button.Bumper)
-        {
-            Debug.Log("bumper released");
-            SphereTest.instance.ShowPos();
-        }
-    }
-
-    void CheckTrigger()
-    {
-        if(_controller == null)
-        {
-            return;
-        }
-        if (_controller.TriggerValue > 0.2f)
-        {
-            if (pressed == false)
-            {
-                Debug.Log("pressed Trigger");
-                TakeImage();
-            }
-            pressed = true;
-        }
-        else
-        {
-            pressed = false;
-        }
-    }
-    #endregion input
     #region camera
     /// <summary>
     /// Once privileges have been granted, enable the camera and callbacks.
@@ -193,7 +131,7 @@ public class TakePicture : MonoBehaviour
     }
     #endregion camera
 
-    void TakeImage() //called by button presses
+    public void TakeImage() //called by button presses
     {
         if (_granted)
         {
@@ -208,7 +146,7 @@ public class TakePicture : MonoBehaviour
     /// the data path where it is saved.
     /// </summary>
     /// <param name="fileName">The name of the file to be saved to.</param>
-    public void TriggerAsyncCapture()
+    private void TriggerAsyncCapture()
     {
         if (_captureThread == null || (!_captureThread.IsAlive))
         {

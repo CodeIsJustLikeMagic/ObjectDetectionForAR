@@ -80,15 +80,15 @@ public class HandleResult : MonoBehaviour
     public GameObject spherePrefab;
     public GameObject redsphere;
     public GameObject bluespherePrefab;
-    private float xmin = 0;
-    private float xmax = 1920;
-    private float ymin = 0;
-    private float ymax = 1080;
+    private float xmin = 525;
+    private float xmax = 1585;//1920;
+    private float ymin = 150;
+    private float ymax = 935;//1080;
 
-    private float umin = -0.155F;//0.29F;
-    private float umax = 0.155F;
-    private float vmin = 0.1F;//-0.216F;
-    private float vmax = -0.1F;
+    private float umin = -0.154F;//0.29F;
+    private float umax = 0.154F;
+    private float vmin = 0.98F;//-0.216F;
+    private float vmax = -0.98F;
     public void markEdges(Matrix4x4 m)
     {
         markEdges(new CameraPosition(Camera.main));
@@ -103,21 +103,21 @@ public class HandleResult : MonoBehaviour
     }
     public void Cast(float x, float y, CameraPosition cpos,GameObject sphere, string name)
     {
-        LabelCreater.instance.AddLabel(name);
-        //Debug.Log("ymin "+ymin);
-        //move pointer basen on photo pixel position (1080/1920)
+        //check if out of display view
         if (x > xmax || x < xmin || y > ymax || y < ymin)
         {
             ResultAsText.instance.Add(x + " " + y + " is out of view, skipped");
             Debug.Log(x + " " + y + " is out of view, skipped");
             return;
         }
+        LabelCreater.instance.AddLabel(name);
+        //move pointer basen on photo pixel position (1080/1920)
         Vector3 p = cpos.cameratoWorldMatrix.MultiplyPoint(new Vector3(U(x), V(y), -0.4F));
 
         Raycast.instance.StartCast(Raycast.instance.CreateRaycastParams(cpos.ctransform, p));
 
         //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity); show point on clipping plane
-        ResultAsText.instance.Add(U(x) + " " + U(y) + " "+name +" object marked");
+        ResultAsText.instance.Add(x +" "+y+" "+U(x) + " " + U(y) + " "+name +" object marked");
         //Debug.Log(x+" "+y+" "+u(x) + " " + u(y) + " object marked");
         //sphere.transform.position = p;
     }

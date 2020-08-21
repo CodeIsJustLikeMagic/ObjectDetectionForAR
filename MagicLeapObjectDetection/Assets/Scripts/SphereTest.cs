@@ -37,6 +37,7 @@ public class SphereTest : MonoBehaviour
         Matrix4x4 m = Camera.main.cameraToWorldMatrix;
         p = m.MultiplyPoint(new Vector3(0, 0, -1F));
         display.transform.position = p;
+        display.transform.LookAt(Camera.main.transform.position);
     }
 
     public void Runtest()
