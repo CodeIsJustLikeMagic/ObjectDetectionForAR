@@ -42,8 +42,8 @@ public class HandleResult : MonoBehaviour
         foreach (DetectedObject obj in det.objectNames)
         {
             Debug.Log(obj.objectName);
-            int x = obj.rectangle.x;
-            int y = obj.rectangle.y;
+            int x = obj.rectangle.x + (obj.rectangle.w/2);
+            int y = obj.rectangle.y + (obj.rectangle.h/2);
             ResultAsText.instance.Add(obj.objectName);
             Cast(x, y, cpos,spherePrefab, obj.objectName);
         }
@@ -71,15 +71,15 @@ public class HandleResult : MonoBehaviour
     public GameObject spherePrefab;
     public GameObject redsphere;
     public GameObject bluespherePrefab;
-    private float xmin = 525;
-    private float xmax = 1585;//1920;
-    private float ymin = 150;
-    private float ymax = 935;//1080;
+    private float xmin = 0;//525;
+    private float xmax = 1920;//1585;//1920;
+    private float ymin = 0;//150;
+    private float ymax = 1080;//935;//1080;
 
-    private float umin = -0.154F;//0.29F;
-    private float umax = 0.154F;
-    private float vmin = 0.98F;//-0.216F;
-    private float vmax = -0.98F;
+    private float umin = -0.295F;
+    private float umax = 0.2281F;
+    private float vmin = 0.1546F;
+    private float vmax = -0.1507F;
     public void markEdges(Matrix4x4 m)
     {
         markEdges(new CameraPosition(Camera.main));
@@ -102,11 +102,11 @@ public class HandleResult : MonoBehaviour
         }
         else
         {
-            LabelCreater.instance.AddLabel(name);
+            //LabelCreater.instance.AddLabel(name);
             //move pointer basen on photo pixel position (1080/1920)
             Vector3 p = cpos.cameratoWorldMatrix.MultiplyPoint(new Vector3(U(x), V(y), -0.4F));
             Raycast.instance.StartCast(Raycast.instance.CreateRaycastParams(cpos.ctransform, p),name);
-            //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity); show point on clipping plane
+            //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity);// show point on clipping plane
             ResultAsText.instance.Add(x +" "+y+" "+U(x) + " " + U(y) + " "+name +" object marked");
             //Debug.Log(x+" "+y+" "+u(x) + " " + u(y) + " object marked");
             //sphere.transform.position = p;

@@ -39,9 +39,16 @@ public class SphereTest : MonoBehaviour
         display.transform.position = p;
         display.transform.LookAt(Camera.main.transform.position);
     }
-
+    private float umin = -0.295F;//0.29F;
+    private float umax = 0.2281F;
+    private float vmin = 0.1546F;//-0.216F;
+    private float vmax = -0.1507F;
     public void Runtest()
     {
-        LabelCreater.instance.CreateMarker(new Vector3(0, 0, 0), new Vector3(0, 0, 0), "test");
+        //Vector3 p = Camera.main.cameraToWorldMatrix.MultiplyPoint(new Vector3(umin, vmax, -0.4F));
+        //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity);
+        HandleResult.instance.markEdges(Camera.main.cameraToWorldMatrix);
+        //LabelCreater.instance.CreateMarker(new Vector3(0, 0, 0), new Vector3(0, 0, 0), "test");
     }
+
 }
