@@ -38,10 +38,10 @@ public class Raycast : MonoBehaviour
     {
         //HandleResult.instance.markEdges(Camera.main.cameraToWorldMatrix);
     }
-    public void StartCast(MLRaycast.QueryParams raycastParams)
+    public void StartCast(MLRaycast.QueryParams raycastParams, string text)
     {
         Debug.Log("Raycast started");
-        MLRaycast.Raycast(raycastParams, HandleOnReceiveRaycast);
+        MLRaycast.Raycast(raycastParams, (state, point, normal, confidence) => HandleOnReceiveRaycast(text, state, point, normal, confidence));
     }
     private IEnumerator NormalMarker(Vector3 point, Vector3 normal)
     {
@@ -50,7 +50,7 @@ public class Raycast : MonoBehaviour
         yield return new WaitForSeconds(2);
         Destroy(go);
     }
-    void HandleOnReceiveRaycast(MLRaycast.ResultState state, UnityEngine.Vector3 point, Vector3 normal, float confidence)
+    void HandleOnReceiveRaycast(string text, MLRaycast.ResultState state, UnityEngine.Vector3 point, Vector3 normal, float confidence)
     {
         Debug.Log("Finished Raycast");
         if (state == MLRaycast.ResultState.HitObserved)
@@ -59,7 +59,7 @@ public class Raycast : MonoBehaviour
             //StartCoroutine(NormalMarker(point, normal));
             //PermanentMarker(point, normal);
             Debug.Log("normal" + normal);
-            LabelCreater.instance.CreateMarker(point, new Vector3(0,0,0));
+            LabelCreater.instance.CreateMarker(point, new Vector3(0,0,0), text);
         }
     }
     private void PermanentMarker(Vector3 point, Vector3 normal)

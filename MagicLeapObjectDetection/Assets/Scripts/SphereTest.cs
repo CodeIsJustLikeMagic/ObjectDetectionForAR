@@ -42,6 +42,6 @@ public class SphereTest : MonoBehaviour
 
     public void Runtest()
     {
-        LabelCreater.instance.CreateMarker(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+        LabelCreater.instance.CreateMarker(new Vector3(0, 0, 0), new Vector3(0, 0, 0), "test");
     }
 }

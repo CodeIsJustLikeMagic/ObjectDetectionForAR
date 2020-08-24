@@ -15,14 +15,14 @@ public class LabelCreater : MonoBehaviour
     public List<GameObject> markers = new List<GameObject>();
     public void AddLabel(string str)
     {
+        //ResultAsText.instance.AddLabel(str);
         labelsTexts.Add(str);
     }
     int m = 0;
-    public void CreateMarker(Vector3 point, Vector3 normal)
+    public void CreateMarker(Vector3 point, Vector3 normal, string text)
     {
         m = m + 1;
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
-
         GameObject go = Instantiate(markerprefab, point, rotation);
         MarkerBehavior b = go.GetComponent<MarkerBehavior>();
         if(b == null)
@@ -30,7 +30,18 @@ public class LabelCreater : MonoBehaviour
             Debug.Log("no MarkerBehavior Component");
         }
         markers.Add(go);
-        go.GetComponent<MarkerBehavior>().SetText(Label(m));
+        go.GetComponent<MarkerBehavior>().SetText(text);
+        ShowLabels();
+        ResultAsText.instance.AddMarkers("new marker " +m+" "+text);
+    }
+    private void ShowLabels()
+    {
+        string s = "";
+        foreach(string l in labelsTexts)
+        {
+            s = s + "\n" + l;
+        }
+        ResultAsText.instance.ShowLabels(s);
     }
     private string Label(int m)
     {

@@ -6,14 +6,12 @@ using UnityEngine.UI;
 public class ResultAsText : MonoBehaviour
 {
     public static ResultAsText instance;
-    private Text output;
+    public Text output;
+    public Text labels;
+    public Text markers;
     private void Awake()
     {
         instance = this;
-    }
-    void Start()
-    {
-        output = GameObject.FindObjectOfType<Text>();
     }
 
     public void Show(System.String json)
@@ -25,5 +23,16 @@ public class ResultAsText : MonoBehaviour
     {
         output.text = output.text + "\n" + json;
     }
-
+    public void ShowLabels(System.String json)
+    {
+        labels.text = json;
+    }
+    public void AddLabel(System.String json)
+    {
+        labels.text = labels.text + "\n" +json;
+    }
+    public void AddMarkers(System.String json)
+    {
+        markers.text = markers.text + "\n" + json;
+    }
 }

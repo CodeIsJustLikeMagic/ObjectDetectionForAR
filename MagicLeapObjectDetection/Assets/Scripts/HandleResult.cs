@@ -11,7 +11,6 @@ public class HandleResult : MonoBehaviour
     {
         instance = this;
     }
-
     [System.Serializable]
     public class Rectangle
     {
@@ -20,7 +19,6 @@ public class HandleResult : MonoBehaviour
         public int w;
         public int h;
     }
-
     [System.Serializable]
     public class DetectedObject
     {
@@ -28,18 +26,13 @@ public class HandleResult : MonoBehaviour
         public string objectName;
         public double confidence;
     }
-
     [System.Serializable]
     public class DetectionResponse
     {
         public DetectedObject[] objectNames;
         public string requestId;
         public object metadata;
-
     }
-
-
-
     public void HandleJson(byte[] imageBytes, System.String jsonResponse, CameraPosition cpos)
     { 
         jsonResponse = jsonResponse.Replace("object", "objectName");
@@ -54,10 +47,8 @@ public class HandleResult : MonoBehaviour
             ResultAsText.instance.Add(obj.objectName);
             Cast(x, y, cpos,spherePrefab, obj.objectName);
         }
-        //markEdges(cpos);
         ShowImage(imageBytes);
     }
-
     public void ShowImage(byte[] imageData)
     {
         Texture2D texture = new Texture2D(8, 8);
@@ -108,18 +99,18 @@ public class HandleResult : MonoBehaviour
         {
             ResultAsText.instance.Add(x + " " + y + " is out of view, skipped");
             Debug.Log(x + " " + y + " is out of view, skipped");
-            return;
         }
-        LabelCreater.instance.AddLabel(name);
-        //move pointer basen on photo pixel position (1080/1920)
-        Vector3 p = cpos.cameratoWorldMatrix.MultiplyPoint(new Vector3(U(x), V(y), -0.4F));
-
-        Raycast.instance.StartCast(Raycast.instance.CreateRaycastParams(cpos.ctransform, p));
-
-        //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity); show point on clipping plane
-        ResultAsText.instance.Add(x +" "+y+" "+U(x) + " " + U(y) + " "+name +" object marked");
-        //Debug.Log(x+" "+y+" "+u(x) + " " + u(y) + " object marked");
-        //sphere.transform.position = p;
+        else
+        {
+            LabelCreater.instance.AddLabel(name);
+            //move pointer basen on photo pixel position (1080/1920)
+            Vector3 p = cpos.cameratoWorldMatrix.MultiplyPoint(new Vector3(U(x), V(y), -0.4F));
+            Raycast.instance.StartCast(Raycast.instance.CreateRaycastParams(cpos.ctransform, p),name);
+            //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity); show point on clipping plane
+            ResultAsText.instance.Add(x +" "+y+" "+U(x) + " " + U(y) + " "+name +" object marked");
+            //Debug.Log(x+" "+y+" "+u(x) + " " + u(y) + " object marked");
+            //sphere.transform.position = p;
+        }
     }
     private float U(float x)
     {
