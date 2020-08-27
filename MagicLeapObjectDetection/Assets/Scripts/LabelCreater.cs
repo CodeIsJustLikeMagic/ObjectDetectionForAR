@@ -7,13 +7,19 @@ public class LabelCreater : MonoBehaviour
 {
     public static LabelCreater instance;
     public GameObject markerprefab;
+    public GameObject markerprefab2;
     private void Awake()
     {
         instance = this;
     }
     public List<GameObject> markers = new List<GameObject>();
-    public void CreateMarker(Vector3 point, Vector3 normal, string text)
+    public void CreateMarker(Vector3 point, Vector3 normal, string text, int material)
     {
+        GameObject prefab = markerprefab;
+        if(material == 2)
+        {
+            markerprefab = markerprefab2;
+        }
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
         GameObject go = Instantiate(markerprefab, point, rotation);
         MarkerBehavior b = go.GetComponent<MarkerBehavior>();

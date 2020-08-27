@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SphereTest : MonoBehaviour
+public class TestLabels : MonoBehaviour
 {
     public GameObject display;
-    public static SphereTest instance;
+    public static TestLabels instance;
     void Awake()
     {
         instance = this;
@@ -47,7 +47,7 @@ public class SphereTest : MonoBehaviour
     {
         //Vector3 p = Camera.main.cameraToWorldMatrix.MultiplyPoint(new Vector3(umin, vmax, -0.4F));
         //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity);
-        HandleResult.instance.markEdges(Camera.main.cameraToWorldMatrix);
+        PixelToWorld.instance.markEdges(Camera.main.cameraToWorldMatrix);
         //LabelCreater.instance.CreateMarker(new Vector3(0, 0, 0), new Vector3(0, 0, 0), "test");
     }
 

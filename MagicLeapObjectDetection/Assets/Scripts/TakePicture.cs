@@ -160,14 +160,14 @@ public class TakePicture : MonoBehaviour
             Debug.Log("Previous thread has not finished, unable to begin a new capture just yet.");
         }
     }
-    private CameraPosition cpos;
+    private SavedCameraState camereaState;
     /// <summary>
     /// Worker function to call the API's Capture function
     /// capture the actual image
     /// </summary>
     private void CaptureThreadWorker()
     {
-        cpos = new CameraPosition(Camera.main);
+        camereaState = new SavedCameraState(Camera.main);
         Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);//uses magic leap camera
 
         lock (_cameraLockObject)
@@ -195,7 +195,8 @@ public class TakePicture : MonoBehaviour
         }
         // Initialize to 8x8 texture so there is no discrepency
         // between uninitalized captures and error texture
-        StartCoroutine(VisionManager.instance.AnalyseImage(imageData, cpos));
+        StartCoroutine(AzureObjectDetection.instance.AnalyseImage(imageData, camereaState));
+        StartCoroutine(AzureCustomPrediction.instance.AnalyseImage(imageData, camereaState));
         Texture2D texture = new Texture2D(8, 8);
         bool status = texture.LoadImage(imageData);
 

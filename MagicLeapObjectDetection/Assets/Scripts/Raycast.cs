@@ -34,38 +34,20 @@ public class Raycast : MonoBehaviour
         return _raycastParams;
     }
     // Update is called once per frame
-    void Update()
-    {
-        //HandleResult.instance.markEdges(Camera.main.cameraToWorldMatrix);
-    }
-    public void StartCast(MLRaycast.QueryParams raycastParams, string text)
+    public void StartCast(MLRaycast.QueryParams raycastParams, string text, int material)
     {
         Debug.Log("Raycast started");
-        MLRaycast.Raycast(raycastParams, (state, point, normal, confidence) => HandleOnReceiveRaycast(text, state, point, normal, confidence));
+        MLRaycast.Raycast(raycastParams, (state, point, normal, confidence) => HandleOnReceiveRaycast(text, material, state, point, normal, confidence));
     }
-    private IEnumerator NormalMarker(Vector3 point, Vector3 normal)
-    {
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
-        GameObject go = Instantiate(prefab, point, rotation);
-        yield return new WaitForSeconds(2);
-        Destroy(go);
-    }
-    void HandleOnReceiveRaycast(string text, MLRaycast.ResultState state, UnityEngine.Vector3 point, Vector3 normal, float confidence)
+    void HandleOnReceiveRaycast(string text, int material, MLRaycast.ResultState state, UnityEngine.Vector3 point, Vector3 normal, float confidence)
     {
         Debug.Log("Finished Raycast");
         if (state == MLRaycast.ResultState.HitObserved)
         {
             Debug.Log("Hit something, want to mark it");
-            //StartCoroutine(NormalMarker(point, normal));
-            //PermanentMarker(point, normal);
             Debug.Log("normal" + normal);
-            LabelCreater.instance.CreateMarker(point, new Vector3(0,0,0), text);
+            LabelCreater.instance.CreateMarker(point, new Vector3(0,0,0), text, material);
         }
-    }
-    private void PermanentMarker(Vector3 point, Vector3 normal)
-    {
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
-        GameObject go = Instantiate(prefab, point, rotation);
     }
     private void OnDestroy()
     {

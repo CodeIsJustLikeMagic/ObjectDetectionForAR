@@ -41,11 +41,11 @@ public class InputHandler : MonoBehaviour
         if (button == MLInput.Controller.Button.Bumper)
         {
             Debug.Log("bumper released");
-            SphereTest.instance.ShowPos();
+            TestLabels.instance.ShowPos();
         }
         if(button == MLInput.Controller.Button.HomeTap)
         {
-            HandleResult.instance.markEdges(Camera.main.cameraToWorldMatrix);
+            PixelToWorld.instance.markEdges(Camera.main.cameraToWorldMatrix);
         }
     }
 
