@@ -8,6 +8,7 @@ public class ResultAsText : MonoBehaviour
     public static ResultAsText instance;
     public Text output;
     public Text markers;
+    public Text iteration;
     private void Awake()
     {
         instance = this;
@@ -24,5 +25,9 @@ public class ResultAsText : MonoBehaviour
     public void AddMarkers(System.String json)
     {
         markers.text = markers.text + "\n" + json;
+    }
+    public void ShowIteration(string str)
+    {
+        iteration.text = "Custom Vision Iteration : " + str;
     }
 }

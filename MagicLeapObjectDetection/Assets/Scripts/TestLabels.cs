@@ -11,7 +11,6 @@ public class TestLabels : MonoBehaviour
         instance = this;
     }
     public GameObject sphere;
-    Vector3 p;
 
     void Update()//move sphere to somewhere within the camera view
     {
@@ -21,24 +20,11 @@ public class TestLabels : MonoBehaviour
         }
         if (Input.GetKeyDown("r"))
         {
-            ReorientCanvas();
+            MoveDisplay.instance.ReorientCanvas();
         }
     }
 
-    public void ShowPos()
-    {
-        ReorientCanvas();
-        //ResultAsText.instance.Show(p.ToString());
-        //HandleResult.instance.markEdges(Camera.main.cameraToWorldMatrix);
-    }
-
-    public void ReorientCanvas()
-    {
-        Matrix4x4 m = Camera.main.cameraToWorldMatrix;
-        p = m.MultiplyPoint(new Vector3(0, 0, -1F));
-        display.transform.position = p;
-        display.transform.LookAt(Camera.main.transform.position);
-    }
+    
     private float umin = -0.295F;//0.29F;
     private float umax = 0.2281F;
     private float vmin = 0.1546F;//-0.216F;

@@ -7,8 +7,6 @@ using UnityEngine.XR.MagicLeap;
 public class Raycast : MonoBehaviour
 {
     public static Raycast instance;
-    //public Transform ctransform;
-    public GameObject prefab;
     // Start is called before the first frame update
     private void Awake()
     {

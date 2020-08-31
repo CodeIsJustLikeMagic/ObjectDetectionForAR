@@ -7,23 +7,48 @@ using MagicLeap.Core.StarterKit;
 
 public class TakePicture : MonoBehaviour
 {
-    // Start is called before the first frame update
+    #region globalVars
     public static TakePicture instance;
     private MLPrivilegeRequesterBehavior _privRequester = null;
     private bool _granted = false;
     [SerializeField, Tooltip("Object to set new images on.")]
     private GameObject _previewObject = null;
-    
     private object _cameraLockObject = new object();
-
     private bool _isCameraConnected = false;
-
     private bool _isCapturing = false;
-
     private bool _hasStarted = false;
-   
     private Thread _captureThread = null;
-    
+    #endregion
+    /// <summary>
+    /// Handles the event of a new image getting captured.
+    /// Starts Analysing Image with Azure Object Detectio nand Azure Custom Prediction.
+    /// </summary>
+    /// <param name="imageData">The raw data of the image.</param>
+    private void OnCaptureRawImageComplete(byte[] imageData)
+    {
+        ResultAsText.instance.Add("capture done");
+        lock (_cameraLockObject)
+        {
+            _isCapturing = false;
+        }
+        Texture2D texture = new Texture2D(8, 8);
+        bool status = texture.LoadImage(imageData);
+
+        if (status && (texture.width != 8 && texture.height != 8))
+        {
+            _previewObject.SetActive(true);
+            Renderer renderer = _previewObject.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.mainTexture = texture;
+            }
+
+        }
+        StartCoroutine(AzureObjectDetection.instance.AnalyseImage(imageData, camereaState));
+        StartCoroutine(AzureCustomPrediction.instance.AnalyseImage(imageData, camereaState));
+    }
+
+    #region TakeImage
     void Awake()
     {
         //get privileges
@@ -37,10 +62,10 @@ public class TakePicture : MonoBehaviour
         if (!result.IsOk)
         {
             Debug.Log("we didnt get privileges");
-            ResultAsText.instance.Add("we didnt get privileges");
+            ResultAsText.instance.Show("we didnt get privileges");
         }
         Debug.Log("we got privileges");
-        ResultAsText.instance.Add("we got privileges");
+        ResultAsText.instance.Show("we got privileges");
         _granted = true;
         StartCapture(); //enables camera and callbacks
     }
@@ -135,7 +160,7 @@ public class TakePicture : MonoBehaviour
     {
         if (_granted)
         {
-            ResultAsText.instance.Add("take image do");
+            ResultAsText.instance.Add("take an image...");
             TriggerAsyncCapture();
 
         }
@@ -150,14 +175,14 @@ public class TakePicture : MonoBehaviour
     {
         if (_captureThread == null || (!_captureThread.IsAlive))
         {
-            Debug.Log("starting image take thread");
+            ResultAsText.instance.Add("capture thread started");
             ThreadStart captureThreadStart = new ThreadStart(CaptureThreadWorker);
             _captureThread = new Thread(captureThreadStart);
             _captureThread.Start();
         }
         else
         {
-            Debug.Log("Previous thread has not finished, unable to begin a new capture just yet.");
+            ResultAsText.instance.Add("Previous thread has not finished, unable to begin a new capture just yet.");
         }
     }
     private SavedCameraState camereaState;
@@ -182,34 +207,6 @@ public class TakePicture : MonoBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// Handles the event of a new image getting captured.
-    /// </summary>
-    /// <param name="imageData">The raw data of the image.</param>
-    private void OnCaptureRawImageComplete(byte[] imageData)
-    {
-        lock (_cameraLockObject)
-        {
-            _isCapturing = false;
-        }
-        // Initialize to 8x8 texture so there is no discrepency
-        // between uninitalized captures and error texture
-        StartCoroutine(AzureObjectDetection.instance.AnalyseImage(imageData, camereaState));
-        StartCoroutine(AzureCustomPrediction.instance.AnalyseImage(imageData, camereaState));
-        Texture2D texture = new Texture2D(8, 8);
-        bool status = texture.LoadImage(imageData);
-
-        if (status && (texture.width != 8 && texture.height != 8))
-        {
-            _previewObject.SetActive(true);
-            Renderer renderer = _previewObject.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material.mainTexture = texture;
-            }
-
-        }
-    }
+    #endregion
 }
 

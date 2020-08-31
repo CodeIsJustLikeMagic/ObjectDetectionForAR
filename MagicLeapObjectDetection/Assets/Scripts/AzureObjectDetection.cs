@@ -44,7 +44,7 @@ public class AzureObjectDetection : MonoBehaviour
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
                 ResultAsText.instance.Add(jsonResponse);
-                HandleJson(imageBytes, jsonResponse, cameraState);
+                HandleJsonResponse(imageBytes, jsonResponse, cameraState);
             }
             catch (Exception exception)
             {
@@ -77,7 +77,7 @@ public class AzureObjectDetection : MonoBehaviour
         public string requestId;
         public object metadata;
     }
-    public void HandleJson(byte[] imageBytes, System.String jsonResponse, SavedCameraState cpos)
+    public void HandleJsonResponse(byte[] imageBytes, System.String jsonResponse, SavedCameraState cpos)
     {
         jsonResponse = jsonResponse.Replace("object", "objectName");
         DetectionResponse det = new DetectionResponse();
@@ -91,6 +91,5 @@ public class AzureObjectDetection : MonoBehaviour
             ResultAsText.instance.Add(obj.objectName);
             PixelToWorld.instance.Cast(x, y, cpos, obj.objectName);
         }
-        PixelToWorld.instance.ShowImage(imageBytes);
     }
 }

@@ -5,6 +5,9 @@ using UnityEngine.XR.MagicLeap;
 
 public class InputHandler : MonoBehaviour
 {
+    //Trigger for TakeImage
+    //Home button to reorient canvas
+    //Bumper t
     private MLInput.Controller _controller;
     void Start()
     {
@@ -22,7 +25,7 @@ public class InputHandler : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.Log("coudnlt find Controller");
+            Debug.Log("couldnt find ML Controller");
         }
 
     }
@@ -32,23 +35,22 @@ public class InputHandler : MonoBehaviour
     {
         CheckTrigger();
     }
-
-    bool pressed = false;
-
+    
     //on bumper press
     void OnButtonUp(byte controllerId, MLInput.Controller.Button button)
     {
         if (button == MLInput.Controller.Button.Bumper)
         {
-            Debug.Log("bumper released");
-            TestLabels.instance.ShowPos();
+            LabelCreater.instance.ToggleShow();
         }
         if(button == MLInput.Controller.Button.HomeTap)
         {
-            PixelToWorld.instance.markEdges(Camera.main.cameraToWorldMatrix);
+            MoveDisplay.instance.ReorientCanvas();
+            //PixelToWorld.instance.markEdges(Camera.main.cameraToWorldMatrix);
         }
     }
-
+    
+    bool pressed = false;
     void CheckTrigger()
     {
         if (_controller == null)
@@ -59,7 +61,6 @@ public class InputHandler : MonoBehaviour
         {
             if (pressed == false)
             {
-                Debug.Log("pressed Trigger");
                 TakePicture.instance.TakeImage();
             }
             pressed = true;

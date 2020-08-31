@@ -6,13 +6,11 @@ using UnityEngine.XR.MagicLeap;
 public class PixelToWorld : MonoBehaviour
 {
     public static PixelToWorld instance;
-    public Renderer imageViewer = null;
     void Awake()
     {
         instance = this;
     }
-
-    public GameObject greensphere;
+    
     public GameObject bluespherePrefab;
     private float xmin = 0;//525;
     private float xmax = 1920;//1585;//1920;
@@ -65,25 +63,5 @@ public class PixelToWorld : MonoBehaviour
         float slope = ((vmax - vmin) / (ymax - ymin));
         float b = vmin - slope * ymin;
         return slope * y + b;
-    }
-
-    public void ShowImage(byte[] imageData)
-    {
-        Texture2D texture = new Texture2D(8, 8);
-        bool status = texture.LoadImage(imageData);
-
-        if (status && (texture.width != 8 && texture.height != 8))
-        {
-            Camera cam = Camera.main;
-            float cheight = 2f * cam.orthographicSize;
-            float cwidth = cheight * cam.aspect;
-            Debug.Log(cheight + " " + cwidth);
-            Renderer renderer = imageViewer;
-            if (renderer != null)
-            {
-                renderer.material.mainTexture = texture;
-            }
-            ResultAsText.instance.Add("camera h, w: (" + cheight + ", " + cwidth + ") texture h, w: (" + texture.height + ", " + texture.width + ")");
-        }
     }
 }

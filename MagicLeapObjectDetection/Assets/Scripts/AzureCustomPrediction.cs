@@ -9,13 +9,17 @@ public class AzureCustomPrediction : MonoBehaviour
     public static AzureCustomPrediction instance;
 
     private string predictionKey = "";
-    private string predictionEndpoint = "https://detectiontrainingforar.cognitiveservices.azure.com/customvision/v3.0/Prediction/ac915246-5268-461f-bd11-cf0c1826d509/detect/iterations/Iteration2/image";
+    private string predictionEndpointStart = "https://detectiontrainingforar.cognitiveservices.azure.com/customvision/v3.0/Prediction/ac915246-5268-461f-bd11-cf0c1826d509/detect/iterations/";
+    private string predictionEndpoint = "";
     [HideInInspector] public byte[] imageBytes;
+    public string iteration = "Iteration4";
     private void Awake()
     {
         instance = this;
         TextAsset txt = (TextAsset)Resources.Load("predictionKey", typeof(TextAsset));
         predictionKey = txt.text;
+        predictionEndpoint = predictionEndpointStart + iteration + "/image";
+        ResultAsText.instance.ShowIteration(iteration);
     }
 
     public IEnumerator AnalyseImage(byte[] imageBytes, SavedCameraState cameraState)
