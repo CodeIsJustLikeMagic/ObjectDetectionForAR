@@ -37,18 +37,36 @@ public class LabelCreater : MonoBehaviour
             objectdetectionMarkers.Add(go);
         }
         go.GetComponent<MarkerBehavior>().SetText(text);
-        ResultAsText.instance.AddMarkers(text);
+        markersOnCanvas();
+    }
+
+    private void markersOnCanvas()
+    {
+        string str = "";
+        foreach (GameObject m in objectdetectionMarkers)
+        {
+            str = str + m.GetComponent<MarkerBehavior>().GetText() +"\n";
+        }
+        str = str + "Custom Vision: \n";
+        foreach (GameObject m in custompredictionMarkers)
+        {
+            str = str + m.GetComponent<MarkerBehavior>().GetText()+"\n";
+        }
+        ResultAsText.instance.ShowMarkers(str);
     }
     public void Update()
     {
-        foreach(GameObject m in objectdetectionMarkers)
         {
-            m.transform.LookAt(Camera.main.transform.position);
+            foreach (GameObject m in objectdetectionMarkers)
+            {
+                m.transform.LookAt(Camera.main.transform.position);
+            }
+            foreach (GameObject m in custompredictionMarkers)
+            {
+                m.transform.LookAt(Camera.main.transform.position);
+            }
         }
-        foreach (GameObject m in custompredictionMarkers)
-        {
-            m.transform.LookAt(Camera.main.transform.position);
-        }
+
     }
     int showState = 0;
     public void ToggleShow()
@@ -79,4 +97,34 @@ public class LabelCreater : MonoBehaviour
             m.SetActive(showblue);
         }
     }
+
+    public void EraseLast()
+    {
+        if(showState == 0)//erase last blue, erase red if no blue exists
+        {
+            if (!RemoveFrom(custompredictionMarkers))
+            {
+                RemoveFrom(objectdetectionMarkers);
+            }
+        }else if(showState == 1)//erase last red
+        {
+            RemoveFrom(objectdetectionMarkers);
+        }else if(showState == 2)//erase last blue
+        {
+            RemoveFrom(custompredictionMarkers);
+        }
+        markersOnCanvas();
+    }
+    
+    private bool RemoveFrom(List<GameObject> l)
+    {
+        if (l.Count > 0) //prevent IndexOutOfRangeException for empty list
+        {
+            Object.Destroy(l[l.Count - 1]);
+            l.RemoveAt(l.Count - 1);
+            return true;
+        }
+        return false;
+    }
+
 }

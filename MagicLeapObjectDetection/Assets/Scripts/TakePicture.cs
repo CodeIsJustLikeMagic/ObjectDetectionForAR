@@ -197,6 +197,7 @@ public class TakePicture : MonoBehaviour
 
         lock (_cameraLockObject)
         {
+            ResultAsText.instance.Add("MLCamera.IsStarted " + MLCamera.IsStarted + " isCameraConnected " + _isCameraConnected);
             if (MLCamera.IsStarted && _isCameraConnected)
             {
                 MLResult result = MLCamera.CaptureRawImageAsync();
@@ -206,6 +207,54 @@ public class TakePicture : MonoBehaviour
                 }
             }
         }
+    }
+    /// <summary>
+    /// Stop the camera, unregister callbacks, and stop input and privileges APIs.
+    /// </summary>
+    void OnDisable()
+    {
+        lock (_cameraLockObject)
+        {
+            if (_isCameraConnected)
+            {
+                MLCamera.OnRawImageAvailable -= OnCaptureRawImageComplete;
+
+                _isCapturing = false;
+                DisableMLCamera();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Cannot make the assumption that a reality privilege is still granted after
+    /// returning from pause. Return the application to the state where it
+    /// requests privileges needed and clear out the list of already granted
+    /// privileges. Also, disable the camera and unregister callbacks.
+    /// </summary>
+    void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            lock (_cameraLockObject)
+            {
+                if (_isCameraConnected)
+                {
+                    MLCamera.OnRawImageAvailable -= OnCaptureRawImageComplete;
+
+                    _isCapturing = false;
+
+                    DisableMLCamera();
+                }
+            }
+            
+
+            _hasStarted = false;
+        }
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        EnableMLCamera();
     }
     #endregion
 }

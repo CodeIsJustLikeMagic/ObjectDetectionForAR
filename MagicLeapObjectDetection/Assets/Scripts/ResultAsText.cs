@@ -30,4 +30,8 @@ public class ResultAsText : MonoBehaviour
     {
         iteration.text = "Custom Vision Iteration : " + str;
     }
+    public void ShowMarkers(string str)
+    {
+        markers.text = "Markers :\n" + str;
+    }
 }

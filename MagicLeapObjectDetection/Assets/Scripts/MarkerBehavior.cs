@@ -10,4 +10,9 @@ public class MarkerBehavior : MonoBehaviour
     {
         textHolder.text = str;
     }
+    public string GetText()
+    {
+        return textHolder.text;
+    }
+
 }

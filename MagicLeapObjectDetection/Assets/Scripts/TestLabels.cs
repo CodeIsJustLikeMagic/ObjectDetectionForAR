@@ -23,7 +23,6 @@ public class TestLabels : MonoBehaviour
             MoveDisplay.instance.ReorientCanvas();
         }
     }
-
     
     private float umin = -0.295F;//0.29F;
     private float umax = 0.2281F;
@@ -31,10 +30,10 @@ public class TestLabels : MonoBehaviour
     private float vmax = -0.1507F;
     public void Runtest()
     {
+        PixelToWorld.instance.markEdges(Camera.main.cameraToWorldMatrix);
+        //LabelCreater.instance.CreateMarker(new Vector3(0, 0, 0), new Vector3(0, 0, 0), "test", 1);
+        //LabelCreater.instance.EraseLast();
         //Vector3 p = Camera.main.cameraToWorldMatrix.MultiplyPoint(new Vector3(umin, vmax, -0.4F));
         //GameObject sphere2 = Instantiate(sphere, p, Quaternion.identity);
-        PixelToWorld.instance.markEdges(Camera.main.cameraToWorldMatrix);
-        //LabelCreater.instance.CreateMarker(new Vector3(0, 0, 0), new Vector3(0, 0, 0), "test");
     }
-
 }
