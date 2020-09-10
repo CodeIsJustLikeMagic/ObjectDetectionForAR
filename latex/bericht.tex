@@ -1,0 +1,308 @@
+\documentclass[german,a4paper, 12pt]{llncs}
+\usepackage[left=30mm,right=30mm,top=25mm,bottom=25mm]{geometry}
+\setlength{\footskip}{6mm} % Abstand Seitenzahl zu Text
+\setcounter{tocdepth}{2}
+\makeatletter
+\renewcommand*\l@author[2]{}
+\renewcommand*\l@author[2]{}
+\makeatletter
+\usepackage[utf8]{inputenc}
+\usepackage[backend=biber,sorting =none]{biblatex}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage{babel}
+
+\usepackage{parskip}
+\usepackage{float}
+
+%\usepackage{hyperref}
+\usepackage{filecontents}
+
+
+\begin{filecontents}{references.bib}
+	
+	@article{introToCNN,
+		author = {O'Shea, Keiron and Nash, Ryan},
+		year = {2015},
+		month = {11},
+		pages = {},
+		title = {An Introduction to Convolutional Neural Networks},
+		journal = {ArXiv e-prints}
+	}
+	@article{surveyOfDeepLearing,
+		author = {Jiao, Licheng and Zhang, Fan and Liu, Fang and Yang, Shuyuan and Li, Lingling and Feng, Zhixi and Qu, Rong},
+		year = {2019},
+		month = {09},
+		pages = {1-1},
+		title = {A Survey of Deep Learning based Object Detection},
+		volume = {PP},
+		journal = {IEEE Access},
+		doi = {10.1109/ACCESS.2019.2939201}
+	}
+	
+	@ONLINE{spatialMapping,
+		title = {Spatial Mapping},
+		url = {https://docs.microsoft.com/de-de/windows/mixed-reality/spatial-mapping},
+		urldate = {2020-04-17},
+	}
+	
+	@ONLINE{spatialMappingUnity,
+		title = {Räumliche Zuordnung in Unity},
+		url = {https://docs.microsoft.com/de-de/windows/mixed-reality/spatial-mapping-in-unity},
+		urldate = {2020-04-17},
+	}
+	
+	@INPROCEEDINGS{cNNforClass,
+		author={N. {Jmour} and S. {Zayen} and A. {Abdelkrim}},
+		booktitle={2018 International Conference on Advanced Systems and Electric Technologies (IC ASET)}, 
+		title={Convolutional neural networks for image classification}, 
+		year={2018},
+		volume={},
+		number={},
+		pages={397-402},}
+	
+	%https://docs.microsoft.com/de-de/learn/modules/analyze-images-computer-vision/2-image-analysis-azure
+	
+	@ONLINE{getAzure,
+		title = {Microsoft Azure Computer Vsion},
+		url = {https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/},
+		urldate = {2020-06-12},
+	}
+	@ONLINE{whatIsAzure,
+		title = {What is Computer Vision},
+		url = {https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home},
+		urldate = {2020-06-12},
+	}
+	@ONLINE{objDetectAzure,
+		title = {Detect common objects in images},
+		url = {https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/concept-object-detection},
+		urldate = {2020-06-12},
+	}
+	
+	@ONLINE{pytorch,
+		title = {From research to production},
+		url = {https://pytorch.org/},
+		urldate = {2020-06-12},
+	}
+	@ONLINE{Azure302Doc,
+		title = {Mr und Azure 302 Maschinelles Sehen},
+		url = {https://docs.microsoft.com/de-de/windows/mixed-reality/mr-azure-302},
+		urldate = {2020-06-12},
+	}
+	@ONLINE{Azure302bDoc,
+		title = {Mr und Azure 302b benutzerdefinierte Vision},
+		url = {https://docs.microsoft.com/de-de/windows/mixed-reality/mr-azure-302b},
+		urldate = {2020-06-12},
+	}
+	@INPROCEEDINGS{cars,
+		author={X. {Chen} and H. {Ma} and J. {Wan} and B. {Li} and T. {Xia}},
+		booktitle={2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}, 
+		title={Multi-view 3D Object Detection Network for Autonomous Driving}, 
+		year={2017},
+		volume={},
+		number={},
+		pages={6526-6534},
+	}
+	@ONLINE{sensoren,
+		title = {HoloLens Forschungsmodus},
+		url = {https://docs.microsoft.com/de-de/windows/mixed-reality/research-mode},
+		urldate = {2020-06-12},
+	}
+	@ONLINE{hololensHardware,
+		title = {HoloLens Hardware},
+		url = {https://docs.microsoft.com/de-de/hololens/hololens1-hardware},
+		urldate = {2020-06-12},
+	}
+	@ONLINE{mixedRalityToolkitOverview,
+		title = {What is the Mixed Reality Toolkit},
+		url = {https://microsoft.github.io/MixedRealityToolkit-Unity/README.html},
+		urldate = {2020-06-15},
+	}
+	@ONLINE{locatableCamera,
+		title = {Ausrichtbare Kamera},
+		url = {https://docs.microsoft.com/de-de/windows/mixed-reality/locatable-camera},
+		urldate = {2020-06-15},
+	}
+	@ONLINE{mixedrealitytooltip,
+		title = {Tooltip},
+		url = {https://github.com/microsoft/MixedRealityToolkit-Unity/blob/mrtk_development/Documentation/README_Tooltip.md},
+		urldate = {2020-06-15},
+	}
+	
+	
+	
+\end{filecontents}
+
+\addbibresource{references.bib}
+\title{Bachelorarbeit}
+\subtitle{Automatisches Labeln von Objekten in einer Augmented Reality Umgebung}
+\author{\parbox{.9\textwidth}{\centering 
+		\large Janelle Pfeifer \\
+		\small Delpstraße 28\\
+		53359 Rheinbach \\
+		janelle.pfeifer@smail.inf.h-brs.de}}
+\institute{\parbox{.9\textwidth}{\centering 
+		\large Hochschule Bonn-Rhein-Sieg \\
+		\normalsize Institute of Visual Computing \\ 
+		\small Fachbereich Informatik \\
+		Studiengang: Informatik (B.SC.)\\
+		\phantom{.}\\
+		\normalsize Erstprüfer: Prof. Dr. Ernst Kruijff\\
+		\normalsize Zweitprüfer: Prof. Dr. André Hinkenjann\\
+		\phantom{.}\\
+		\normalsize Rheinbach, 1.10.2020}}
+\begin{document}
+	
+	%{\let\newpage\relax\maketitle}
+	\maketitle
+	\newpage
+	\tableofcontents
+	\newpage
+	
+\section{Einleitung}
+%noch ein bsichen lang. kann die beschreibung der zwei schlechteren methoden verkürzen. Abschnitte 2 3 4 
+
+Augmented Reality (AR) ist eine Vermischung der realen Welt mit digitalen Elementen. Es wird durch Anzeigegeräte, wie Handys, Tablets oder Augmented Reality Brillen präsentiert und bietet ein intuitives Benutzerinterface um Informationen über Objekten der realen Welt anzuzeigen. Dafür müssen Informationen über die Umgebung erfasst werden. Es ist wichtig zu bestimmen welche Objekte sich in der Umgebung befinden, die durch AR erweitert werden soll.
+
+%wie wird objekt erkennung gemacht
+Es gibt mehrere Möglichkeiten reale Objekte zu erkennen. Zum einen können Markierungen in der realen Welt verwendet werden. Dabei handelt es sich um statische Bilder, beispielsweise ein Foto, oder ein QR Code, die von einer Kamera eingescannt werden. Der Marker ist einzigartig für jedes Object, das erkannt werden soll, damit sie voneinander unterschieden werden können. Der Nachteil bei diesem Vorgehen ist der Arbeitsaufwand, der damit verbunden ist, jeden Gegenstand einzeln zu Markieren und der AR Applikation die Marker bekannt zu machen. 
+%Außerdem können Marker leicht verdeckt werden und nicht an jedes Object lassen sich Marker anbringen. 
+
+Wenn man Markierungen in der Realen Welt umgehen möchte, kann man den Nutzer der Applikation bitten, per Geste oder per eye sight auf Objekte der Realen Welt zu weisen, die erkannt werden sollen. Dabei muss von dem Nutzer auch angegeben werden, um welches Object es sich genau handelt, damit die Applikation unterschiedliche Objekte auseinander halten kann und die korrekten Informationen mit ihren assoziiert. Auch hier ist ein hoher Arbeitsaufwand damit verbunden alle Objekte für die Application auszuweisen. 
+
+%also basically per hand. was ziemlich schlecht ist. % es bleibt nur übrig automatisch zu tracken
+Beide der Verfahren sind nicht auf große AR Umgebungen skalierbar, da sie sehr Arbeitsintensiv sind. Nur eine voll automatische Objekterkennung ist skalierbar. 
+
+%object detection funktoniert was bilder angeht.
+Um diese Automatisierung zu erreichen kann Image based Object Detection aus dem Bereich der Computer Vision verwendet werden.
+Dabei werden Objekte in Bildern erkannt, indem nach Charakteristiken gesucht werden, die unterschiedliche Arten an Objekten auszeichnen.\cite{introToCNN}
+
+%Diese Automatisierung wollen wir in dieser Thesis mit einer Hololens durchführen. quasi zeigen das es geht.
+In dieser Thesis wird das Erkennen und Labeln von Objekten in einer AR Umgebung, mithilfe von Image based Objekt Detection, automatisiert. 
+Dabei wird as AR Gerät "Magic Leap" verwendet. 
+
+
+\section{Grundlagen}
+\subsection*{Spatial Mapping} 
+Durch Spatial Mapping wird eine 3D Abbildung einer realen Umgebung erschaffen. So können Hologramme mit der echten Welt interagieren, diese Verdecken, oder von ihr verdeckt werden.\cite{spatialMapping} 
+
+\subsection*{Object Detection}
+Bei Objekt Detection werden Objekte in einem Bild untersucht. Dabei wird bestimmt um welche Klasse an Objekt es sich handelt, beispielsweise ob es eine Katze oder ein Hund ist, und wo sich das Objekt befindet. Die Ausgabedaten dieser Untersuchung ist eine Liste an Objektarten und eine Liste an Bounding Boxen, die die Positionen angeben.
+
+\subsection*{Artificial Neural Networks}
+Artificial Neural Networks sind Machine Learning Architekturen. Sie können beispielsweise Musik, Text oder Bilder nach Mustern durchsuchen. Sie sind für keine genaue Aufgabe programmiert, sondern lernen indem sie mit Beispieldaten trainiert werden. Für jedes Beispiel gibt es ein Label, das angibt ob es das gesuchte Muster enthält oder nicht. Die Struktur des Networks verfügt über Gewichte, die Einfluss auf den Output haben. Mit jedem Trainingsbeispiel passt das Network die Gewichte an, sodass der Output dem Label des Beispiels entspricht.\cite{introToCNN,surveyOfDeepLearing}
+
+
+%Artificial Neural Networks bestehen aus einer Menge an verbundenen Knoten, die jeweils eine Berechnung durchführen. Diese Knoten sind in Ebenen aufgeteilt, den Input Layer, den Output Layer, und mehrere Hidden Layer dazwischen. Die Knoten einer Ebene sind mit allen Knoten der Vorherigen Ebene verbunden.\cite{introToCNN,surveyOfDeepLearing}
+%Das Neural Network bekommt eine Menge an Daten als Input. Die Knoten arbeiten zusammen um den Output zu erzeugen. Dabei wird über Gewichte entschieden, wie viel Einfluss das Ergebnis der einzelnen Knoten auf die nächste Ebene hat.\cite{introToCNN,surveyOfDeepLearing}
+%Um ein Neural Network zu trainieren, wird der Output von einem Mensch bewertet. Das Neural Network nutzt diese Bewertung, um die Gewichte der einzelnen Knoten zu verändern. So passt sich das Neural Network an. \cite{introToCNN,surveyOfDeepLearing}
+
+\subsection*{Convolutional Neural Networks}
+Convolutional Neural Networks sind auf das Verarbeiten von Bildern spezialisiert. Sie nutzen aus, das Bilder viele Redundanzen und Informationsarme Bereiche haben, indem sie mit jedem Verarbeitungsschritt Informationen weglassen. So können Rechenzeit und Trainingsdaten verringert werden.\cite{introToCNN,surveyOfDeepLearing,cNNforClass}
+
+%So wird das Convolutional Neural Network gezwungen sich auf wesentliche Teile des Bildes zu knozentrieren. Mit jedem verarbeitungsschritt sinkt die Menge an Informationen, die Das Sie Brauceh weniger Rechenzeit und weniger Trainigsdaten als ein generelles Artificial Neural Network werden eingesetzt um Muster in Bildern zu erknenne
+
+%Convolutional Neural Networks sind Machine Learning Architekturen, die darauf ausgelegt sind, Muster in Bildern zu erkennen. Sie müssen auf das Muster trainiert werden. Dazu wird ihnen eine Menge an Bildern, die Teilweise das Muster erhalten, und der gewünschte Output, der erreicht werden soll, gegeben. Die Struktur des Network verfügt über Gewichte, die die Berechnung des Outputs beeinflussen. Mit jedem Trainigsbild passt das Network die Gewichte an, damit es die Mustern korrekt erkennen kann.\cite{introToCNN,surveyOfDeepLearing}
+
+%Convolutional Neural Networks werden hauptsächlich eingesetzt um Muster in Bildern zu erkennen. Daher ist ihre Struktur und ihre Arbeitsweise auf Bilder spezialisiert. Sie brauchen weniger Rechenzeit und weniger Trainingsdaten als ein generelles Artificial Neural Network für dieselbe Aufgabe brauchen würde.\cite{introToCNN,surveyOfDeepLearing,cNNforClass} 
+%Die Knoten in einer Ebene eines Convolutional Neural Network sind nur mit wenigen Knoten der vorherigen Ebene verbunden. So sinkt die Menge an Informationen mit jeder Ebene. Das CNN wird gezwungen sich auf wesentliche Teile des Bildes zu konzentrieren, mit denen beispielsweise ein Objekt oder  Muster erkannt werden kann. \cite{introToCNN,surveyOfDeepLearing}
+
+\subsection*{Azure maschinelles Sehen}
+Microsoft Azure bietet einen Computer Vision Service an, der für Object Detection trainiert ist.
+Der Anwender sendet ein Bild an Microsoft, dort wird es verarbeitet und ein Ergebnis zurückgegeben.\cite{getAzure,whatIsAzure,objDetectAzure,Azure302Doc}
+
+\subsection*{Azure Custom Vision}
+Azure bietet zusätzlich einen Computer Vision Service an, den der Nutzer Trainieren kann um bestimmte Objekte Klassifizieren zu können.\cite{Azure302bDoc}
+
+\subsection*{Magic Leap AR Brille}
+Die Hololens verfügt über 4 Umgebungskameras, eine tiefen Kamera und eine  ausrichtbare Kamera. Die Umgebungskameras werden für Spatial Mapping genutzt. Anhand der Topographie kann die Hololens einfache Ebenen, wie die Wände und den Boden eines Raumes erkennen. Die ausrichtbare Kamera kann geschwenkt werden und nimmt Fotos auf. Die Bilder, die dabei entstehen, erhält in Unity eine 'cameraToWorldMatrix', die zum Zeitpunkt der Erfassung für jeden Pixel des Bildes eine Position im Koordinatensystem der AR Umgebung angibt. So kann das Koordinatensystem des Bildes in das Koordinatensystem der Umgebung transformiert werden.\cite{locatableCamera}
+
+
+\subsection{Räumliche Zuordnung in Unity}
+\subsection{Räumliche Anker}
+\subsection{Object Detection}
+\subsection{Azure Object Detection}
+\subsection{Magic Leap}
+\subsection{Webrequests}
+\subsection{Camera to World Matrix in Unity}
+\subsection{CNN Networks für Object Detection}
+
+\section{Design und Implementierung}
+Das Ziel ist es das Erkennen und Labeln von Objekten in einer AR Umgebung, durch Image based Objekt Detection zu ermöglichen und mit einer Magic Leap Brille umzusetzten.
+
+%eine grobe beschreibung welche schritte der nutzer macht und welche schritte das programm macht. was soll das endprudukt können?
+Wenn der Nutzer den Controller betätigt, beginnt die Detection indem zunächst mit der Kamera der Magic Leap ein Foto aufgenommen wird. 
+Dieses Foto wird dann an Azure Object Detection und Azure Custom Vision geschickt. 
+Als Ergebnis gibt es jeweils eine Json Datei. Darin wird angegeben welche Objekte auf den Bilder gefunden wurden und wo sie sich befinden. 
+Die gefundenen Objekte werden aus den Json Dateien ausgelesen. 
+
+Im nächsten Schritt wird die Position in der AR Umgebung bestimmt, die 
+\section{Design}
+Die Magic leap macht fotos von der Umgebung. die Bilder werden dann mit Azure Analysiert. Das Ergebnis ist eine Json Datei. Es wird für Bildbereicht angegeben welcher Object dort gefunden wurde.
+Die Lokation ist in Pixeln angegeben und hängt natürlich von dem Foto ab.
+Die Pixel Position muss umgewandelt werden in eine Position im Raum an der sich das Object befindet.
+
+Die Pixel Position von dem Foto wird in eine Position auf der Clipping Plane der Camera umgerechnet. Ein Raycast wird von dem Urspurng der Camera durc hie Position in die welt geschickt. Der Raycast trifft dann auf das Mesh der Umgebugn dir von dem Magic leap spatial mapping erzeugt wurde.
+Der Treffpunkt des Raycast ist die Position des Objektes und wird mit einem Label Markiert. 
+
+
+Wenn der Nutzer den Trigger von dem Controller drückt, wird TackePicture getriggered. 
+Ein Thread geöffnet um das Bild zu machen, das dauert nähmlich ein bischen. Zu dem Zeitpunkt wird die aktuelle Position der Camera gespeichert.
+
+Das Foto wird durch die ML Camera aufgenommen. In der Methode OnCaputreRawImageComplete wird aufgerufen, wenn ein Bild aufgebonnen wurde. Dort wird die Analyse der Bilder gestartet. 
+
+\section{AzureObject Detection}
+
+Um Azure Object Detectio zu nutzen muss ein ein Webrequest gemacht werden. Ein Post request an einen web endpoint von Azure. In den header kommt ein authorization Key und das bild in den content. 
+
+Azure führt die Analyse durch und gibt eine Json Datei als Response zurück.
+Beispiel der Json::
+
+Es wird für jedes gefundene Object ein Klassenname und ein Viereck angegeben in des sich das Object auf dem Bild befindet. 
+Die Mitte des Vierecks dient hier als Ankerpunkt für das Object. 
+Die Klasse PixelToWorld bekommt die x und y koordinaten des Mittelpuntke sowie den Objectnamen und die KameraPosition übergeben die Die Kamera hatte, als das Foto aufgenommen wurde.
+
+\subsection{Pixel to World}
+
+In diesem Abschnitt soll die Pixel Position von einem 2D Foto in eine 3D Position auf auf dem Mesh des Spatial Mappings übertragen werden.
+
+Als erstes wird die Pixel Position auf eine Position auf der Clipping Ebene der Camera umgerechnet. 
+Dafür wird die CameraToWorld Matrix eingesetzt. Um xyz koordinaten zu erhalten die sich auf der clipping ebene befinden. 
+Mit Vector offset von der Camera bestimmen. Mutliplizieren mit cameraToWorld matrix um Koordinate in der welt abhänig von der blickrichtug, dem winkel und der position der kamera zu erhalten.
+Vekotr mit dem Multimpiuiert wird bekommt 3 dinge: u, v, distance.
+
+Distance ist die distanz vom urspung der kamera. Hier ist die distance zur clipping plane genutzt.
+U und V geben dann die Kooridnate auf der Bildebene der Kamera an.
+
+Die x und y Kooridnate von dem foto werden in u und v umgewaldelt. Es wurden minimal und maximalwerte für u und v ausprobiert, mit dennen die Ränder des FOTOS AUF DER bILDENENE lokalisiert werden können. 
+Dabei wurde beachtet, das die fotos größer ald die Bildebene sind und ein anderes Seitenverhältnisse haben.
+Siehe abbildung Bild, wo foto eingeblendet ist, man das view frustum sieht und die ränder markeirt sind mit u und v.
+Mit den minimal und maximalwerten, sowie der Größe der Fotos werden zwei linearfunktikoionen aufgestellt mit dennen x und y in un und v umgwaldelt werden können. Siehe Abbidlung, die die Funmktioien zeigen. Raycast. 
+Ein Raycast durch den Urpsung der Kamera und den Punkt auf der Clipping Plane. Nutzt ML Raycast Setzte Urpsung und Direction. Der kann Raycast auf Spatial Mesh Siehe Abbildung.
+Erstelle ein Label an der Stelle. String des Labels wird in raycast start mit lambda gesetztt. Dann muss mlraycast den Inhalt nicht füllen, wenn der die rückgabe methode aufruft. This is sooo vage.
+Über u und v kann dann der pixel auf der clippingplane bestimmt werden. 
+Foto hat ein anderes seitenverhältnis und ist größer als der view frustum der kamera. 
+
+Die Um einen Punkte auf der Clipping Ebene zu erhalten wird ein Abstand von 0.4 angegeben, da die Clipping Plane 0.37 von muss Die Matrix bekommt einen Vector Mit einem Abstand von 0.4 von dem Camera kann eine Position auf der Clipping Plane angegeben werden. 
+
+Erste Problem ist, das das Foto ein Anderes Seitenverhältnis und eine andere  größe hat als das Display der Magicleap und somit als die Unity Camera. 
+
+
+
+\section{Implementierung}
+Input von dem Magic Leap controller abwarter. Man muss permission haben um Fotos zu machen ins Internet zu gehen.  
+
+
+
+\subsection{Azure Vision Services}
+
+\subsection{Foto Pixel zu AR Welt}
+
+\subsection{Object Detection mit Hololens Daten}
+\subsection{Object in 3D Szene mit Labeln versehen}
+
+\section{Zusammenfassung}
+	
+	\newpage
+	\printbibliography
+\end{document}

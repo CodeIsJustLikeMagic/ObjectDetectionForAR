@@ -1,0 +1,48 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {german}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {title}{Bachelorarbeit}{1}% 
+\defcounter {refsection}{0}\relax 
+\authcount {1}
+\defcounter {refsection}{0}\relax 
+\contentsline {author}{\parbox {.9\textwidth }{\centering \large Janelle Pfeifer \unskip \ \ignorespaces \relax \fontsize {9}{11}\selectfont \abovedisplayskip 8.5\p@ plus3\p@ minus4\p@ \abovedisplayshortskip \z@ plus2\p@ \belowdisplayshortskip 4\p@ plus2\p@ minus2\p@ \def \leftmargin \leftmargini \topsep \z@ \parsep \parskip \itemsep \z@ {\leftmargin \leftmargini \parsep 0\p@ plus1\p@ minus\p@ \topsep 8\p@ plus2\p@ minus4\p@ \itemsep 0\p@ }\belowdisplayskip \abovedisplayskip Delpstraße 28\unskip \ \ignorespaces 53359 Rheinbach \unskip \ \ignorespaces janelle.pfeifer@smail.inf.h-brs.de}}{1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1}Einleitung}{3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2}Grundlagen}{3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1}Räumliche Zuordnung in Unity}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2}Räumliche Anker}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3}Object Detection}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4}Azure Object Detection}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.5}Magic Leap}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.6}Webrequests}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.7}Camera to World Matrix in Unity}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.8}CNN Networks für Object Detection}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3}Design und Implementierung}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4}Design}{5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5}AzureObject Detection}{6}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1}Pixel to World}{6}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6}Implementierung}{7}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1}Azure Vision Services}{7}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.2}Foto Pixel zu AR Welt}{7}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.3}Object Detection mit Hololens Daten}{7}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.4}Object in 3D Szene mit Labeln versehen}{7}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7}Zusammenfassung}{7}% 
