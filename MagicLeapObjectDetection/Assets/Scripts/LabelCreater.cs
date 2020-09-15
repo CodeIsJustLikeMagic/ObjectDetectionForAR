@@ -22,24 +22,38 @@ public class LabelCreater : MonoBehaviour
             prefab = MarkerCustomPrediction;
         }
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
-        GameObject go = Instantiate(prefab, point, rotation);
-        MarkerBehavior b = go.GetComponent<MarkerBehavior>();
+        GameObject marker = Instantiate(prefab, point, rotation);
+        MarkerBehavior b = marker.GetComponent<MarkerBehavior>();
         if(b == null)
         {
             Debug.Log("no MarkerBehavior Component");
         }
         if(material == 2)
         {
-            custompredictionMarkers.Add(go);
+            custompredictionMarkers.Add(marker);
         }
         else
         {
-            objectdetectionMarkers.Add(go);
+            objectdetectionMarkers.Add(marker);
         }
-        go.GetComponent<MarkerBehavior>().SetText(text);
+        marker.GetComponent<MarkerBehavior>().SetText(text);
         markersOnCanvas();
     }
+    
+    public void Update()
+    {//roate existing Markers towars camera
+        foreach (GameObject m in objectdetectionMarkers)
+        {
+            m.transform.LookAt(Camera.main.transform.position);
+        }
+        foreach (GameObject m in custompredictionMarkers)
+        {
+            m.transform.LookAt(Camera.main.transform.position);
+        }
+       
+    }
 
+    //updates UI Display of which Markers exist in the world
     private void markersOnCanvas()
     {
         string str = "";
@@ -54,20 +68,7 @@ public class LabelCreater : MonoBehaviour
         }
         ResultAsText.instance.ShowMarkers(str);
     }
-    public void Update()
-    {
-        {
-            foreach (GameObject m in objectdetectionMarkers)
-            {
-                m.transform.LookAt(Camera.main.transform.position);
-            }
-            foreach (GameObject m in custompredictionMarkers)
-            {
-                m.transform.LookAt(Camera.main.transform.position);
-            }
-        }
 
-    }
     int showState = 0;
     public void ToggleShow()
     {

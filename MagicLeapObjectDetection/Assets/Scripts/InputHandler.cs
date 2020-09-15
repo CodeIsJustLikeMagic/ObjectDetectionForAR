@@ -5,11 +5,8 @@ using UnityEngine.XR.MagicLeap;
 
 public class InputHandler : MonoBehaviour
 {
-    //Trigger for TakeImage
-    //Home button to reorient canvas
-    //Bumper t
     private MLInput.Controller _controller;
-
+    //actions
     private void TriggerTapped()
     {
         Debug.Log("Trigger Tapped");

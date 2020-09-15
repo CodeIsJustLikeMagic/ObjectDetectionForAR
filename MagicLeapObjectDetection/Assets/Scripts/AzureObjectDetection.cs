@@ -44,7 +44,7 @@ public class AzureObjectDetection : MonoBehaviour
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
                 ResultAsText.instance.Add(jsonResponse);
-                HandleJsonResponse(imageBytes, jsonResponse, cameraState);
+                HandleJsonResponse(jsonResponse, cameraState);
             }
             catch (Exception exception)
             {
@@ -77,9 +77,9 @@ public class AzureObjectDetection : MonoBehaviour
         public string requestId;
         public object metadata;
     }
-    public void HandleJsonResponse(byte[] imageBytes, System.String jsonResponse, SavedCameraState cpos)
+    public void HandleJsonResponse(System.String jsonResponse, SavedCameraState cpos)
     {
-        jsonResponse = jsonResponse.Replace("object", "objectName");
+        jsonResponse = jsonResponse.Replace("object", "objectName"); //c# dosn't like "public string object"
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
         ResultAsText.instance.Show(" Handle Json");

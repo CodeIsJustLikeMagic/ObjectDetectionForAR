@@ -99,14 +99,14 @@ public class AzureCustomPrediction : MonoBehaviour
             if(obj.probability >= 0.8)
             {
                 Debug.Log(obj.tagName);
-                int x = (int)(texture.width * obj.boundingBox.left);
-                int y = (int)(texture.height * obj.boundingBox.top);
+                int u = (int)(texture.width * obj.boundingBox.left);
+                int v = (int)(texture.height * obj.boundingBox.top);
                 int w = (int)(texture.width * obj.boundingBox.width);
                 int h = (int)(texture.height * obj.boundingBox.height);
-                x = x + w / 2;
-                y = y + h / 2;
-                ResultAsText.instance.Add(obj.tagName + " " + x + " " + y +" "+obj.probability);
-                PixelToWorld.instance.Cast(x, y, cpos, obj.tagName, 2); //make it use second material to differentiate between Object Detection and Custom Vision
+                u = u + w / 2;
+                v = v + h / 2;
+                ResultAsText.instance.Add(obj.tagName + " " + u + " " + v +" "+obj.probability);
+                PixelToWorld.instance.Cast(u, v, cpos, obj.tagName, 2); //make it use second material to differentiate between Object Detection and Custom Vision
             }
         }
     }

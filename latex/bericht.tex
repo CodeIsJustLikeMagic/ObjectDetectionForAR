@@ -158,7 +158,8 @@
 	\newpage
 	\tableofcontents
 	\newpage
-	
+
+\section{Zusammenfassung}
 \section{Einleitung}
 %noch ein bsichen lang. kann die beschreibung der zwei schlechteren methoden verkürzen. Abschnitte 2 3 4 
 
@@ -227,81 +228,191 @@ Die Hololens verfügt über 4 Umgebungskameras, eine tiefen Kamera und eine  aus
 \subsection{Camera to World Matrix in Unity}
 \subsection{CNN Networks für Object Detection}
 
-\section{Design und Implementierung}
+raycast
+clipping plane
+mesh
+
+\section{Design}
 Das Ziel ist es das Erkennen und Labeln von Objekten in einer AR Umgebung, durch Image based Objekt Detection zu ermöglichen und mit einer Magic Leap Brille umzusetzten.
 
 %eine grobe beschreibung welche schritte der nutzer macht und welche schritte das programm macht. was soll das endprudukt können?
-Wenn der Nutzer den Controller betätigt, beginnt die Detection indem zunächst mit der Kamera der Magic Leap ein Foto aufgenommen wird. 
+Wenn der Nutzer den Controller betätigt, beginnt die Detection damit, zunächst ein Foto mit der Kamera der Magic Leap aufzunehmen. 
 Dieses Foto wird dann an Azure Object Detection und Azure Custom Vision geschickt. 
-Als Ergebnis gibt es jeweils eine Json Datei. Darin wird angegeben welche Objekte auf den Bilder gefunden wurden und wo sie sich befinden. 
-Die gefundenen Objekte werden aus den Json Dateien ausgelesen. 
+Als Ergebnis gibt es jeweils eine Json Datei. Darin wird angegeben welche Arten von Objekten auf dem Foto gefunden wurden (Hund, Person, Computermaus) und wo sie sich jeweils befinden. Die Position eines Objektes ist dabei mit einer Bounding Box bestimmt. Um das Markieren von Objekten in der AR Umgebung zu vereinfachen wird die Mitte der Box als Position des Objektes genommen.
 
-Im nächsten Schritt wird die Position in der AR Umgebung bestimmt, die 
-\section{Design}
-Die Magic leap macht fotos von der Umgebung. die Bilder werden dann mit Azure Analysiert. Das Ergebnis ist eine Json Datei. Es wird für Bildbereicht angegeben welcher Object dort gefunden wurde.
-Die Lokation ist in Pixeln angegeben und hängt natürlich von dem Foto ab.
-Die Pixel Position muss umgewandelt werden in eine Position im Raum an der sich das Object befindet.
-
-Die Pixel Position von dem Foto wird in eine Position auf der Clipping Plane der Camera umgerechnet. Ein Raycast wird von dem Urspurng der Camera durc hie Position in die welt geschickt. Der Raycast trifft dann auf das Mesh der Umgebugn dir von dem Magic leap spatial mapping erzeugt wurde.
-Der Treffpunkt des Raycast ist die Position des Objektes und wird mit einem Label Markiert. 
-
-
-Wenn der Nutzer den Trigger von dem Controller drückt, wird TackePicture getriggered. 
-Ein Thread geöffnet um das Bild zu machen, das dauert nähmlich ein bischen. Zu dem Zeitpunkt wird die aktuelle Position der Camera gespeichert.
-
-Das Foto wird durch die ML Camera aufgenommen. In der Methode OnCaputreRawImageComplete wird aufgerufen, wenn ein Bild aufgebonnen wurde. Dort wird die Analyse der Bilder gestartet. 
-
-\section{AzureObject Detection}
-
-Um Azure Object Detectio zu nutzen muss ein ein Webrequest gemacht werden. Ein Post request an einen web endpoint von Azure. In den header kommt ein authorization Key und das bild in den content. 
-
-Azure führt die Analyse durch und gibt eine Json Datei als Response zurück.
-Beispiel der Json::
-
-Es wird für jedes gefundene Object ein Klassenname und ein Viereck angegeben in des sich das Object auf dem Bild befindet. 
-Die Mitte des Vierecks dient hier als Ankerpunkt für das Object. 
-Die Klasse PixelToWorld bekommt die x und y koordinaten des Mittelpuntke sowie den Objectnamen und die KameraPosition übergeben die Die Kamera hatte, als das Foto aufgenommen wurde.
-
-\subsection{Pixel to World}
-
-In diesem Abschnitt soll die Pixel Position von einem 2D Foto in eine 3D Position auf auf dem Mesh des Spatial Mappings übertragen werden.
-
-Als erstes wird die Pixel Position auf eine Position auf der Clipping Ebene der Camera umgerechnet. 
-Dafür wird die CameraToWorld Matrix eingesetzt. Um xyz koordinaten zu erhalten die sich auf der clipping ebene befinden. 
-Mit Vector offset von der Camera bestimmen. Mutliplizieren mit cameraToWorld matrix um Koordinate in der welt abhänig von der blickrichtug, dem winkel und der position der kamera zu erhalten.
-Vekotr mit dem Multimpiuiert wird bekommt 3 dinge: u, v, distance.
-
-Distance ist die distanz vom urspung der kamera. Hier ist die distance zur clipping plane genutzt.
-U und V geben dann die Kooridnate auf der Bildebene der Kamera an.
-
-Die x und y Kooridnate von dem foto werden in u und v umgewaldelt. Es wurden minimal und maximalwerte für u und v ausprobiert, mit dennen die Ränder des FOTOS AUF DER bILDENENE lokalisiert werden können. 
-Dabei wurde beachtet, das die fotos größer ald die Bildebene sind und ein anderes Seitenverhältnisse haben.
-Siehe abbildung Bild, wo foto eingeblendet ist, man das view frustum sieht und die ränder markeirt sind mit u und v.
-Mit den minimal und maximalwerten, sowie der Größe der Fotos werden zwei linearfunktikoionen aufgestellt mit dennen x und y in un und v umgwaldelt werden können. Siehe Abbidlung, die die Funmktioien zeigen. Raycast. 
-Ein Raycast durch den Urpsung der Kamera und den Punkt auf der Clipping Plane. Nutzt ML Raycast Setzte Urpsung und Direction. Der kann Raycast auf Spatial Mesh Siehe Abbildung.
-Erstelle ein Label an der Stelle. String des Labels wird in raycast start mit lambda gesetztt. Dann muss mlraycast den Inhalt nicht füllen, wenn der die rückgabe methode aufruft. This is sooo vage.
-Über u und v kann dann der pixel auf der clippingplane bestimmt werden. 
-Foto hat ein anderes seitenverhältnis und ist größer als der view frustum der kamera. 
-
-Die Um einen Punkte auf der Clipping Ebene zu erhalten wird ein Abstand von 0.4 angegeben, da die Clipping Plane 0.37 von muss Die Matrix bekommt einen Vector Mit einem Abstand von 0.4 von dem Camera kann eine Position auf der Clipping Plane angegeben werden. 
-
-Erste Problem ist, das das Foto ein Anderes Seitenverhältnis und eine andere  größe hat als das Display der Magicleap und somit als die Unity Camera. 
-
-
+Für jedes Objekte wird ihre Position auf dem Foto auf die Clipping plane der Kamera übertragen. Dann wird ein Raycast von der Kamera aus durch die Clipping Plane Position geschickt. Der Raycast trifft auf ein Mesh, das die reale Welt abbildet. Die Position, die der Raycast trifft, wird mit einem Schriftzug markiert. Dort befindet sich das Objekt, das auf dem Foto gefunden wurde.
 
 \section{Implementierung}
-Input von dem Magic Leap controller abwarter. Man muss permission haben um Fotos zu machen ins Internet zu gehen.  
+% https://developer.magicleap.com/en-us/learn/guides/get-started-developing-in-unity
+Das Projekt wurde in Unity umgesetzt, und wurde für eine Magic Leap AR Brille entwickelt.
+Es wurde ein Unity Projekt Template von Magic Leap verwendet um den Set up zu vereinfachen. 
 
+Zusätzlich werden einige vorgefertigte Klassen von Magic Leap verwendet. Dazu gehören MLInput, MLCamera, MLRaycast, MLPrivilegeRequestBehavior und MLSpatialMapper.
 
+MLSpatialMapper setzt spatial mapping um und erzeugt ein Mesh, das die Umgebung abbildet.
+%\subsection{Input}
 
-\subsection{Azure Vision Services}
+%Der Input des Controllers wird in der Klasse InputHandler verarbeitet. Die Klasse MLInput verwaltet den Status des Controllers. In InputHandler werden die Stadi interpretiert und Mithilfe von MLInput werden ButtonDown und ButtonUp events abgefangen. 
 
-\subsection{Foto Pixel zu AR Welt}
+\subsection{Ein Foto aufnehmen}
 
-\subsection{Object Detection mit Hololens Daten}
-\subsection{Object in 3D Szene mit Labeln versehen}
+Das Script TakePicture implementiert das aufnehmen von einem Foto.
+Die Methode StartCapture wird aufgerufen, um den Process zu starten. 
+MLCamera wird genutzt um die Kamera der Magic Leap Brille anzusteuern.
+
+%Image: Aufgenommenes Foto wird in AR UI angezeigt.
+
+Wenn das Foto gemacht wurde, wird OnCaptureRawImageComplete aufgerufen. Die Daten des Bildes werden an die Klassen Azure ObjectDetection und AzureCustomPrediction weitgergegeben. Dort wird die Analyse der Bilder gestartet. 
+
+\subsection{Azure Object Detection}
+
+In der Methode AnalyseImage von AzureObjectDetection wird ein Web Request zusammengestellt. Azure stellt dafür einen Web endpoint zur verfügung. In dem Request muss ein Authorization Key für den Service und die Bild-Daten enthalten sein.
+
+Der Webrequest wird geschickt und es wird auf die Antwort gewartet. Wenn es keine Probleme mit dem Netzwerk gab, wird eine JsonDatei als String in der Antwort auf den Webrequest geschickt. Siehe Abbilung ??
+
+%picture of a json response. 
+
+Es wird für jedes gefundene Object auf dem Foto eine Bezeichnung und eine Bounding Box angegeben, in dem sich das Object auf dem Bild befindet. 
+
+Die Json Datei wird in HandleJsonResponse verarbeitet. Für den erwarteten Aufbau der Datei wurden drei Klassen geschrieben. Der Json String wird mit JsonUtility in ein DetectionResponse Object umgewandelt. Dabei werden alle gefundenen Foto-Objekte in einer Liste von DetectedObject abgelegt. %https://docs.unity3d.com/ScriptReference/JsonUtility.FromJson.html
+
+Die Gefundenen Object sollen im 3D Raum mit einer Markierung ausgezeichnet werden. 
+Dafür wird für jedes DetectedObject die Methode Cast von der Klasse PixelToWorld aufgerufen. Der Methode wird der Mittelpunkt der BoundingBox als u,v Foto-Koordinate für das DetectedObject übergeben.
+
+\subsection{Von dem Foto zum 3D Raum}
+
+In der Methode Cast wird die u,v Foto-Koordinate des Fotos und die Kameraausrichtung verwendet um das gefundene Foto-Objekt in der 3D Abbildung der Realen Welt zu lokalisieren.
+
+Als erstes wird die u,v Foto-Koordinate in eine Koordinate auf Clipping Plane der Kamera umgerechnet. 
+Dafür wird ein Vektor bestimmt, der einen Offset zu der Kamera angibt. 
+Dieser Offset wird mit der cameraToWorld Matrix multipliziert um einen Punkt p in dem dreidimensionalen Raum, abhängig von der Blickrichtung, dem Winkel und der Position der Kamera zu erhalten. P behält demnach, bei einem gleichbleibenden Offset, ein gleichbleibendes räumliches Verhältnis zu der Kamera.
+
+Der Offset-Vektor besteht aus drei Dimensionen: x,y,z.
+Der z Anteil gibt die Achse an, die von der Kamera nach vorne durch den View Frustum verläuft. Bei z = -0.4 wird der Punkt auf der Achse gewählt, auf dem die Clipping Plane liegt. 
+
+Die x und y Dimensionen beschreiben die Achsen, die horizontal und vertikal zur Clipping Plane verlaufen. Mit dem festgelegten z = -0.4, kann jeder Punkt auf der Clipping Plane durch x und y angegeben werden. Dazu gehören auch Punkte die außerhalb des View Frustum liegen.
+
+Es wurden Werte für x und y ausprobiert, mit denen die Ränder des Fotos auf der Clipping Plane angegeben werden können. Dabei wurde darauf geachtet, das das Foto ein Seitenverhältnis von 16:9 hat, während das Magic Leap Display, und somit die Kamera, ein Seitenverhältnis von 4:3 hat. Darüber hinaus ist der Bildausschnitt des Displays kleiner. Daher liegen die Ränder des Fotos außerhalb des View Frustum. 
+
+Sind die x und y Werte für die Ränder bekannt, ergibt sich für die Achsen jeweils ein Intervall, die kombiniert alle Positionen auf der Clipping Plane angeben können, die auch auf einem Foto zu finden sind. Die Intervall lauten: [-0.295,0.2281] für x und [0.1546,-0.1507] für y.
+
+Um die u,v Koordinate eines Fotos in eine x,y Koordinate umzuwandeln, werden zwei Lineare Funktionen aufgestellt:
+\begin{itemize}
+	\item Die Funktion X Bildet das Intervall für u [0,1920] auf das Intervall für x [-0.295,0.2281] ab.
+	\item Die Funktion Y Bildet das Intervall für v [0,1080] auf das Intervall für y [0.1546,-0.1507] ab.
+\end{itemize}
+Siehe Abbildung \ref{code:uvtoxy}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{images/code_uv_to_xy_scale.PNG}
+	\caption[]{Funktionen X und Y}
+	\label{code:uvtoxy}
+\end{figure}
+
+Die Funktionen werden genutzt um die u,v Koordinate eines DetectedObject in einen Offset-Vektor umzuwandeln. Der Offset wird mit der cameraToWorld Matrix multipliziert um den Punkt p im 3D Raum zu erhalten, der sich an der korrekten Stelle auf der Clippling Plane befindet. Siehe Abbildung \ref{code:castmethod}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.1\textwidth]{images/code_cast_method.PNG}
+	\caption[]{Cast Methode}
+	\label{code:castmethod}
+\end{figure}
+\subsection{Raycast}
+
+Als Nächstes wird ein Raycast durch den Ursprung der Kamera und den Punkt p gesendet. Dort wo der Raycast auf das Spatial Mapping Mesh trifft, ist das DetectedObject in dem 3D Raum zu finden. 
+
+Das Spatial Mapping Mesh wird von dem MLSpatialMapper erzeugt und bildet die Reale Welt ab. Um ein Raycast auf das Mesh auszuführen, wird MLRaycast eingesetzt. Ein MLRaycast brauch zwei Parameter:
+\begin{itemize}
+	\item Ein QueryParams Objekt, das Ursprung und Richtung für den Raycast beinhaltet.
+	\item Eine Methode die aufgerufen wird, wenn der Raycast fertig ist. 
+\end{itemize}
+In den QueryParams wird die Kamera als Ursprung für den Raycast angegeben, während ein Richtungsvektor von der Kamera zu dem Punkt p die Richtung des Raycastes bestimmt. Siehe Abbildung \ref{code:raycastparams}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{images/code_raycastparams.PNG}
+	\caption[]{Cast Methode}
+	\label{code:raycastparams}
+\end{figure}
+
+Wenn der Raycast fertig ist, wird die Methode HandleOnRecieveRaycast aufgerufen. Der Parameter point beinhaltet dabei die Koordinate, die getroffen wurde.
+Dieser Parameter wird an die Methode CreateMarker von der Klasse LabelCreater weitergegeben.
+
+\subsection{LabelCreater}
+
+CreateMarker erhält den Punkt point der getroffen wurde und die Bezeichnung für das DetectedObject. An der Koordinate von point wird ein Prefab GameObject instanziiert, das als Markierung für das DetectedObject in der 3D Umgebung dient.
+
+Das Prefab besteht aus einer Kugel und einem Schriftzug, der den Namen des DetectedObject anzeigen soll. Dem neu instanziierten GameObject wird die Bezeichnung des DetectedObject als Schriftzug zugewiesen. Siehe Abbildung \ref{image:labels}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{images/ML_labels.jpg}
+	\caption[]{Markierungen in der Welt}
+	\label{image:labels}
+\end{figure}
+
+\subsection{Azure Custom Vision}
+
+Neben der Bildanalyse mit Azure Object Detection wird auch Azure Custom Vision verwendet.
+Die AI wurde über die Webseite trainiert.
+
+Die Anfrage an den Service passiert in der Klasse AzureCustomPrediction. Ähnlich wie bei AzureObjectDetection wird ein Webrequest erstellt mit einem authorization key für den Service und einem Foto als payload.
+
+In der Antwort wird eine Json Datei zurückgeschickt, die die gefundenen Objecte angibt.
+Da die Json Datei eine etwas anderes Format hat, wurde eine eigene Handle Json Methode dafür geschrieben.
+
+Für jedes erkannte Objekt wird die Methode Cast von PixelToWorld aufgerufen, um das Objekt in der realen Welt zu lokalisieren und zu markieren.
+
+\subsubsection{Das Trainieren}
+
+Es wurde Probiert das Cusotm Vision Modell auf drei unterschieldiche Objekte zu trainieren.
+Dabei wurden vier Iterationen erstellt. 
+
+Iteration 1:
+
+Zunächst wurde probiert Tuben von Acrylfarbe zu erkennen. Die Genauigkeit war davon war nicht so gut. Es wurden in den Fotos Acrylfarben erkannt, wo es keine gab. Sieh Abbildung \ref{image:customVisionPaint}. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/customVisionPaint.PNG}
+	\caption[]{Beispielfoto Iteration 1. Die Wasserflasche wurde als Farbe markiert mit 55.7 Prozent statistischer Konfidenz. Die Tatsächliche Farbtube wurde mit einer Konfidenz von 47.5 Prozent erkannt.}
+	\label{image:customVisionPaint}
+\end{figure}
+
+Iteration 2:
+
+In der zweiten Iteration wurde probiert das Model darauf zu trainieren, eine Blaue Dose von Nivea Hautcreme to erkennen. Die Form und Farbe von der Dose ist sehr simpel, daher wurde davon ausgegangen, das sie leicher zu erkennen ist. Auch dort dar die Genauigkeit zunächt bei nur 80 Prozent. Es wurden in vielen Fotos fälschlicherweise Nivea Dosen erkannt.
+
+Iteration 3:
+
+In der Iteration drei wurde versucht Iteration 2 zu verbessern. Es wurden ausgewählte Training Fotos entfernt, die die Dose von einem Seitlichen Winkel zeigten, mit der mit der Erwartung das die Detektion der Dose aus dem Blickwinkel von Oben damit konsistenter wird. Zusätzlich wurden mehr Fotos von der Dose auf verschieden farbigen und gemusterten Untergrund hinzugefügt. 
+
+Die Genauigkeit der Prediction sank auf 75 Prozent.
+
+Iteration 4:
+
+In Iteration 4 wurden zwei Fotos von der Nivea Dose entfernt, das die Genauigkeit auf 100 Prozent steigen ließ. In der Umsetzung mit der Magic Leap Anwendung werden trotzdem häufig Objekte fälschlicherweise als Nivea Dose markiert.
+
+Neben der Dose wurde diese Iteration darauf trainiert eine bestimmte Holz Haarbürste zu erkennen. Aufgrund von dem komplexeren, und markanten Aussehen der Bürste ist davon ausgegangen, das die Bürste besser von anderen Objekte zu unterschieden ist. 
+Die Bürste wurde nur mit den Borsten nach oben Photographiert.
+
+Die Genauigkeit für die Bürste lag bei 100 Prozent. 
+In der Umsetzung mit der Magic Leap Anwendung wird die Bürste häufig nicht erkannt, obwohl sie im Bild ist und mit den Borsten nach oben liegt. Es werden jedoch keine Objekte als Haarbürste erkannt die keine sind.
+
+\subsection{Entwicklung von PixelToWorld}
+%todo schrieben was ich ausprobiert habe in pixel to world
+
+Zuerst ausprobiert 
+
+virtuell foto abschneiden nur den bereich verwenden, der auch auf dem display zu sehen ist. besseres feedback, das objekte dort entstanden sind und man weiß das dort das mesh schon ist.
+
+dafür ausprobiert, welche pixel des fotos am rand des displays liegen. dafür das zuletzt aufgenommene foto in der Anwendung in einem UI element anzeigen. ein tranzparentes gitternetzt darüber gelegt, wo man ablesen kann, welcher pixel sich wo auf dem foto befindet. Darüber durch Fotos machen und ablesen welche real world features sich bei welcher pixel position befinden. Herausstellen, welcher Fotoausschnitt mit dem Display übereinstimmt. 
+%bilder zeigen wie es dann aussieht
+%make methods, classes and variables italic
 
 \section{Zusammenfassung}
+%sachen die verbessert werden könnten
+man kann zusätzlich zum raycast auf das mesh auch noch die tiefenkamera nutzen. spatial mapping hat manchmal das mesh an der stelle noch nicht, oder ist nicht aktualisiert. besonders probleme mit wasserflaschen die nicht erkannt werden. HInzuzihenen von tiefen datan kann das lokalisieren von objekten im 3D raum noch verbessern.
 	
 	\newpage
 	\printbibliography

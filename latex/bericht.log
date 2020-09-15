@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.12)  9 SEP 2020 00:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.12)  16 SEP 2020 00:52
 entering extended mode
 **./bericht.tex
 (bericht.tex
@@ -683,62 +683,102 @@ oc)
 
 ]
 
-LaTeX Warning: Citation 'introToCNN' on page 3 undefined on input line 178.
+LaTeX Warning: Citation 'introToCNN' on page 3 undefined on input line 179.
 
 
-LaTeX Warning: Citation 'spatialMapping' on page 3 undefined on input line 187.
+LaTeX Warning: Citation 'spatialMapping' on page 3 undefined on input line 188.
 
-
-
-LaTeX Warning: Citation 'introToCNN' on page 3 undefined on input line 193.
-
-
-LaTeX Warning: Citation 'surveyOfDeepLearing' on page 3 undefined on input line
- 193.
 
 [3]
 
-LaTeX Warning: Citation 'introToCNN' on page 4 undefined on input line 201.
+LaTeX Warning: Citation 'introToCNN' on page 4 undefined on input line 194.
 
 
 LaTeX Warning: Citation 'surveyOfDeepLearing' on page 4 undefined on input line
- 201.
+ 194.
 
 
-LaTeX Warning: Citation 'cNNforClass' on page 4 undefined on input line 201.
+LaTeX Warning: Citation 'introToCNN' on page 4 undefined on input line 202.
 
 
-Overfull \hbox (25.0308pt too wide) in paragraph at lines 201--202
+LaTeX Warning: Citation 'surveyOfDeepLearing' on page 4 undefined on input line
+ 202.
+
+
+LaTeX Warning: Citation 'cNNforClass' on page 4 undefined on input line 202.
+
+
+Overfull \hbox (25.0308pt too wide) in paragraph at lines 202--203
 \OT1/cmr/m/n/12 chen-zeit und Trai-nings-da-ten ver-rin-gert werden.[[], [],
  []
 
 
-LaTeX Warning: Citation 'getAzure' on page 4 undefined on input line 212.
+LaTeX Warning: Citation 'getAzure' on page 4 undefined on input line 213.
 
 
-LaTeX Warning: Citation 'whatIsAzure' on page 4 undefined on input line 212.
+LaTeX Warning: Citation 'whatIsAzure' on page 4 undefined on input line 213.
 
 
-LaTeX Warning: Citation 'objDetectAzure' on page 4 undefined on input line 212.
+LaTeX Warning: Citation 'objDetectAzure' on page 4 undefined on input line 213.
 
 
 
-LaTeX Warning: Citation 'Azure302Doc' on page 4 undefined on input line 212.
+LaTeX Warning: Citation 'Azure302Doc' on page 4 undefined on input line 213.
 
 
-LaTeX Warning: Citation 'Azure302bDoc' on page 4 undefined on input line 215.
+LaTeX Warning: Citation 'Azure302bDoc' on page 4 undefined on input line 216.
 
 
-LaTeX Warning: Citation 'locatableCamera' on page 4 undefined on input line 218
+LaTeX Warning: Citation 'locatableCamera' on page 4 undefined on input line 219
 .
 
+[4] [5] [6]
+<images/code_uv_to_xy_scale.PNG, id=24, 435.12563pt x 343.2825pt>
+File: images/code_uv_to_xy_scale.PNG Graphic file (type png)
+<use images/code_uv_to_xy_scale.PNG>
+Package pdftex.def Info: images/code_uv_to_xy_scale.PNG  used on input line 307
+.
+(pdftex.def)             Requested size: 213.39568pt x 168.35655pt.
+<images/code_cast_method.PNG, id=26, 852.18375pt x 204.01219pt>
+File: images/code_cast_method.PNG Graphic file (type png)
+<use images/code_cast_method.PNG>
+Package pdftex.def Info: images/code_cast_method.PNG  used on input line 316.
+(pdftex.def)             Requested size: 469.47308pt x 112.39383pt.
 
-Underfull \vbox (badness 3240) has occurred while \output is active []
+Overfull \hbox (42.68173pt too wide) in paragraph at lines 316--317
+ [][] 
+ []
 
- [4]
-[5] [6] [7]
 
-LaTeX Warning: Empty bibliography on input line 305.
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7 <./images/code_uv_to_xy_scale.PNG>]
+<images/code_raycastparams.PNG, id=33, 644.4075pt x 218.31563pt>
+File: images/code_raycastparams.PNG Graphic file (type png)
+<use images/code_raycastparams.PNG>
+Package pdftex.def Info: images/code_raycastparams.PNG  used on input line 333.
+
+(pdftex.def)             Requested size: 298.75264pt x 101.2159pt.
+<images/ML_labels.jpg, id=34, 1445.4pt x 1084.05pt>
+File: images/ML_labels.jpg Graphic file (type jpg)
+<use images/ML_labels.jpg>
+Package pdftex.def Info: images/ML_labels.jpg  used on input line 349.
+(pdftex.def)             Requested size: 298.75264pt x 224.06776pt.
+ [8 <./images/code_cast_method.PNG> <./images/code_raycastparams.PNG>]
+<images/customVisionPaint.PNG, id=40, 828.84656pt x 489.32813pt>
+File: images/customVisionPaint.PNG Graphic file (type png)
+<use images/customVisionPaint.PNG>
+Package pdftex.def Info: images/customVisionPaint.PNG  used on input line 377.
+(pdftex.def)             Requested size: 426.79135pt x 251.96573pt.
+ [9 <./images/ML_labels.jpg>]
+Overfull \hbox (6.075pt too wide) in paragraph at lines 396--398
+[]\OT1/cmr/m/n/12 Neben der Do-se wur-de die-se Ite-ra-ti-on dar-auf trai-niert
+ ei-ne be-stimm-te Holz Haarb[]urste
+ []
+
+[10 <./images/customVisionPaint.PNG>] [11]
+
+LaTeX Warning: Empty bibliography on input line 418.
 
 (bericht.aux)
 
@@ -754,21 +794,22 @@ Package logreq Info: Writing requests to 'bericht.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 10589 strings out of 492452
- 188125 string characters out of 3119596
- 662987 words of memory out of 3000000
- 14830 multiletter control sequences out of 15000+200000
- 8806 words of font info for 31 fonts, out of 3000000 for 9000
+ 10636 strings out of 492452
+ 189291 string characters out of 3119596
+ 662028 words of memory out of 3000000
+ 14868 multiletter control sequences out of 15000+200000
+ 9114 words of font info for 32 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
- 39i,5n,39p,819b,1641s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,6n,39p,819b,1641s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmmi12.pfb><C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Mummel/AppData/Local/Progr
-ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb>
-Output written on bericht.pdf (7 pages, 79596 bytes).
+public/amsfonts/cm/cmbx9.pfb><C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Mummel/AppData/Local/Progr
+ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Mummel/AppDat
+a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb>
+Output written on bericht.pdf (11 pages, 2749883 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
+ 68 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
