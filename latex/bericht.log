@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.12)  16 SEP 2020 00:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.12)  23 SEP 2020 04:37
 entering extended mode
 **./bericht.tex
 (bericht.tex
@@ -570,18 +570,18 @@ Package csquotes Info: Redefining alias 'default' -> 'german'.
  (bericht.aux)
 \openout1 = `bericht.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 154.
-LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 179.
+LaTeX Font Info:    ... okay on input line 179.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 179.
+LaTeX Font Info:    ... okay on input line 179.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 179.
+LaTeX Font Info:    ... okay on input line 179.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 179.
+LaTeX Font Info:    ... okay on input line 179.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 179.
+LaTeX Font Info:    ... okay on input line 179.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 179.
+LaTeX Font Info:    ... okay on input line 179.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -625,8 +625,8 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'bericht.bbl' found.
 (bericht.bbl)
-Package biblatex Info: Reference section=0 on input line 154.
-Package biblatex Info: Reference segment=0 on input line 154.
+Package biblatex Info: Reference section=0 on input line 179.
+Package biblatex Info: Reference segment=0 on input line 179.
 
 ("C:\Users\Mummel\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\supp-
 pdf.mkii"
@@ -663,15 +663,15 @@ G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 157.
+(Font)              <12> on input line 182.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 157.
+(Font)              <8> on input line 182.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 157.
+(Font)              <6> on input line 182.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 157.
+(Font)              <9> on input line 182.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 157.
+(Font)              <5> on input line 182.
  [1
 
 {C:/Users/Mummel/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] (bericht.t
@@ -681,135 +681,108 @@ oc)
 
  [2
 
-]
-
-LaTeX Warning: Citation 'introToCNN' on page 3 undefined on input line 179.
-
-
-LaTeX Warning: Citation 'spatialMapping' on page 3 undefined on input line 188.
-
-
-[3]
-
-LaTeX Warning: Citation 'introToCNN' on page 4 undefined on input line 194.
-
-
-LaTeX Warning: Citation 'surveyOfDeepLearing' on page 4 undefined on input line
- 194.
-
-
-LaTeX Warning: Citation 'introToCNN' on page 4 undefined on input line 202.
-
-
-LaTeX Warning: Citation 'surveyOfDeepLearing' on page 4 undefined on input line
- 202.
-
-
-LaTeX Warning: Citation 'cNNforClass' on page 4 undefined on input line 202.
-
-
-Overfull \hbox (25.0308pt too wide) in paragraph at lines 202--203
-\OT1/cmr/m/n/12 chen-zeit und Trai-nings-da-ten ver-rin-gert werden.[[], [],
- []
-
-
-LaTeX Warning: Citation 'getAzure' on page 4 undefined on input line 213.
-
-
-LaTeX Warning: Citation 'whatIsAzure' on page 4 undefined on input line 213.
-
-
-LaTeX Warning: Citation 'objDetectAzure' on page 4 undefined on input line 213.
-
-
-
-LaTeX Warning: Citation 'Azure302Doc' on page 4 undefined on input line 213.
-
-
-LaTeX Warning: Citation 'Azure302bDoc' on page 4 undefined on input line 216.
-
-
-LaTeX Warning: Citation 'locatableCamera' on page 4 undefined on input line 219
-.
-
-[4] [5] [6]
-<images/code_uv_to_xy_scale.PNG, id=24, 435.12563pt x 343.2825pt>
+] [3] [4] [5] [6] [7]
+<images/code_uv_to_xy_scale.PNG, id=28, 435.12563pt x 343.2825pt>
 File: images/code_uv_to_xy_scale.PNG Graphic file (type png)
 <use images/code_uv_to_xy_scale.PNG>
-Package pdftex.def Info: images/code_uv_to_xy_scale.PNG  used on input line 307
+Package pdftex.def Info: images/code_uv_to_xy_scale.PNG  used on input line 384
 .
-(pdftex.def)             Requested size: 213.39568pt x 168.35655pt.
-<images/code_cast_method.PNG, id=26, 852.18375pt x 204.01219pt>
+(pdftex.def)             Requested size: 256.07741pt x 202.0373pt.
+ [8 <./images/code_uv_to_xy_scale.PNG>]
+<images/code_cast_method.PNG, id=35, 852.18375pt x 204.01219pt>
 File: images/code_cast_method.PNG Graphic file (type png)
 <use images/code_cast_method.PNG>
-Package pdftex.def Info: images/code_cast_method.PNG  used on input line 316.
-(pdftex.def)             Requested size: 469.47308pt x 112.39383pt.
+Package pdftex.def Info: images/code_cast_method.PNG  used on input line 393.
+(pdftex.def)             Requested size: 512.14832pt x 122.61371pt.
 
-Overfull \hbox (42.68173pt too wide) in paragraph at lines 316--317
+Overfull \hbox (85.35696pt too wide) in paragraph at lines 393--394
  [][] 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [7 <./images/code_uv_to_xy_scale.PNG>]
-<images/code_raycastparams.PNG, id=33, 644.4075pt x 218.31563pt>
+<images/code_raycastparams.PNG, id=36, 644.4075pt x 218.31563pt>
 File: images/code_raycastparams.PNG Graphic file (type png)
 <use images/code_raycastparams.PNG>
-Package pdftex.def Info: images/code_raycastparams.PNG  used on input line 333.
+Package pdftex.def Info: images/code_raycastparams.PNG  used on input line 418.
 
-(pdftex.def)             Requested size: 298.75264pt x 101.2159pt.
-<images/ML_labels.jpg, id=34, 1445.4pt x 1084.05pt>
+(pdftex.def)             Requested size: 384.1096pt x 130.13425pt.
+[9 <./images/code_cast_method.PNG> <./images/code_raycastparams.PNG>]
+<images/ML_labels.jpg, id=43, 1445.4pt x 1084.05pt>
 File: images/ML_labels.jpg Graphic file (type jpg)
 <use images/ML_labels.jpg>
-Package pdftex.def Info: images/ML_labels.jpg  used on input line 349.
+Package pdftex.def Info: images/ML_labels.jpg  used on input line 434.
 (pdftex.def)             Requested size: 298.75264pt x 224.06776pt.
- [8 <./images/code_cast_method.PNG> <./images/code_raycastparams.PNG>]
-<images/customVisionPaint.PNG, id=40, 828.84656pt x 489.32813pt>
+ [10 <./images/ML_labels.jpg>]
+<images/customVisionPaint.PNG, id=47, 828.84656pt x 489.32813pt>
 File: images/customVisionPaint.PNG Graphic file (type png)
 <use images/customVisionPaint.PNG>
-Package pdftex.def Info: images/customVisionPaint.PNG  used on input line 377.
+Package pdftex.def Info: images/customVisionPaint.PNG  used on input line 462.
 (pdftex.def)             Requested size: 426.79135pt x 251.96573pt.
- [9 <./images/ML_labels.jpg>]
-Overfull \hbox (6.075pt too wide) in paragraph at lines 396--398
+ [11 <./images/customVisionPaint.PNG>]
+Overfull \hbox (6.075pt too wide) in paragraph at lines 481--483
 []\OT1/cmr/m/n/12 Neben der Do-se wur-de die-se Ite-ra-ti-on dar-auf trai-niert
  ei-ne be-stimm-te Holz Haarb[]urste
  []
 
-[10 <./images/customVisionPaint.PNG>] [11]
-
-LaTeX Warning: Empty bibliography on input line 418.
-
-(bericht.aux)
-
-LaTeX Warning: There were undefined references.
+[12] [13] [14]
+Overfull \hbox (14.36275pt too wide) in paragraph at lines 550--550
+\OT1/cmtt/m/n/12 azure / cognitive -[] services / computer -[] vision / home$ \
+OT1/cmr/m/n/12 (be-sucht am 12.06.2020). 
+ []
 
 
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                bericht
-(biblatex)                and rerun LaTeX afterwards.
+Overfull \hbox (2.84082pt too wide) in paragraph at lines 550--550
+[]\OT1/cmr/m/it/12 Mr und Azu-re 302b be-nut-zer-de-fi-nier-te Vi-si-on\OT1/cmr
+/m/n/12 . \OT1/cmr/m/sc/12 url\OT1/cmr/m/n/12 : $\OT1/cmtt/m/n/12 https : / / d
+ocs . microsoft .
+ []
 
+
+Overfull \hbox (15.36275pt too wide) in paragraph at lines 550--550
+\OT1/cmtt/m/n/12 com / de -[] de / windows / mixed -[] reality / mr -[] azure -
+[] 302b$ \OT1/cmr/m/n/12 (be-sucht am 12.06.2020). 
+ []
+
+
+Overfull \hbox (47.96796pt too wide) in paragraph at lines 550--550
+[]\OT1/cmr/m/it/12 Camera.cameraToWorldMatrix\OT1/cmr/m/n/12 . \OT1/cmr/m/sc/12
+ url\OT1/cmr/m/n/12 : $\OT1/cmtt/m/n/12 https : / / docs . unity3d . com / Scri
+ptReference /
+ []
+
+
+Overfull \hbox (14.37878pt too wide) in paragraph at lines 550--550
+[]\OT1/cmr/m/it/12 Matrix4x4.MultiplyPoint\OT1/cmr/m/n/12 . \OT1/cmr/m/sc/12 ur
+l\OT1/cmr/m/n/12 : $\OT1/cmtt/m/n/12 https : / / docs . unity3d . com / ScriptR
+eference /
+ []
+
+[15] (bericht.aux)
 Package logreq Info: Writing requests to 'bericht.run.xml'.
 \openout1 = `bericht.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 10636 strings out of 492452
- 189291 string characters out of 3119596
- 662028 words of memory out of 3000000
- 14868 multiletter control sequences out of 15000+200000
- 9114 words of font info for 32 fonts, out of 3000000 for 9000
+ 10698 strings out of 492452
+ 191522 string characters out of 3119596
+ 666826 words of memory out of 3000000
+ 14927 multiletter control sequences out of 15000+200000
+ 9931 words of font info for 35 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
- 39i,6n,39p,819b,1641s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,6n,45p,819b,1641s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmbx9.pfb><C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Mummel/AppData/Local/Progr
-ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Mummel/AppDat
-a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb>
-Output written on bericht.pdf (11 pages, 2749883 bytes).
+/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Users/Mummel/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Mummel/AppD
+ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/User
+s/Mummel/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.
+pfb><C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfo
+nts/cm/cmsy10.pfb><C:/Users/Mummel/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmti12.pfb><C:/Users/Mummel/AppData/Local/Programs/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on bericht.pdf (15 pages, 2806135 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
+ 97 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

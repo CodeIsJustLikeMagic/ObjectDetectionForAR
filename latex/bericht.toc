@@ -13,40 +13,34 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Grundlagen}{3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Räumliche Zuordnung in Unity}{5}% 
+\contentsline {subsection}{\numberline {3.1}Webrequests}{5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Räumliche Anker}{5}% 
+\contentsline {subsection}{\numberline {3.2}Lokale und globale Koordinatensysteme in 3D Szenen}{5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Object Detection}{5}% 
+\contentsline {subsection}{\numberline {3.3}Kamera in 3D-Computergrafik}{6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4}Azure Object Detection}{5}% 
+\contentsline {subsubsection}{View Frustum}{6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.5}Magic Leap}{5}% 
+\contentsline {subsubsection}{Clipping Plane}{6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.6}Webrequests}{5}% 
+\contentsline {section}{\numberline {4}Design}{6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.7}Camera to World Matrix in Unity}{5}% 
+\contentsline {section}{\numberline {5}Implementierung}{7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.8}CNN Networks für Object Detection}{5}% 
+\contentsline {subsection}{\numberline {5.1}Ein Foto aufnehmen}{7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Design}{5}% 
+\contentsline {subsection}{\numberline {5.2}Azure Object Detection}{7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Implementierung}{5}% 
+\contentsline {subsection}{\numberline {5.3}Von dem Foto zum 3D Raum}{7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1}Ein Foto aufnehmen}{6}% 
+\contentsline {subsection}{\numberline {5.4}Raycast}{9}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.2}Azure Object Detection}{6}% 
+\contentsline {subsection}{\numberline {5.5}LabelCreater}{10}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.3}Von dem Foto zum 3D Raum}{6}% 
+\contentsline {subsection}{\numberline {5.6}Azure Custom Vision}{10}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.4}Raycast}{8}% 
+\contentsline {subsubsection}{Das Trainieren}{11}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.5}LabelCreater}{8}% 
+\contentsline {subsection}{\numberline {5.7}Entwicklung der Foto-Repräsentation}{12}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.6}Azure Custom Vision}{9}% 
-\defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Das Trainieren}{9}% 
-\defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.7}Entwicklung von PixelToWorld}{11}% 
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6}Zusammenfassung}{11}% 
+\contentsline {section}{\numberline {6}Zusammenfassung}{14}% 

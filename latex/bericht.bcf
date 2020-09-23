@@ -2130,18 +2130,30 @@
   </bcf:bibdata>
   <bcf:section number="0">
     <bcf:citekey order="1">introToCNN</bcf:citekey>
-    <bcf:citekey order="2">spatialMapping</bcf:citekey>
+    <bcf:citekey order="2">introToCNN</bcf:citekey>
+    <bcf:citekey order="2">surveyOfDeepLearing</bcf:citekey>
     <bcf:citekey order="3">introToCNN</bcf:citekey>
     <bcf:citekey order="3">surveyOfDeepLearing</bcf:citekey>
-    <bcf:citekey order="4">introToCNN</bcf:citekey>
-    <bcf:citekey order="4">surveyOfDeepLearing</bcf:citekey>
-    <bcf:citekey order="4">cNNforClass</bcf:citekey>
-    <bcf:citekey order="5">getAzure</bcf:citekey>
-    <bcf:citekey order="5">whatIsAzure</bcf:citekey>
-    <bcf:citekey order="5">objDetectAzure</bcf:citekey>
-    <bcf:citekey order="5">Azure302Doc</bcf:citekey>
-    <bcf:citekey order="6">Azure302bDoc</bcf:citekey>
-    <bcf:citekey order="7">locatableCamera</bcf:citekey>
+    <bcf:citekey order="3">cNNforClass</bcf:citekey>
+    <bcf:citekey order="4">getAzure</bcf:citekey>
+    <bcf:citekey order="4">whatIsAzure</bcf:citekey>
+    <bcf:citekey order="4">objDetectAzure</bcf:citekey>
+    <bcf:citekey order="4">Azure302Doc</bcf:citekey>
+    <bcf:citekey order="5">Azure302bDoc</bcf:citekey>
+    <bcf:citekey order="6">spatialMapping</bcf:citekey>
+    <bcf:citekey order="7">mlofficialsalespitch</bcf:citekey>
+    <bcf:citekey order="7">mlglossary</bcf:citekey>
+    <bcf:citekey order="8">mlofficialsalespitch</bcf:citekey>
+    <bcf:citekey order="8">mlglossary</bcf:citekey>
+    <bcf:citekey order="9">mlluminOS</bcf:citekey>
+    <bcf:citekey order="9">mlluminfeatures</bcf:citekey>
+    <bcf:citekey order="9">mlluminworldreconstruktion</bcf:citekey>
+    <bcf:citekey order="9">mlmeshingunity</bcf:citekey>
+    <bcf:citekey order="10">mlluminfeatures</bcf:citekey>
+    <bcf:citekey order="10">mlappsecurity</bcf:citekey>
+    <bcf:citekey order="11">unitycameratoworldmatrix</bcf:citekey>
+    <bcf:citekey order="12">unitycameratoworldmatrix</bcf:citekey>
+    <bcf:citekey order="12">unitymultiplyoint</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

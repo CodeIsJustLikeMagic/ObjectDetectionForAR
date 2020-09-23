@@ -1,34 +1,19 @@
 [0] Config.pm:304> INFO - This is Biber 2.13
-[1] Config.pm:307> INFO - Logfile is 'bericht.blg'
-[61] biber-MSWIN64:315> INFO - === 
-[160] Biber.pm:375> INFO - Reading 'bericht.bcf'
-[368] Biber.pm:905> INFO - Found 16 citekeys in bib section 0
-[410] Biber.pm:4196> INFO - Processing section 0
-[412] Utils.pm:75> INFO - Globbing data source 'references.bib'
-[455] Utils.pm:91> INFO - Globbed data source 'references.bib' to references.bib
-[481] Biber.pm:4373> INFO - Looking for bibtex format file 'references.bib' for section 0
-[486] bibtex.pm:1462> INFO - LaTeX decoding ...
-[497] bibtex.pm:1281> INFO - Found BibTeX data source 'references.bib'
-[522] Utils.pm:300> WARN - I didn't find a database entry for 'introToCNN' (section 0)
-[522] Utils.pm:300> WARN - I didn't find a database entry for 'hololensHardware' (section 0)
-[522] Utils.pm:300> WARN - I didn't find a database entry for 'sensoren' (section 0)
-[522] Utils.pm:300> WARN - I didn't find a database entry for 'spatialMapping' (section 0)
-[522] Utils.pm:300> WARN - I didn't find a database entry for 'spatialMappingUnity' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'surveyOfDeepLearing' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'cNNforClass' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'getAzure' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'whatIsAzure' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'objDetectAzure' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'Azure302Doc' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'Azure302bDoc' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'pytorch' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'locatableCamera' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'mixedRalityToolkitOverview' (section 0)
-[523] Utils.pm:300> WARN - I didn't find a database entry for 'mixedrealitytooltip' (section 0)
-[537] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[537] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
-[537] Biber.pm:4024> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'de-DE'
-[537] Biber.pm:4030> INFO - No sort tailoring available for locale 'de-DE'
-[538] bbl.pm:648> INFO - Writing 'bericht.bbl' with encoding 'UTF-8'
-[538] bbl.pm:751> INFO - Output to bericht.bbl
-[550] Biber.pm:110> INFO - WARNINGS: 16
+[0] Config.pm:307> INFO - Logfile is 'bericht.blg'
+[36] biber-MSWIN64:315> INFO - === 
+[62] Biber.pm:375> INFO - Reading 'bericht.bcf'
+[165] Biber.pm:905> INFO - Found 18 citekeys in bib section 0
+[182] Biber.pm:4196> INFO - Processing section 0
+[184] Utils.pm:75> INFO - Globbing data source 'references.bib'
+[194] Utils.pm:91> INFO - Globbed data source 'references.bib' to references.bib
+[211] Biber.pm:4373> INFO - Looking for bibtex format file 'references.bib' for section 0
+[217] bibtex.pm:1462> INFO - LaTeX decoding ...
+[239] bibtex.pm:1281> INFO - Found BibTeX data source 'references.bib'
+[241] Utils.pm:300> WARN - Duplicate entry key: 'mlluminOS' in file 'references.bib', skipping ...
+[307] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
+[307] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[307] Biber.pm:4024> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'de-DE'
+[307] Biber.pm:4030> INFO - No sort tailoring available for locale 'de-DE'
+[326] bbl.pm:648> INFO - Writing 'bericht.bbl' with encoding 'UTF-8'
+[335] bbl.pm:751> INFO - Output to bericht.bbl
+[411] Biber.pm:110> INFO - WARNINGS: 1

@@ -103,33 +103,58 @@
 		number={},
 		pages={6526-6534},
 	}
-	@ONLINE{sensoren,
-		title = {HoloLens Forschungsmodus},
-		url = {https://docs.microsoft.com/de-de/windows/mixed-reality/research-mode},
-		urldate = {2020-06-12},
+	@ONLINE{mlluminfeatures,
+	title = {Magic Leap Features},
+	url = {https://developer.magicleap.com/en-us/learn/guides/magic-leap-features},
+	urldate = {2020-09-18},
 	}
-	@ONLINE{hololensHardware,
-		title = {HoloLens Hardware},
-		url = {https://docs.microsoft.com/de-de/hololens/hololens1-hardware},
-		urldate = {2020-06-12},
-	}
-	@ONLINE{mixedRalityToolkitOverview,
-		title = {What is the Mixed Reality Toolkit},
-		url = {https://microsoft.github.io/MixedRealityToolkit-Unity/README.html},
-		urldate = {2020-06-15},
-	}
-	@ONLINE{locatableCamera,
-		title = {Ausrichtbare Kamera},
-		url = {https://docs.microsoft.com/de-de/windows/mixed-reality/locatable-camera},
-		urldate = {2020-06-15},
-	}
-	@ONLINE{mixedrealitytooltip,
-		title = {Tooltip},
-		url = {https://github.com/microsoft/MixedRealityToolkit-Unity/blob/mrtk_development/Documentation/README_Tooltip.md},
-		urldate = {2020-06-15},
-	}
-	
-	
+	@ONLINE{mlluminOS,
+	title = {Lumin OS Overview},
+	url = {https://developer.magicleap.com/en-us/learn/guides/lumin-os-overview},
+	urldate = {2020-09-18},
+}
+	@ONLINE{mlluminOS,
+	title = {Lumin OS Overview},
+	url = {https://developer.magicleap.com/en-us/learn/guides/lumin-os-overview},
+	urldate = {2020-09-18},
+}
+	@ONLINE{mlluminworldreconstruktion,
+	title = {World Reconstruktion},
+	url = {https://developer.magicleap.com/en-us/learn/guides/world-reconstruction-overview-landing},
+	urldate = {2020-09-18},
+}
+	@ONLINE{mlmeshingunity,
+	title = {1.4 Spatial Meshing - Unity},
+	url = {https://developer.magicleap.com/en-us/learn/guides/meshing-in-unity},
+	urldate = {2020-09-18},
+}
+	@ONLINE{mlappsecurity,
+	title = {App Security},
+	url = {https://developer.magicleap.com/en-us/learn/guides/application-security-overview},
+	urldate = {2020-09-18},
+}
+	@ONLINE{mlofficialsalespitch,
+	title = {magic leap 1},
+	url = {https://www.magicleap.com/en-us/magic-leap-1},
+	urldate = {2020-09-18},
+}
+	@ONLINE{mlglossary,
+	title = {Glossary and Usage},
+	url = {https://developer.magicleap.com/en-us/learn/guides/glossary},
+	urldate = {2020-09-18},
+}
+
+	@ONLINE{unitycameratoworldmatrix,
+	title = {Camera.cameraToWorldMatrix},
+	url = {https://docs.unity3d.com/ScriptReference/Camera-cameraToWorldMatrix.html},
+	urldate = {2020-09-18},
+}
+
+	@ONLINE{unitymultiplyoint,
+	title = {Matrix4x4.MultiplyPoint},
+	url = {https://docs.unity3d.com/ScriptReference/Matrix4x4.MultiplyPoint.html},
+	urldate = {2020-09-18},
+}
 	
 \end{filecontents}
 
@@ -184,15 +209,14 @@ Dabei wird as AR Gerät "Magic Leap" verwendet.
 
 
 \section{Grundlagen}
-\subsection*{Spatial Mapping} 
-Durch Spatial Mapping wird eine 3D Abbildung einer realen Umgebung erschaffen. So können Hologramme mit der echten Welt interagieren, diese Verdecken, oder von ihr verdeckt werden.\cite{spatialMapping} 
 
 \subsection*{Object Detection}
-Bei Objekt Detection werden Objekte in einem Bild untersucht. Dabei wird bestimmt um welche Klasse an Objekt es sich handelt, beispielsweise ob es eine Katze oder ein Hund ist, und wo sich das Objekt befindet. Die Ausgabedaten dieser Untersuchung ist eine Liste an Objektarten und eine Liste an Bounding Boxen, die die Positionen angeben.
+Objekt Detection ist eine Aufgabe in Computer Vision bei der Objekte in einem Bild identifiziert werden. Es wird bestimmt um welche Klasse an Objekt es sich handelt, beispielsweise ob es eine Katze oder ein Hund ist, und wo sich das Objekt befindet. Die Ausgabedaten dieser Untersuchung ist eine Liste an Objektarten und eine Liste an Bounding Boxen, die die Positionen angeben.
+
+Object Detection kann mit Artificial Neural Networks durchgeführt werden.  
 
 \subsection*{Artificial Neural Networks}
 Artificial Neural Networks sind Machine Learning Architekturen. Sie können beispielsweise Musik, Text oder Bilder nach Mustern durchsuchen. Sie sind für keine genaue Aufgabe programmiert, sondern lernen indem sie mit Beispieldaten trainiert werden. Für jedes Beispiel gibt es ein Label, das angibt ob es das gesuchte Muster enthält oder nicht. Die Struktur des Networks verfügt über Gewichte, die Einfluss auf den Output haben. Mit jedem Trainingsbeispiel passt das Network die Gewichte an, sodass der Output dem Label des Beispiels entspricht.\cite{introToCNN,surveyOfDeepLearing}
-
 
 %Artificial Neural Networks bestehen aus einer Menge an verbundenen Knoten, die jeweils eine Berechnung durchführen. Diese Knoten sind in Ebenen aufgeteilt, den Input Layer, den Output Layer, und mehrere Hidden Layer dazwischen. Die Knoten einer Ebene sind mit allen Knoten der Vorherigen Ebene verbunden.\cite{introToCNN,surveyOfDeepLearing}
 %Das Neural Network bekommt eine Menge an Daten als Input. Die Knoten arbeiten zusammen um den Output zu erzeugen. Dabei wird über Gewichte entschieden, wie viel Einfluss das Ergebnis der einzelnen Knoten auf die nächste Ebene hat.\cite{introToCNN,surveyOfDeepLearing}
@@ -212,40 +236,97 @@ Convolutional Neural Networks sind auf das Verarbeiten von Bildern spezialisiert
 Microsoft Azure bietet einen Computer Vision Service an, der für Object Detection trainiert ist.
 Der Anwender sendet ein Bild an Microsoft, dort wird es verarbeitet und ein Ergebnis zurückgegeben.\cite{getAzure,whatIsAzure,objDetectAzure,Azure302Doc}
 
+Der Service wird über einen web request angefragt. Und sendet eine Json Datei zurück. 
+
+Über ein web endpoint per web request anfragen. Bekommt eine Json zurück. darin steht welche Obejkte darin sind, daten über das foto und objekte mit bounding box angegeben. Beispiel von Json angeben. 
+
+%todo write more about this
 \subsection*{Azure Custom Vision}
 Azure bietet zusätzlich einen Computer Vision Service an, den der Nutzer Trainieren kann um bestimmte Objekte Klassifizieren zu können.\cite{Azure302bDoc}
 
+was ist die Prediction? 
+Erkälre die Iterations
+Erkläre was die Genauigkeit der Predation aussagt.
+%todo write more about this
+\subsection*{Spatial Mapping} 
+Durch Spatial Mapping wird eine 3D Abbildung einer realen Umgebung erschaffen. So können Hologramme mit der echten Welt interagieren, diese Verdecken, oder von ihr verdeckt werden.\cite{spatialMapping} 
+
 \subsection*{Magic Leap AR Brille}
-Die Hololens verfügt über 4 Umgebungskameras, eine tiefen Kamera und eine  ausrichtbare Kamera. Die Umgebungskameras werden für Spatial Mapping genutzt. Anhand der Topographie kann die Hololens einfache Ebenen, wie die Wände und den Boden eines Raumes erkennen. Die ausrichtbare Kamera kann geschwenkt werden und nimmt Fotos auf. Die Bilder, die dabei entstehen, erhält in Unity eine 'cameraToWorldMatrix', die zum Zeitpunkt der Erfassung für jeden Pixel des Bildes eine Position im Koordinatensystem der AR Umgebung angibt. So kann das Koordinatensystem des Bildes in das Koordinatensystem der Umgebung transformiert werden.\cite{locatableCamera}
 
+Die Magic Leap 1 Lightwear ist eine Augmented Reality Brille. Sie besitzt neun Sensoren und mehrere Kameras. Dazu gehören:
+\begin{itemize}
+	\item ein Infrarot Tiefen-Sensor,
+	\item ein Eye Tracker,
+	\item eine Foto und Video Kamera, die im Format 16:9 mit einer Auflösung von 1920 x 1080 Pixeln aufnehmen,
+	\item Umgebungskameras die in unterschiedliche Richtungen ausgerichtet sind. \cite{mlofficialsalespitch,mlglossary}
+\end{itemize}
 
-\subsection{Räumliche Zuordnung in Unity}
-\subsection{Räumliche Anker}
-\subsection{Object Detection}
-\subsection{Azure Object Detection}
-\subsection{Magic Leap}
+Output geschieht über ein Display mit einem 50 Grad Field of View und einem Seitenverhältnis von 4:3. 
+Input wird durch ein 6 Degree of Freedom Controller gegeben.\cite{mlofficialsalespitch,mlglossary}
+
+Die Magic Leap Brille läuft auf dem Betriebssystem Lumin OS. Dieses wurde für Spatial Computing entwickelt und stellt Applikationen entsprechende Funktionalitäten zur Verfügung.
+Beispielsweise führt das Betriebssystem Spatial Mapping durch. Mit den Sensoren und Kameras der Brille werden Daten aufgenommen und in einen Zeitlichen Zusammenhang mit der Bewegung der Brille gesetzte, um eine Rekonstruktion des Raumes zu erhalten.\cite{mlluminOS,mlluminfeatures,mlluminworldreconstruktion,mlmeshingunity}
+
+Lumin OS bietet es Applikationen an,
+\begin{itemize}
+	\item Raycast auf die Umgebung durchzuführen und
+	\item ein Mesh der Rekonstruktion zu erhalten.
+\end{itemize}
+
+Lumin OS unterstützt das Verarbeiten von dem Input des Controllers und verwaltet die Privilegien der Applikationen. Dazu gehört beispielsweise der Zugriff auf die Fotokamera und das Netzwerk.\cite{mlluminfeatures,mlappsecurity}
 \subsection{Webrequests}
-\subsection{Camera to World Matrix in Unity}
-\subsection{CNN Networks für Object Detection}
 
-raycast
-clipping plane
-mesh
+%todo: this
+%hmmm do I have to explain this ?
+
+\subsection*{3D-Computergrafik}
+\subsection{Lokale und globale Koordinatensysteme in 3D Szenen}
+
+In einer 3D Szenen werden die Positionen von Objekten als Matrizen in drei Dimensionalen Koordinatensystemen verwaltet.
+Es gibt ein globales Koordinatensystem (auch Weltkoordinatensystem oder World Space), in dem alle Objekte relativ zu einem gewählten Ursprung liegen. 
+
+Jedes Objekt hat zusätzlich ein eigenes, lokales Koordinatensystem (Objektkoordinatensystem). Dessen Ursprung liegt in dem jeweiligen Objekt.
+Die Position und Rotation des Objektes in dem globalen Koordinatensystem bestimmt die Relation zwischen dem globalen und dem lokalen Koordinatensystem. 
+
+Das lokale Koordinatensystem einer Kamera wird auch Camera Space genannt. Die Relation zwischen dem Camera Space und dem globalen Koordinatensystem wird in Unity durch die cameraToWorld Matrix beschrieben. Mithilfe dieser Matrix kann eine Koordinate aus dem Camera Space in die entsprechende Koordinate des globalen Koordinatensystems transformiert werden.\cite{unitycameratoworldmatrix}
+
+Dazu wird die Koordinate als Vektor angegeben und mit der cameraToWorld Matrix multipliziert. Das Resultat ist ein Vektor, der eine Koordinate im globalen Koordinatensystem angibt.\cite{unitycameratoworldmatrix,unitymultiplyoint}
+
+\subsection{Kamera in 3D-Computergrafik}
+\subsubsection{View Frustum}
+ist der Teilvolumen einer 3D Szene, die auf den zweidimensionalen Bildschirm abgebildet wird. Alle Objekte die von der Kamera gesehen werden, befinden sich in dem View frustum.
+
+\subsubsection{Clipping Plane}
+bezeichnet eine Ebene, die den view frustum quer zur Blickrichung begrenzt. 
+Es gibt eine vordere und eine hintere Clippingebene.
+Die vordere Clippingebene liegt nahe an der Kamera dran. Alle Objekte die zwischen der Kamera und der Ebene liegen werden nicht angezeigt.
+
+Die hintere Clippingebene limitiert wie weit Objekte entfernt sein können, bevor sie nicht mehr zu sehen sind.
+
+%to myself: yay :) you're doing well I believe in you!
 
 \section{Design}
-Das Ziel ist es das Erkennen und Labeln von Objekten in einer AR Umgebung, durch Image based Objekt Detection zu ermöglichen und mit einer Magic Leap Brille umzusetzten.
+Das Ziel ist das Erkennen und Labeln von Objekten in einer AR Umgebung, durch Image Based Objekt Detection.
 
-%eine grobe beschreibung welche schritte der nutzer macht und welche schritte das programm macht. was soll das endprudukt können?
-Wenn der Nutzer den Controller betätigt, beginnt die Detection damit, zunächst ein Foto mit der Kamera der Magic Leap aufzunehmen. 
+Wenn der Nutzer das Signal gibt, beginnt die Detection. Als Erstes wird ein Foto mit der Kamera der AR Brille aufzunehmen. 
 Dieses Foto wird dann an Azure Object Detection und Azure Custom Vision geschickt. 
-Als Ergebnis gibt es jeweils eine Json Datei. Darin wird angegeben welche Arten von Objekten auf dem Foto gefunden wurden (Hund, Person, Computermaus) und wo sie sich jeweils befinden. Die Position eines Objektes ist dabei mit einer Bounding Box bestimmt. Um das Markieren von Objekten in der AR Umgebung zu vereinfachen wird die Mitte der Box als Position des Objektes genommen.
+Als Ergebnis gibt es jeweils eine Json Datei. Darin wird angegeben, welche Arten von Objekten auf dem Foto gefunden wurden (Hund, Person, Computermaus) und wo sie sich jeweils befinden. Die Position eines Objektes ist dabei mit einer Bounding Box bestimmt. Um das Markieren von Objekten in der AR Umgebung zu vereinfachen, wird die Mitte der Box als Position des Objektes genommen.
 
-Für jedes Objekte wird ihre Position auf dem Foto auf die Clipping plane der Kamera übertragen. Dann wird ein Raycast von der Kamera aus durch die Clipping Plane Position geschickt. Der Raycast trifft auf ein Mesh, das die reale Welt abbildet. Die Position, die der Raycast trifft, wird mit einem Schriftzug markiert. Dort befindet sich das Objekt, das auf dem Foto gefunden wurde.
+Jedes Objekt soll an der tatsächlichen Stelle der Realen Welt markiert werden.
+Dafür wird in der 3D Szene der AR Umgebung eine Virtuelle Repräsentation des Fotos erschaffen. Die Fotorepräsentation muss die richtige Skalierung, Position und Rotation haben, um das räumliche Verhältnis zwischen der realen Foto-Kamera und der Umgebung nachzubilden.
+
+Da die Foto-Kamera und das Display nahe beieinander liegen und den gleichen Blickwinkel haben, kann die Position des Displays als Repräsentation des Fotos genutzt werden. In der 3D Szene ist das Display mit der Hauptkamera gleichgesetzt. Die Clipping Plane der Kamera hat somit die gleiche Rotation und eine zumindest ähnliche Position und Skalierung wie das Foto. 
+
+Daher werden die Foto-Positionen auf Koordinaten der Clipping Plane abgebildet. Dabei werden verbleibende Positions- und Skalierungs-Unterschiede ausgeglichen. Für jedes Objekte wird so eine Koordinate auf der Clipping Plane bestimmt. 
+
+Als Nächstes wird ein Raycast von der Kamera aus durch die Clipping Plane Koordinate geschickt. Der Raycast schneidet sich mit einem Mesh, das die reale Welt abbildet. Die getroffene Position wird mit einem Schriftzug markiert. Dort befindet sich das Objekt, das auf dem Foto gefunden wurde.
+
+Alle Objekte, die Azure Object Detection und Azure Custom Vision gefunden haben, werden so für den Nutzer in der AR Umgebung markiert.
 
 \section{Implementierung}
 % https://developer.magicleap.com/en-us/learn/guides/get-started-developing-in-unity
 Das Projekt wurde in Unity umgesetzt, und wurde für eine Magic Leap AR Brille entwickelt.
-Es wurde ein Unity Projekt Template von Magic Leap verwendet um den Set up zu vereinfachen. 
+Es wurde ein Unity Projekt Template von Magic Leap verwendet. 
 
 Zusätzlich werden einige vorgefertigte Klassen von Magic Leap verwendet. Dazu gehören MLInput, MLCamera, MLRaycast, MLPrivilegeRequestBehavior und MLSpatialMapper.
 
@@ -262,7 +343,7 @@ MLCamera wird genutzt um die Kamera der Magic Leap Brille anzusteuern.
 
 %Image: Aufgenommenes Foto wird in AR UI angezeigt.
 
-Wenn das Foto gemacht wurde, wird OnCaptureRawImageComplete aufgerufen. Die Daten des Bildes werden an die Klassen Azure ObjectDetection und AzureCustomPrediction weitgergegeben. Dort wird die Analyse der Bilder gestartet. 
+Wenn das Foto uafgenommen wurde, wird OnCaptureRawImageComplete aufgerufen. Die Daten des Bildes werden an die Klassen Azure ObjectDetection und AzureCustomPrediction weitgergegeben. Dort wird die Analyse der Bilder gestartet. 
 
 \subsection{Azure Object Detection}
 
@@ -270,7 +351,7 @@ In der Methode AnalyseImage von AzureObjectDetection wird ein Web Request zusamm
 
 Der Webrequest wird geschickt und es wird auf die Antwort gewartet. Wenn es keine Probleme mit dem Netzwerk gab, wird eine JsonDatei als String in der Antwort auf den Webrequest geschickt. Siehe Abbilung ??
 
-%picture of a json response. 
+%todo picture of a json response. 
 
 Es wird für jedes gefundene Object auf dem Foto eine Bezeichnung und eine Bounding Box angegeben, in dem sich das Object auf dem Bild befindet. 
 
@@ -283,20 +364,16 @@ Dafür wird für jedes DetectedObject die Methode Cast von der Klasse PixelToWor
 
 In der Methode Cast wird die u,v Foto-Koordinate des Fotos und die Kameraausrichtung verwendet um das gefundene Foto-Objekt in der 3D Abbildung der Realen Welt zu lokalisieren.
 
-Als erstes wird die u,v Foto-Koordinate in eine Koordinate auf Clipping Plane der Kamera umgerechnet. 
-Dafür wird ein Vektor bestimmt, der einen Offset zu der Kamera angibt. 
-Dieser Offset wird mit der cameraToWorld Matrix multipliziert um einen Punkt p in dem dreidimensionalen Raum, abhängig von der Blickrichtung, dem Winkel und der Position der Kamera zu erhalten. P behält demnach, bei einem gleichbleibenden Offset, ein gleichbleibendes räumliches Verhältnis zu der Kamera.
-
-Der Offset-Vektor besteht aus drei Dimensionen: x,y,z.
-Der z Anteil gibt die Achse an, die von der Kamera nach vorne durch den View Frustum verläuft. Bei z = -0.4 wird der Punkt auf der Achse gewählt, auf dem die Clipping Plane liegt. 
+Das Foto kann mit dem Display und somit mit der Clipping Plane der Hauptkamera approximiert werden.
+Die u,v Foto-Koordinate wird zunächst in eine x,y,z Koordinate in dem Camera Space umgewandelt. Der z Anteil gibt die Achse an, die von der Kamera nach vorne durch den View Frustum verläuft. Bei z = -0.4 wird der Punkt auf der Achse gewählt, auf dem die Clipping Plane liegt. 
 
 Die x und y Dimensionen beschreiben die Achsen, die horizontal und vertikal zur Clipping Plane verlaufen. Mit dem festgelegten z = -0.4, kann jeder Punkt auf der Clipping Plane durch x und y angegeben werden. Dazu gehören auch Punkte die außerhalb des View Frustum liegen.
 
-Es wurden Werte für x und y ausprobiert, mit denen die Ränder des Fotos auf der Clipping Plane angegeben werden können. Dabei wurde darauf geachtet, das das Foto ein Seitenverhältnis von 16:9 hat, während das Magic Leap Display, und somit die Kamera, ein Seitenverhältnis von 4:3 hat. Darüber hinaus ist der Bildausschnitt des Displays kleiner. Daher liegen die Ränder des Fotos außerhalb des View Frustum. 
+Es wurden Werte für x und y ausprobiert, mit denen die Ränder des Fotos auf der Clipping Plane angegeben werden können. Dabei wurde darauf geachtet, das das Foto ein Seitenverhältnis von 16:9 hat, während das Display, und somit die Kamera, ein Seitenverhältnis von 4:3 hat. Darüber hinaus ist der Bildausschnitt des Displays kleiner. Daher liegen die Ränder des Fotos außerhalb des View Frustum. 
 
-Sind die x und y Werte für die Ränder bekannt, ergibt sich für die Achsen jeweils ein Intervall, die kombiniert alle Positionen auf der Clipping Plane angeben können, die auch auf einem Foto zu finden sind. Die Intervall lauten: [-0.295,0.2281] für x und [0.1546,-0.1507] für y.
+Sind die x und y Werte für die Ränder bekannt, ergibt sich für die Achsen jeweils ein Intervall, die kombiniert alle Foto-Koordinaten auf die Clipping Plane abbilden können. Die Intervall lauten: [-0.295,0.2281] für x und [0.1546,-0.1507] für y. Durch die Intervalle wird die Position und Skalierung des Fotos in Relation zu dem Display - und der Hauptkamera- berücksichtigt. Siehe Kapitel \ref{section:devpixeltoworld} für die Entwickelung des Cast Methode und die Ermittelung der Intervall Werte.
 
-Um die u,v Koordinate eines Fotos in eine x,y Koordinate umzuwandeln, werden zwei Lineare Funktionen aufgestellt:
+Es werden zwei Lineare Funktionen aufgestellt:
 \begin{itemize}
 	\item Die Funktion X Bildet das Intervall für u [0,1920] auf das Intervall für x [-0.295,0.2281] ab.
 	\item Die Funktion Y Bildet das Intervall für v [0,1080] auf das Intervall für y [0.1546,-0.1507] ab.
@@ -304,39 +381,47 @@ Um die u,v Koordinate eines Fotos in eine x,y Koordinate umzuwandeln, werden zwe
 Siehe Abbildung \ref{code:uvtoxy}.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\textwidth]{images/code_uv_to_xy_scale.PNG}
+	\includegraphics[width=0.6\textwidth]{images/code_uv_to_xy_scale.PNG}
 	\caption[]{Funktionen X und Y}
 	\label{code:uvtoxy}
 \end{figure}
 
-Die Funktionen werden genutzt um die u,v Koordinate eines DetectedObject in einen Offset-Vektor umzuwandeln. Der Offset wird mit der cameraToWorld Matrix multipliziert um den Punkt p im 3D Raum zu erhalten, der sich an der korrekten Stelle auf der Clippling Plane befindet. Siehe Abbildung \ref{code:castmethod}.
+Mit den Funktionen wird für u,v eine Koordinate im Camera Space berechnet. Diese Koordinate wird dann mithilfe der cameraToWorldMatrix in die Koordinate p des globale Koordinatensystem umgewandelt. Damit wird die Position und Rotation der Kamera - und somit des Fotos - in der 3D Szene berücksichtigt. Siehe Abbildung \ref{code:castmethod}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.1\textwidth]{images/code_cast_method.PNG}
+	\includegraphics[width=1.2\textwidth]{images/code_cast_method.PNG}
 	\caption[]{Cast Methode}
 	\label{code:castmethod}
 \end{figure}
 \subsection{Raycast}
 
-Als Nächstes wird ein Raycast durch den Ursprung der Kamera und den Punkt p gesendet. Dort wo der Raycast auf das Spatial Mapping Mesh trifft, ist das DetectedObject in dem 3D Raum zu finden. 
+Als Nächstes wird ein Raycast durch den Ursprung der Kamera und die Koordinate p gesendet. MLRaycast wird genutzt, um einen Schnittpunkt mit der Rekonstitution der Welt von Lumin OS zu bestimmen. Die Stelle die der Raycast trifft beschreibt die Position des DetectedObject im 3D Raum.
 
-Das Spatial Mapping Mesh wird von dem MLSpatialMapper erzeugt und bildet die Reale Welt ab. Um ein Raycast auf das Mesh auszuführen, wird MLRaycast eingesetzt. Ein MLRaycast brauch zwei Parameter:
+Für den MLRaycast werden zwei Parameter benötigt:
 \begin{itemize}
 	\item Ein QueryParams Objekt, das Ursprung und Richtung für den Raycast beinhaltet.
+	\begin{itemize}
+		\item Ursprung: Kamera
+		\item Richtung: Richtungsvektor von der Kamera zu der Koordinate p
+	\end{itemize}
 	\item Eine Methode die aufgerufen wird, wenn der Raycast fertig ist. 
+		\begin{itemize}
+		\item Callback Methode: HandleOnRecieveRaycast
+	\end{itemize}
 \end{itemize}
-In den QueryParams wird die Kamera als Ursprung für den Raycast angegeben, während ein Richtungsvektor von der Kamera zu dem Punkt p die Richtung des Raycastes bestimmt. Siehe Abbildung \ref{code:raycastparams}.
+
+Siehe Abbildung \ref{code:raycastparams}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/code_raycastparams.PNG}
+	\includegraphics[width=0.9\textwidth]{images/code_raycastparams.PNG}
 	\caption[]{Cast Methode}
 	\label{code:raycastparams}
 \end{figure}
 
-Wenn der Raycast fertig ist, wird die Methode HandleOnRecieveRaycast aufgerufen. Der Parameter point beinhaltet dabei die Koordinate, die getroffen wurde.
-Dieser Parameter wird an die Methode CreateMarker von der Klasse LabelCreater weitergegeben.
+Wenn der Raycast fertig ist, wird die Methode HandleOnRecieveRaycast aufgerufen. Der Parameter point beinhaltet dabei die getroffene Koordinate.
+Diese an die Methode CreateMarker von der Klasse LabelCreater weitergegeben.
 
 \subsection{LabelCreater}
 
@@ -399,19 +484,65 @@ Die Bürste wurde nur mit den Borsten nach oben Photographiert.
 Die Genauigkeit für die Bürste lag bei 100 Prozent. 
 In der Umsetzung mit der Magic Leap Anwendung wird die Bürste häufig nicht erkannt, obwohl sie im Bild ist und mit den Borsten nach oben liegt. Es werden jedoch keine Objekte als Haarbürste erkannt die keine sind.
 
-\subsection{Entwicklung von PixelToWorld}
-%todo schrieben was ich ausprobiert habe in pixel to world
+\subsection{Entwicklung der Foto-Repräsentation}
+\label{section:devpixeltoworld}
+%todo verweis auf diese Section von Cast Section aus.
 
-Zuerst ausprobiert 
+Um die u,v Foto-Koordinate eines gefundenen Objektes auf der Clipping Plane der Kamera zu lokalisieren wurden ein paar Herangehensweisen ausprobiert.
 
-virtuell foto abschneiden nur den bereich verwenden, der auch auf dem display zu sehen ist. besseres feedback, das objekte dort entstanden sind und man weiß das dort das mesh schon ist.
+Das Ziel ist das setzten einer Markierung in dem 3D Raum, basierend auf der Foto-Koordinate. Das Foto beinhaltet keine Information über die Entfernung zu dem Objekt. Dafür muss ein Raycast durchgeführt werden. 
 
-dafür ausprobiert, welche pixel des fotos am rand des displays liegen. dafür das zuletzt aufgenommene foto in der Anwendung in einem UI element anzeigen. ein tranzparentes gitternetzt darüber gelegt, wo man ablesen kann, welcher pixel sich wo auf dem foto befindet. Darüber durch Fotos machen und ablesen welche real world features sich bei welcher pixel position befinden. Herausstellen, welcher Fotoausschnitt mit dem Display übereinstimmt. 
+Mit einer Repräsentation des Fotos in dem 3D Raum ist es möglich ein Raycast durchzuführen. 
+Dazu muss das Foto nicht tatsächlich in dem 3D Raum vorhanden sein. Es muss jedoch mit dem Input von einer Foto-Koordinate ein Output von einer Koordinate in dem 3D Raum geben, mit dem der Raycast durchgeführt werden kann.
+
+Die Position des Fotos hängt mit der Kamera zusammen, daher kann das Foto durch den Camera Space simuliert werden. Als erstes wurde probiert ein Sphären-Objekt an eine gezielte Koordinate in dem Camera Space zu bewegen. 
+
+% make pretty after this
+Wenn die Kamera an dem Ursprung des globalen Koordinatensystem liegt und eine neutrale Rotation hat, stimmt der Camera Space mit dem globalen Koordinatensystem überein. Die Sphäre wurde in der Szene per Hand bewegt um markante Koordinaten des Camera Space abzulesen. Dabei wurden foglende Camera Space Koordinaten gefunden:
+\begin{itemize}
+	\item Near Clipping Plane bei z = -0.37
+	\item linker Rand bei x = -0.153
+	\item rechter Rand bei x = 0.153
+	\item oberer Rand bei y = 0.1147
+	\item unterer Rand bei y = -0.1147
+\end{itemize}
+
+Die x und y Koordinaten hängen von der u,v Koordinate des Fotos ab. Es wurden linear Funktionen aufgestellt um u,v auf x,y Abzubilden. Diese Abbildung dient als Repräsentation des Fotos im 3D Raum. Zusätzlich gibt die Position und Skalierung des Fotos im Verhältnis zu der Kamera an.
+
+Dann wurde getestet wie genau DetectedObjects in der AR Umgebung lokalisiert werden. Es wurden Testweise Fotos aufgenommen, analysiert und die DetectedObjects markiert. Die entstandenen Markierungen lagen in Sichtfeld, jedoch nicht an den erwarteten Stellen. 
+
+Um dem Problem auf den Grund zu gehen, wurde ein UI Objekt erstellt, das ein Aufgenommenes Foto bei Runtime anzeigt.
+Das Foto wurde dann mit dem Display verglichen. Dabei viel auf, das sie ein unterschiedliches Seitenverhältnis haben und das Display einen kleinen Bildausschnitt zeigt.  
+
+Mit den Unterschieden zwischen dem Foto und dem Display zwei Möglichkeiten. Entweder wird das Foto auf das Display zugeschnitten, oder das gesammte Foto wird genommen. Dann würden auch Objekte erkannt, die außerhalb des Sichtfeldes liegen.
+es wurde die Entscheidung getroffen das Foto zuzuschneiden. Damit gibt es ein besseres Feedback für den Nutzer, das ein Objekt gefunden wurde. 
+
+Die Zugschneidung wurde realisiert, indem die Intervalle für u und v der Abbildungsfunktionen stärker eingegrenzt wurden. Alle Objekte die Außerhalb der Intervalle liegen werden ignoriert. Um die Intervalle zu bestimmen wurde ein Gitter zu dem Fotoanzeige UI Element hinzugefügt. Mit dem Gitter kann die u,v Position von beliebigen Stellen des Fotos abgelesen werden. 
+Durch aufnehmen von Fotos und vergleichen mit dem Sichtfeld des Displays wurde abgelesen, bei welcher u,v Position des Fotos sich die Ecken des Displays befinden. Die Intervalle wurden dem entsprechend eingegrenzt. 
+
+Mit den durchgenommenen Veränderungen der Intervalle konnten DetectedObjects korrekt in der Umgebung lokalisert werden. Jedoch wurden sehr häufig Objekte nicht markiert, obwohl sie im Sichtfeld des Nutzers lagen, weil deren Mittelpunkt außerhalb eines Intervalls war.
+
+Daher wurde entscheiden doch das gesamte Foto zu verwenden und Objekte auch zu Markieren, wenn sie komplett außerhalb des Sichtfeldes lagen. 
+Dafür wurde die Intervalle für u und v wieder auf die ursprünglichen [0,1920] und [0,1080] gesetzt. Die Intervalle für x und y mussten vergrößert werden.
+
+Um die x und y Intervalle bestimme zu können wurde das Fotoanzeige UI Element Parallel zu der ClippingPlane gelget. Das Element folgt den Bewegungen der Kamera und liegt so nah an der Near Clipping Plane wie es geht und noch angezeigt wird. Das Display der Magic Leap Brille zeigt selbst solide Objekte leicht durchsichtig an. Das wurde genutzt, um Fotos aufzunehmen, mit dem UI Element anzuzeigen und mit der Realen Welt zu vergleichen. Durch ausprobieren wurde das UI Element so skaliert und verschoben, das das Foto mit der realen Welt soweit wie möglich übereinstimmt.
+
+Dann wurden die Ränder des UI Elementes genutzt um die Intervalle für x und y zu bestimmen.
+\begin{itemize}
+	\item für x: [-0.295, 0.2281]
+	\item für y: [0.1546, -0.1507]
+	\item Zusätzlich wurde z = -0.4 gesetzt. Das Ui Element musste ein wenig weiter von der Clipping Plane entfernt werden um angezeigt zu werden.
+\end{itemize}
+
+Mit diesen Intervallen für u,v,x und y konnten DetectedObjects gut lokalisiert werden und es wurden keine Objekte mehr weggelassen, von dennen der Nutzer erwarten würden, das sie markiert werden.
+
+
 %bilder zeigen wie es dann aussieht
 %make methods, classes and variables italic
 
 \section{Zusammenfassung}
 %sachen die verbessert werden könnten
+%todo this part.
 man kann zusätzlich zum raycast auf das mesh auch noch die tiefenkamera nutzen. spatial mapping hat manchmal das mesh an der stelle noch nicht, oder ist nicht aktualisiert. besonders probleme mit wasserflaschen die nicht erkannt werden. HInzuzihenen von tiefen datan kann das lokalisieren von objekten im 3D raum noch verbessern.
 	
 	\newpage
