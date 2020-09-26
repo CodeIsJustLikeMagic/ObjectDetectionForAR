@@ -42,7 +42,7 @@ public class AzureObjectDetection : MonoBehaviour
                 ResultAsText.instance.Add("responseCode " + responseCode);
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
-                Debug.Log(jsonResponse);
+                Debug.Log("Objekt Detection: "+jsonResponse);
                 ResultAsText.instance.Add(jsonResponse);
                 HandleJsonResponse(jsonResponse, cameraState);
             }

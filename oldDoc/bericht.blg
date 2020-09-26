@@ -1,0 +1,19 @@
+[0] Config.pm:304> INFO - This is Biber 2.13
+[0] Config.pm:307> INFO - Logfile is 'bericht.blg'
+[77] biber-MSWIN64:315> INFO - === 
+[183] Biber.pm:375> INFO - Reading 'bericht.bcf'
+[280] Biber.pm:905> INFO - Found 20 citekeys in bib section 0
+[294] Biber.pm:4196> INFO - Processing section 0
+[331] Utils.pm:75> INFO - Globbing data source 'references.bib'
+[359] Utils.pm:91> INFO - Globbed data source 'references.bib' to references.bib
+[385] Biber.pm:4373> INFO - Looking for bibtex format file 'references.bib' for section 0
+[444] bibtex.pm:1462> INFO - LaTeX decoding ...
+[475] bibtex.pm:1281> INFO - Found BibTeX data source 'references.bib'
+[476] Utils.pm:300> WARN - Duplicate entry key: 'mlluminOS' in file 'references.bib', skipping ...
+[578] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
+[578] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[578] Biber.pm:4024> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'de-DE'
+[578] Biber.pm:4030> INFO - No sort tailoring available for locale 'de-DE'
+[836] bbl.pm:648> INFO - Writing 'bericht.bbl' with encoding 'UTF-8'
+[842] bbl.pm:751> INFO - Output to bericht.bbl
+[906] Biber.pm:110> INFO - WARNINGS: 1

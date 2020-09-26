@@ -10,7 +10,7 @@ public class TestDetection : MonoBehaviour
     {
         if(Input.GetKeyDown("t"))
         {
-            TestCustomPrediction();
+            TestAzureDetection();
         }
     }
     /// <summary>
