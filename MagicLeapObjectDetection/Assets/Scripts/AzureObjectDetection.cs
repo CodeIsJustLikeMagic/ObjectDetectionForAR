@@ -22,11 +22,11 @@ public class AzureObjectDetection : MonoBehaviour
     public IEnumerator AnalyseImage(byte[] imageBytes, SavedCameraState cameraState)
     {
         //ResultAsText.instance.Show(authorizationKey);
-        ResultAsText.instance.Show("AnalyseImage");
+        InformationUI.instance.Show("AnalyseImage");
         WWWForm webForm = new WWWForm();
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(visionAnalysisEndpoint, webForm))
         {
-            ResultAsText.instance.Add("made a UnityWebRequest thing");
+            InformationUI.instance.Add("made a UnityWebRequest thing");
             unityWebRequest.SetRequestHeader("Content-Type", "application/octet-stream");
             unityWebRequest.SetRequestHeader(ocpApimSubscriptionKeyHeader, authorizationKey);
             // the download handler will help receiving the analysis from Azure
@@ -39,16 +39,17 @@ public class AzureObjectDetection : MonoBehaviour
             long responseCode = unityWebRequest.responseCode;
             try
             {
-                ResultAsText.instance.Add("responseCode " + responseCode);
+                InformationUI.instance.Add("responseCode " + responseCode);
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log("Objekt Detection: "+jsonResponse);
-                ResultAsText.instance.Add(jsonResponse);
+                InformationUI.instance.Add(jsonResponse);
+                ShowOnCanvas(imageBytes);
                 HandleJsonResponse(jsonResponse, cameraState);
             }
             catch (Exception exception)
             {
-                ResultAsText.instance.Show("Json exception.Message: " + exception.Message);
+                InformationUI.instance.Show("Json exception.Message: " + exception.Message);
                 Debug.Log("Json exception.Message: " + exception.Message);
             }
             yield return null;
@@ -82,14 +83,22 @@ public class AzureObjectDetection : MonoBehaviour
         jsonResponse = jsonResponse.Replace("object", "objectName"); //c# dosn't like "public string object"
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
-        ResultAsText.instance.Show(" Handle Json");
+        InformationUI.instance.Show(" Handle Json");
         foreach (DetectedObject obj in det.objectNames)
         {
             Debug.Log(obj.objectName);
             int x = obj.rectangle.x + (obj.rectangle.w / 2);
             int y = obj.rectangle.y + (obj.rectangle.h / 2);
-            ResultAsText.instance.Add(obj.objectName);
+            InformationUI.instance.Add(obj.objectName);
             PixelToWorld.instance.Cast(x, y, cpos, obj.objectName);
         }
+    }
+
+    public Renderer renderer;
+    public void ShowOnCanvas(byte[] imageBytes)
+    {
+        Texture2D texture = new Texture2D(8, 8);
+        texture.LoadImage(imageBytes);
+        renderer.material.mainTexture = texture;
     }
 }

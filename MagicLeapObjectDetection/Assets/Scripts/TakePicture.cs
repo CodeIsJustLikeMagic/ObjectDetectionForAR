@@ -19,6 +19,61 @@ public class TakePicture : MonoBehaviour
     private bool _hasStarted = false;
     private Thread _captureThread = null;
     #endregion
+    #region capturingImage
+    public void TakeImage() //called by button presses
+    {
+        if (_granted)
+        {
+            InformationUI.instance.Add("take an image...");
+            TriggerAsyncCapture();
+
+        }
+    }
+
+    /// <summary>
+    /// Captures a still image using the device's camera and returns
+    /// the data path where it is saved.
+    /// </summary>
+    /// <param name="fileName">The name of the file to be saved to.</param>
+    private void TriggerAsyncCapture()
+    {
+        if (_captureThread == null || (!_captureThread.IsAlive))
+        {
+            InformationUI.instance.Add("capture thread started");
+            ThreadStart captureThreadStart = new ThreadStart(CaptureThreadWorker);
+            _captureThread = new Thread(captureThreadStart);
+            _captureThread.Start();
+        }
+        else
+        {
+            InformationUI.instance.Add("Previous thread has not finished," +
+                " unable to begin a new capture just yet.");
+        }
+    }
+    private SavedCameraState camereaState;
+    /// <summary>
+    /// Worker function to call the API's Capture function
+    /// capture the actual image
+    /// </summary>
+    private void CaptureThreadWorker()
+    {
+        camereaState = new SavedCameraState(Camera.main);
+        Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);//uses magic leap camera
+
+        lock (_cameraLockObject)
+        {
+            InformationUI.instance.Add("MLCamera.IsStarted " + MLCamera.IsStarted + " isCameraConnected " + _isCameraConnected);
+            if (MLCamera.IsStarted && _isCameraConnected)
+            {
+                MLResult result = MLCamera.CaptureRawImageAsync();
+                if (result.IsOk)
+                {
+                    _isCapturing = true;
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Handles the event of a new image getting captured.
     /// Starts Analysing Image with Azure Object Detectio nand Azure Custom Prediction.
@@ -26,29 +81,18 @@ public class TakePicture : MonoBehaviour
     /// <param name="imageData">The raw data of the image.</param>
     private void OnCaptureRawImageComplete(byte[] imageData)
     {
-        ResultAsText.instance.Add("capture done");
+        InformationUI.instance.Add("capture done");
         lock (_cameraLockObject)
         {
             _isCapturing = false;
         }
-        Texture2D texture = new Texture2D(8, 8);
-        bool status = texture.LoadImage(imageData);
-
-        if (status && (texture.width != 8 && texture.height != 8))
-        {
-            _previewObject.SetActive(true);
-            Renderer renderer = _previewObject.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material.mainTexture = texture;
-            }
-
-        }
+        InformationUI.instance.ShowImage(imageData);
         StartCoroutine(AzureObjectDetection.instance.AnalyseImage(imageData, camereaState));
         StartCoroutine(AzureCustomPrediction.instance.AnalyseImage(imageData, camereaState));
     }
+    #endregion
 
-    #region TakeImage
+    #region privilegesAndRessource
     void Awake()
     {
         //get privileges
@@ -62,36 +106,14 @@ public class TakePicture : MonoBehaviour
         if (!result.IsOk)
         {
             Debug.Log("we didnt get privileges");
-            ResultAsText.instance.Show("we didnt get privileges");
+            InformationUI.instance.Show("we didnt get privileges");
         }
         Debug.Log("we got privileges");
-        ResultAsText.instance.Show("we got privileges");
+        InformationUI.instance.Show("we got privileges");
         _granted = true;
         StartCapture(); //enables camera and callbacks
     }
-
-    void OnDestroy()
-    {
-        //clean up privileges
-        if (_privRequester != null)
-        {
-            _privRequester.OnPrivilegesDone -= HandlePrivilegesDone;
-        }
-
-        //clean up camera use
-        lock (_cameraLockObject)
-        {
-            if (_isCameraConnected)
-            {
-                MLCamera.OnRawImageAvailable -= OnCaptureRawImageComplete;
-
-                _isCapturing = false;
-                DisableMLCamera();
-            }
-        }
-    }
-
-    #region camera
+    
     /// <summary>
     /// Once privileges have been granted, enable the camera and callbacks.
     /// </summary>
@@ -154,60 +176,27 @@ public class TakePicture : MonoBehaviour
         }
 #endif
     }
-    #endregion camera
-
-    public void TakeImage() //called by button presses
+    void OnDestroy()
     {
-        if (_granted)
+        //clean up privileges
+        if (_privRequester != null)
         {
-            ResultAsText.instance.Add("take an image...");
-            TriggerAsyncCapture();
+            _privRequester.OnPrivilegesDone -= HandlePrivilegesDone;
+        }
 
-        }
-    }
-    
-    /// <summary>
-    /// Captures a still image using the device's camera and returns
-    /// the data path where it is saved.
-    /// </summary>
-    /// <param name="fileName">The name of the file to be saved to.</param>
-    private void TriggerAsyncCapture()
-    {
-        if (_captureThread == null || (!_captureThread.IsAlive))
-        {
-            ResultAsText.instance.Add("capture thread started");
-            ThreadStart captureThreadStart = new ThreadStart(CaptureThreadWorker);
-            _captureThread = new Thread(captureThreadStart);
-            _captureThread.Start();
-        }
-        else
-        {
-            ResultAsText.instance.Add("Previous thread has not finished, unable to begin a new capture just yet.");
-        }
-    }
-    private SavedCameraState camereaState;
-    /// <summary>
-    /// Worker function to call the API's Capture function
-    /// capture the actual image
-    /// </summary>
-    private void CaptureThreadWorker()
-    {
-        camereaState = new SavedCameraState(Camera.main);
-        Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);//uses magic leap camera
-
+        //clean up camera use
         lock (_cameraLockObject)
         {
-            ResultAsText.instance.Add("MLCamera.IsStarted " + MLCamera.IsStarted + " isCameraConnected " + _isCameraConnected);
-            if (MLCamera.IsStarted && _isCameraConnected)
+            if (_isCameraConnected)
             {
-                MLResult result = MLCamera.CaptureRawImageAsync();
-                if (result.IsOk)
-                {
-                    _isCapturing = true;
-                }
+                MLCamera.OnRawImageAvailable -= OnCaptureRawImageComplete;
+
+                _isCapturing = false;
+                DisableMLCamera();
             }
         }
     }
+
     /// <summary>
     /// Stop the camera, unregister callbacks, and stop input and privileges APIs.
     /// </summary>
@@ -250,12 +239,7 @@ public class TakePicture : MonoBehaviour
 
             _hasStarted = false;
         }
-    }
-
-    private void OnApplicationFocus(bool focus)
-    {
         EnableMLCamera();
     }
     #endregion
 }
-

@@ -31,7 +31,7 @@ public class AzureCustomTrain : MonoBehaviour
     {
         if(imageBytes == null)
         {
-            ResultAsText.instance.Add("no image saved to uplodad to train custom vision");
+            InformationUI.instance.Add("no image saved to uplodad to train custom vision");
         }
         WWWForm webForm = new WWWForm();
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(trainingImageEndpoint, webForm))
@@ -44,13 +44,13 @@ public class AzureCustomTrain : MonoBehaviour
             yield return unityWebRequest.SendWebRequest();
             long responseCode = unityWebRequest.responseCode;
             Debug.Log(responseCode);
-            ResultAsText.instance.Add("uploaded image, responsecode: "+responseCode);
+            InformationUI.instance.Add("uploaded image, responsecode: "+responseCode);
             try
             {
-                ResultAsText.instance.Add(unityWebRequest.downloadHandler.text);
+                InformationUI.instance.Add(unityWebRequest.downloadHandler.text);
             }catch(Exception exception)
             {
-                ResultAsText.instance.Add("Json exception.Message: " + exception.Message);
+                InformationUI.instance.Add("Json exception.Message: " + exception.Message);
             }
             yield return null;
         }

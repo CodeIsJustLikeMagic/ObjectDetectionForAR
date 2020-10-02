@@ -66,7 +66,7 @@ public class LabelCreater : MonoBehaviour
         {
             str = str + m.GetComponent<MarkerBehavior>().GetText()+"\n";
         }
-        ResultAsText.instance.ShowMarkers(str);
+        InformationUI.instance.ShowMarkers(str);
     }
 
     int showState = 0;

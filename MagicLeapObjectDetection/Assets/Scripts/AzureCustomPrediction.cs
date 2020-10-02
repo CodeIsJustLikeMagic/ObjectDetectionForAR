@@ -19,13 +19,13 @@ public class AzureCustomPrediction : MonoBehaviour
         TextAsset txt = (TextAsset)Resources.Load("predictionKey", typeof(TextAsset));
         predictionKey = txt.text;
         predictionEndpoint = predictionEndpointStart + iteration + "/image";
-        ResultAsText.instance.ShowIteration(iteration);
+        InformationUI.instance.ShowIteration(iteration);
     }
 
     public IEnumerator AnalyseImage(byte[] imageBytes, SavedCameraState cameraState)
     {
         //ResultAsText.instance.Show(authorizationKey);
-        ResultAsText.instance.Show("AnalyseImage");
+        InformationUI.instance.Show("AnalyseImage");
         WWWForm webForm = new WWWForm();
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(predictionEndpoint, webForm))
         {
@@ -45,16 +45,16 @@ public class AzureCustomPrediction : MonoBehaviour
             Debug.Log(responseCode);
             try
             {
-                ResultAsText.instance.Add("responseCode " + responseCode);
+                InformationUI.instance.Add("responseCode " + responseCode);
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
-                ResultAsText.instance.Add(jsonResponse);
+                InformationUI.instance.Add(jsonResponse);
                 HandleJson(imageBytes, jsonResponse, cameraState);
             }
             catch (Exception exception)
             {
-                ResultAsText.instance.Show("Json exception.Message: " + exception.Message);
+                InformationUI.instance.Show("Json exception.Message: " + exception.Message);
                 Debug.Log("Json exception.Message: " + exception.Message);
             }
             yield return null;
@@ -90,7 +90,7 @@ public class AzureCustomPrediction : MonoBehaviour
     {
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
-        ResultAsText.instance.Show(" Handle Json");
+        InformationUI.instance.Show(" Handle Json");
         Texture2D texture = new Texture2D(8, 8);
         texture.LoadImage(imageBytes);
         Debug.Log(texture.width + " " + texture.height);
@@ -105,7 +105,7 @@ public class AzureCustomPrediction : MonoBehaviour
                 int h = (int)(texture.height * obj.boundingBox.height);
                 u = u + w / 2;
                 v = v + h / 2;
-                ResultAsText.instance.Add(obj.tagName + " " + u + " " + v +" "+obj.probability);
+                InformationUI.instance.Add(obj.tagName + " " + u + " " + v +" "+obj.probability);
                 PixelToWorld.instance.Cast(u, v, cpos, obj.tagName, 2); //make it use second material to differentiate between Object Detection and Custom Vision
             }
         }

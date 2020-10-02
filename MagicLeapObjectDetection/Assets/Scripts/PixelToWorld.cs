@@ -36,7 +36,7 @@ public class PixelToWorld : MonoBehaviour
         {
             GameObject sphere2 = Instantiate(clippingPlaneMarker, p, Quaternion.identity);// show point on clipping plane
         }
-        ResultAsText.instance.Add(u + " " + v + " " + X(u) + " " + X(v) + " " + objectName + " object marked");
+        InformationUI.instance.Add(u + " " + v + " " + X(u) + " " + X(v) + " " + objectName + " object marked");
     }
     //Picture u and v ranges
     private float umin = 0;//left

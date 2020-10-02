@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LabelCreater" Collapsed="true">
+    <Position X="2.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgBAAAAAAAAAkAAAAAAAAABAAAAAAhmAAAgAAEA=</HashCode>
+      <FileName>Assets\Scripts\LabelCreater.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AzureCustomPrediction" Collapsed="true">
+    <Position X="2.25" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAEAQAAAAAAAAAAAABAABBAAAAAAAQAAGA=</HashCode>
+      <FileName>Assets\Scripts\AzureCustomPrediction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AzureObjectDetection" Collapsed="true">
+    <Position X="4.5" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAIAAAAAAAAAABEAgAAAAAAAAAAgGA=</HashCode>
+      <FileName>Assets\Scripts\AzureObjectDetection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputHandler" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AQQxAAAAICEgAABACAAAAAAAAAABAAAAAAgAAEwAAAA=</HashCode>
+      <FileName>Assets\Scripts\InputHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MarkerBehavior" Collapsed="true">
+    <Position X="4.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAIAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\MarkerBehavior.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MoveDisplay" Collapsed="true">
+    <Position X="4.5" Y="0.5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAFACAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\MoveDisplay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PixelToWorld" Collapsed="true">
+    <Position X="2.5" Y="4.25" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>IAAIAEAAAAAACAAEAAABAAAAAABAAAAIACEAAEAAcEA=</HashCode>
+      <FileName>Assets\Scripts\PixelToWorld.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Raycast" Collapsed="true">
+    <Position X="2.5" Y="5.5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAJIAAAACAAAAAAAAAAAAAAAABAAAQAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Raycast.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SavedCameraState" Collapsed="true">
+    <Position X="4.5" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Assets\Scripts\SavedCameraState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InformationUI" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAABACAAQAAAAAAAAAISgBEAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\InformationUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TakePicture" Collapsed="true">
+    <Position X="2.25" Y="1.75" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>ACABAAAAAABABAQBACAgBAMAAABACBgKAABIAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\TakePicture.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="camereaState" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1999,6 +1999,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 813483c713a5d7a47be19836dcc4f080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 1852117693}
+--- !u!23 &1852117693 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 74614204765741176, guid: fe9c876ff4149074d9a8cfd5a8a25148,
+    type: 3}
+  m_PrefabInstance: {fileID: 1143395849}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1975913803
 PrefabInstance:
   m_ObjectHideFlags: 0
