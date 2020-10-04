@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6a0f990b8d517a4aa9f11b8f74d9554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MarkerObjectDetection: {fileID: 8124688416462973366, guid: a48c61e2eeb33b5499c85045b9eaed85,
+  MarkerObjectDetection: {fileID: 4895952781860770468, guid: 30e5af7c9d39e2641b80c71b9c5dd617,
     type: 3}
   MarkerCustomPrediction: {fileID: 1565135122990447119, guid: 0a00fd8447af5264bb65690d95278eea,
     type: 3}
@@ -618,6 +618,7 @@ MonoBehaviour:
   output: {fileID: 7787310927216301222}
   markers: {fileID: 1175155148}
   iteration: {fileID: 2137642319}
+  imageDispalyObject: {fileID: 938307251}
 --- !u!4 &841690778
 Transform:
   m_ObjectHideFlags: 0

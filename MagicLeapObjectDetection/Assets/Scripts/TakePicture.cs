@@ -20,11 +20,17 @@ public class TakePicture : MonoBehaviour
     private Thread _captureThread = null;
     #endregion
     #region capturingImage
+    private int picture = 0;
     public void TakeImage() //called by button presses
     {
+        picture = picture + 1;
+        if(picture >= 3)
+        {
+            InputHandler.instance.Reconnect();
+        }
         if (_granted)
         {
-            InformationUI.instance.Add("take an image...");
+            InformationUI.instance.Show("take an image...");
             TriggerAsyncCapture();
 
         }
@@ -58,14 +64,19 @@ public class TakePicture : MonoBehaviour
     private void CaptureThreadWorker()
     {
         camereaState = new SavedCameraState(Camera.main);
-        Debug.Log(MLCamera.IsStarted + " " + _isCameraConnected);//uses magic leap camera
 
         lock (_cameraLockObject)
         {
-            InformationUI.instance.Add("MLCamera.IsStarted " + MLCamera.IsStarted + " isCameraConnected " + _isCameraConnected);
+            InformationUI.instance.Add("MLCamera.IsStarted "
+                + MLCamera.IsStarted + " isCameraConnected " + _isCameraConnected.ToString() +"\nis_Capturing "+_isCapturing.ToString());
             if (MLCamera.IsStarted && _isCameraConnected)
             {
                 MLResult result = MLCamera.CaptureRawImageAsync();
+                if(!result.IsOk)
+                {
+                    resultwasnotok = true;
+                    InformationUI.instance.Add("MLResult is not ok");
+                }
                 if (result.IsOk)
                 {
                     _isCapturing = true;
@@ -73,6 +84,16 @@ public class TakePicture : MonoBehaviour
             }
         }
     }
+    public void Update()
+    {
+        if (resultwasnotok)
+        {
+            DisableMLCamera();
+            EnableMLCamera();
+            resultwasnotok = false;
+        }
+    }
+    private bool resultwasnotok = false;
 
     /// <summary>
     /// Handles the event of a new image getting captured.
@@ -87,6 +108,7 @@ public class TakePicture : MonoBehaviour
             _isCapturing = false;
         }
         InformationUI.instance.ShowImage(imageData);
+        picture = 0;
         StartCoroutine(AzureObjectDetection.instance.AnalyseImage(imageData, camereaState));
         StartCoroutine(AzureCustomPrediction.instance.AnalyseImage(imageData, camereaState));
     }

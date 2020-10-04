@@ -3,7 +3,10 @@ guid: 4e713d9a42d6606489853b2812be67ac
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - textHolder: {instanceID: 0}
+  - graysherePrefab: {fileID: 1458047668762982898, guid: c69c1d2830db45b4ab132daf6a2d7b6c,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

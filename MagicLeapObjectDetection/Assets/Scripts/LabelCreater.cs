@@ -16,41 +16,58 @@ public class LabelCreater : MonoBehaviour
     public List<GameObject> custompredictionMarkers = new List<GameObject>();
     public void CreateMarker(Vector3 point, Vector3 normal, string text, int material)
     {
-        GameObject prefab = MarkerObjectDetection;
-        if(material == 2)
+        if (!IfObjektalreadymarked(point, normal, text, material))
         {
-            prefab = MarkerCustomPrediction;
+            GameObject prefab = MarkerObjectDetection;
+            if (material == 2)
+            {
+                prefab = MarkerCustomPrediction;
+            }
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
+            GameObject marker = Instantiate(prefab, point, rotation);
+            MarkerBehavior b = marker.GetComponent<MarkerBehavior>();
+            if (b == null)
+            {
+                Debug.Log("no MarkerBehavior Component");
+            }
+            if (material == 2)
+            {
+                custompredictionMarkers.Add(marker);
+            }
+            else
+            {
+                objectdetectionMarkers.Add(marker);
+            }
+            marker.GetComponent<MarkerBehavior>().SetText(text);
+            markersOnCanvas();
         }
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
-        GameObject marker = Instantiate(prefab, point, rotation);
-        MarkerBehavior b = marker.GetComponent<MarkerBehavior>();
-        if(b == null)
-        {
-            Debug.Log("no MarkerBehavior Component");
-        }
-        if(material == 2)
-        {
-            custompredictionMarkers.Add(marker);
-        }
-        else
-        {
-            objectdetectionMarkers.Add(marker);
-        }
-        marker.GetComponent<MarkerBehavior>().SetText(text);
-        markersOnCanvas();
     }
-    
-    public void Update()
-    {//roate existing Markers towars camera
-        foreach (GameObject m in objectdetectionMarkers)
+
+    private bool IfObjektalreadymarked(Vector3 point, Vector3 normal, string text, int material)
+    {
+        List<GameObject> markers = objectdetectionMarkers;
+        if(material == 2)
         {
-            m.transform.LookAt(Camera.main.transform.position);
+            markers = custompredictionMarkers;
         }
-        foreach (GameObject m in custompredictionMarkers)
+
+        foreach (GameObject m in markers)
         {
-            m.transform.LookAt(Camera.main.transform.position);
+            //check if objects of same name have been detected
+            if(m.GetComponent<MarkerBehavior>().GetText() == text)
+            {
+                //check if the objects are close
+                if(Vector3.Distance(m.transform.position,point) < 0.5f)
+                {
+                    //the same object has been detected again
+                    //change the position of the old label to midpoint
+                    //add gray shpere to indicate the two detected positions
+                    m.GetComponent<MarkerBehavior>().UpdateLocation(point);
+                    return true;
+                }
+            }
         }
-       
+        return false;
     }
 
     //updates UI Display of which Markers exist in the world

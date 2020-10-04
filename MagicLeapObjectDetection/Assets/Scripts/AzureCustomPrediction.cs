@@ -49,7 +49,6 @@ public class AzureCustomPrediction : MonoBehaviour
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log(jsonResponse);
-                InformationUI.instance.Add(jsonResponse);
                 HandleJson(imageBytes, jsonResponse, cameraState);
             }
             catch (Exception exception)
@@ -90,7 +89,7 @@ public class AzureCustomPrediction : MonoBehaviour
     {
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
-        InformationUI.instance.Show(" Handle Json");
+        InformationUI.instance.Add("Custom Prediction Handle Json");
         Texture2D texture = new Texture2D(8, 8);
         texture.LoadImage(imageBytes);
         Debug.Log(texture.width + " " + texture.height);

@@ -44,12 +44,12 @@ public class AzureObjectDetection : MonoBehaviour
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 Debug.Log("Objekt Detection: "+jsonResponse);
                 InformationUI.instance.Add(jsonResponse);
-                ShowOnCanvas(imageBytes);
+                //ShowOnCanvas(imageBytes);
                 HandleJsonResponse(jsonResponse, cameraState);
             }
             catch (Exception exception)
             {
-                InformationUI.instance.Show("Json exception.Message: " + exception.Message);
+                InformationUI.instance.Add("Json exception.Message: " + exception.Message);
                 Debug.Log("Json exception.Message: " + exception.Message);
             }
             yield return null;
@@ -80,10 +80,11 @@ public class AzureObjectDetection : MonoBehaviour
     }
     public void HandleJsonResponse(System.String jsonResponse, SavedCameraState cpos)
     {
-        jsonResponse = jsonResponse.Replace("object", "objectName"); //c# dosn't like "public string object"
+        jsonResponse = jsonResponse.Replace("object", "objectName"); 
+        //c# dosn't like "public string object"
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
-        InformationUI.instance.Show(" Handle Json");
+        InformationUI.instance.Add("ObjectDetection Handle Json");
         foreach (DetectedObject obj in det.objectNames)
         {
             Debug.Log(obj.objectName);

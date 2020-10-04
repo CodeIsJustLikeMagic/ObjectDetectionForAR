@@ -5,8 +5,10 @@ using UnityEngine.XR.MagicLeap;
 
 public class InputHandler : MonoBehaviour
 {
+    public static InputHandler instance;
     private MLInput.Controller _controller;
     //actions
+
     private void TriggerTapped()
     {
         Debug.Log("Trigger Tapped");
@@ -28,7 +30,23 @@ public class InputHandler : MonoBehaviour
         Debug.Log("Bumper Held");
         LabelCreater.instance.EraseLast();
     }
-    
+
+    public void Awake()
+    {
+        instance = this;
+    }
+
+    public void Reconnect()
+    {
+        // Stop input
+        MLInput.Stop();
+
+        // Remove button callbacks
+        MLInput.OnControllerButtonDown -= OnButtonDown;
+        MLInput.OnControllerButtonUp -= OnButtonUp;
+        Start();
+    }
+
     void Start()
     {
         try

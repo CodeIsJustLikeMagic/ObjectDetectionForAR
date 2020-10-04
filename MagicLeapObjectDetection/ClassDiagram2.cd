@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1">
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="LabelCreater" Collapsed="true">
     <Position X="2.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAgBAAAAAAAAAkAAAAAAAAABAAAAAAhmAAAgAAEA=</HashCode>
+      <HashCode>AAAAAgBAAAAAAAAAkAAAAAAAAABAAAAAAhmAAggAAEA=</HashCode>
       <FileName>Assets\Scripts\LabelCreater.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -16,6 +16,9 @@
   </Class>
   <Class Name="AzureObjectDetection" Collapsed="true">
     <Position X="4.5" Y="3" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAQAIAAAAAAAAAABEAgAAAAAAAAAAgGA=</HashCode>
       <FileName>Assets\Scripts\AzureObjectDetection.cs</FileName>
@@ -24,14 +27,14 @@
   <Class Name="InputHandler" Collapsed="true">
     <Position X="2.25" Y="0.5" Width="1.25" />
     <TypeIdentifier>
-      <HashCode>AQQxAAAAICEgAABACAAAAAAAAAABAAAAAAgAAEwAAAA=</HashCode>
+      <HashCode>BQQxAAAAICEgAABACAAAAAAAAABBAAAAAAgAAEwAAEA=</HashCode>
       <FileName>Assets\Scripts\InputHandler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MarkerBehavior" Collapsed="true">
-    <Position X="4.5" Y="6.75" Width="1.5" />
+    <Position X="1.25" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAIAIAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <HashCode>AAQBAACQAAAAAgAIAIAAAAAAAIAAAAAAAAIBAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\MarkerBehavior.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -57,7 +60,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SavedCameraState" Collapsed="true">
-    <Position X="4.5" Y="1.75" Width="1.75" />
+    <Position X="4.75" Y="1.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
       <FileName>Assets\Scripts\SavedCameraState.cs</FileName>
@@ -70,10 +73,31 @@
       <FileName>Assets\Scripts\InformationUI.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="DetectedObject">
+    <Position X="8.5" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\DetectedObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rectangle">
+    <Position X="6.25" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAhgAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Rectangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DetectionResponse">
+    <Position X="6.25" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\DetectionResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="TakePicture" Collapsed="true">
     <Position X="2.25" Y="1.75" Width="1.25" />
     <TypeIdentifier>
-      <HashCode>ACABAAAAAABABAQBACAgBAMAAABACBgKAABIAAAAAEA=</HashCode>
+      <HashCode>ACQBAAAAAIBABAQBAiAgBAMAAABACBgKAABIAAAAAEA=</HashCode>
       <FileName>Assets\Scripts\TakePicture.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
