@@ -18,15 +18,14 @@ public class AzureObjectDetection : MonoBehaviour
         TextAsset txt = (TextAsset)Resources.Load("authorizationKey", typeof(TextAsset));
         authorizationKey = txt.text;
     }
-
     public IEnumerator AnalyseImage(byte[] imageBytes, SavedCameraState cameraState)
     {
+        float starttime = Time.time;
         //ResultAsText.instance.Show(authorizationKey);
-        InformationUI.instance.Show("AnalyseImage");
+        InformationUI.instance.Add(starttime + " WebRequest with AzureObjectDetection");
         WWWForm webForm = new WWWForm();
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(visionAnalysisEndpoint, webForm))
         {
-            InformationUI.instance.Add("made a UnityWebRequest thing");
             unityWebRequest.SetRequestHeader("Content-Type", "application/octet-stream");
             unityWebRequest.SetRequestHeader(ocpApimSubscriptionKeyHeader, authorizationKey);
             // the download handler will help receiving the analysis from Azure
@@ -42,8 +41,8 @@ public class AzureObjectDetection : MonoBehaviour
                 InformationUI.instance.Add("responseCode " + responseCode);
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
-                Debug.Log("Objekt Detection: "+jsonResponse);
-                InformationUI.instance.Add(jsonResponse);
+                //InformationUI.instance.Add(jsonResponse);
+                InformationUI.instance.Add(Time.time + " web request took: " + (Time.time - starttime));
                 //ShowOnCanvas(imageBytes);
                 HandleJsonResponse(jsonResponse, cameraState);
             }
@@ -80,19 +79,22 @@ public class AzureObjectDetection : MonoBehaviour
     }
     public void HandleJsonResponse(System.String jsonResponse, SavedCameraState cpos)
     {
+        float starttime = Time.time;
         jsonResponse = jsonResponse.Replace("object", "objectName"); 
         //c# dosn't like "public string object"
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
-        InformationUI.instance.Add("ObjectDetection Handle Json");
+        InformationUI.instance.Add(Time. time + " Handle Json took: "+(Time.time - starttime));
+        starttime = Time.time;
         foreach (DetectedObject obj in det.objectNames)
         {
             Debug.Log(obj.objectName);
             int x = obj.rectangle.x + (obj.rectangle.w / 2);
             int y = obj.rectangle.y + (obj.rectangle.h / 2);
-            InformationUI.instance.Add(obj.objectName);
+            //InformationUI.instance.Add("object '"+obj.objectName+"'");
             PixelToWorld.instance.Cast(x, y, cpos, obj.objectName);
         }
+        InformationUI.instance.Add(Time.time + " Created "+det.objectNames.Length+" Labels. Took: " + (Time.time - starttime));
     }
 
     public Renderer renderer;

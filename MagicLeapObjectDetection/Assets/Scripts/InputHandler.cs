@@ -188,4 +188,11 @@ public class InputHandler : MonoBehaviour
             pressed = false;
         }
     }
+    void OnApplicationPause(bool pause)
+    {
+        if (!pause)
+        {
+            Reconnect();   
+        }
+    }
 }

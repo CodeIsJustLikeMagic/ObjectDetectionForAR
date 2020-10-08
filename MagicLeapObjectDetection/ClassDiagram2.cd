@@ -97,7 +97,7 @@
   <Class Name="TakePicture" Collapsed="true">
     <Position X="2.25" Y="1.75" Width="1.25" />
     <TypeIdentifier>
-      <HashCode>ACQBAAAAAIBABAQBAiAgBAMAAABACBgKAABIAAAAAEA=</HashCode>
+      <HashCode>ACQBAAAAAIBABAQBAiAgBgMAAABACBgKAABIAAAAAEA=</HashCode>
       <FileName>Assets\Scripts\TakePicture.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

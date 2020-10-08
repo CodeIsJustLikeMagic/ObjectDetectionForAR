@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
 using System.Threading;
+using System;
 using MagicLeap.Core.StarterKit;
 
 public class TakePicture : MonoBehaviour
@@ -21,8 +22,10 @@ public class TakePicture : MonoBehaviour
     #endregion
     #region capturingImage
     private int picture = 0;
+    private float started;
     public void TakeImage() //called by button presses
     {
+        started = Time.time;
         picture = picture + 1;
         if(picture >= 3)
         {
@@ -30,7 +33,7 @@ public class TakePicture : MonoBehaviour
         }
         if (_granted)
         {
-            InformationUI.instance.Show("take an image...");
+            InformationUI.instance.Show("take an image..." + started);
             TriggerAsyncCapture();
 
         }
@@ -67,8 +70,8 @@ public class TakePicture : MonoBehaviour
 
         lock (_cameraLockObject)
         {
-            InformationUI.instance.Add("MLCamera.IsStarted "
-                + MLCamera.IsStarted + " isCameraConnected " + _isCameraConnected.ToString() +"\nis_Capturing "+_isCapturing.ToString());
+            //InformationUI.instance.Add("MLCamera.IsStarted "
+            //    + MLCamera.IsStarted + " isCameraConnected " + _isCameraConnected.ToString() +"\nis_Capturing "+_isCapturing.ToString());
             if (MLCamera.IsStarted && _isCameraConnected)
             {
                 MLResult result = MLCamera.CaptureRawImageAsync();
@@ -94,7 +97,6 @@ public class TakePicture : MonoBehaviour
         }
     }
     private bool resultwasnotok = false;
-
     /// <summary>
     /// Handles the event of a new image getting captured.
     /// Starts Analysing Image with Azure Object Detectio nand Azure Custom Prediction.
@@ -102,7 +104,7 @@ public class TakePicture : MonoBehaviour
     /// <param name="imageData">The raw data of the image.</param>
     private void OnCaptureRawImageComplete(byte[] imageData)
     {
-        InformationUI.instance.Add("capture done");
+        InformationUI.instance.Add(Time.time + " capture done took: "+ (Time.time - started));
         lock (_cameraLockObject)
         {
             _isCapturing = false;

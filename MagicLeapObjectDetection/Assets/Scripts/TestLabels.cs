@@ -14,11 +14,11 @@ public class TestLabels : MonoBehaviour
 
     void Update()//move sphere to somewhere within the camera view
     {
-        if (Input.GetKeyDown("f"))
+        if (Input.GetKeyDown("w"))
         {
             Runtest();
         }
-        if (Input.GetKeyDown("r"))
+        if (Input.GetKeyDown("e"))
         {
             MoveDisplay.instance.ReorientCanvas();
         }
