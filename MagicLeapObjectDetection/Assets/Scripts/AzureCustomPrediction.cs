@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class AzureCustomPrediction : MonoBehaviour
 {
 
-    public static AzureCustomPrediction instance;
+    public static AzureCustomPrediction instance = null;
 
     private string predictionKey = "";
     private string predictionEndpointStart = "https://detectiontrainingforar.cognitiveservices.azure.com/customvision/v3.0/Prediction/ac915246-5268-461f-bd11-cf0c1826d509/detect/iterations/";
@@ -15,7 +15,12 @@ public class AzureCustomPrediction : MonoBehaviour
     public string iteration = "Iteration4";
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
         TextAsset txt = (TextAsset)Resources.Load("predictionKey", typeof(TextAsset));
         predictionKey = txt.text;
         predictionEndpoint = predictionEndpointStart + iteration + "/image";

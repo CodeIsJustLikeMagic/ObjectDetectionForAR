@@ -5,10 +5,15 @@ using UnityEngine.XR.MagicLeap;
 
 public class PixelToWorld : MonoBehaviour
 {
-    public static PixelToWorld instance;
+    public static PixelToWorld instance = null;
     void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
     
     public GameObject bluespherePrefab;

@@ -5,7 +5,7 @@ using UnityEngine.XR.MagicLeap;
 
 public class InputHandler : MonoBehaviour
 {
-    public static InputHandler instance;
+    public static InputHandler instance = null;
     private MLInput.Controller _controller;
     //actions
 
@@ -33,7 +33,12 @@ public class InputHandler : MonoBehaviour
 
     public void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public void Reconnect()

@@ -5,14 +5,19 @@ using UnityEngine.UI;
 
 public class InformationUI : MonoBehaviour
 {
-    public static InformationUI instance;
+    public static InformationUI instance = null;
     public Text output;
     public Text markers;
     public Text iteration;
     public GameObject imageDispalyObject;
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
     public void ShowImage(byte[] imageData)
     {

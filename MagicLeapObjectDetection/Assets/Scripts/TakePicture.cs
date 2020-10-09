@@ -9,7 +9,7 @@ using MagicLeap.Core.StarterKit;
 public class TakePicture : MonoBehaviour
 {
     #region globalVars
-    public static TakePicture instance;
+    public static TakePicture instance= null;
     private MLPrivilegeRequesterBehavior _privRequester = null;
     private bool _granted = false;
     [SerializeField, Tooltip("Object to set new images on.")]
@@ -119,10 +119,15 @@ public class TakePicture : MonoBehaviour
     #region privilegesAndRessource
     void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        instance = this;
+        DontDestroyOnLoad(this.gameObject);
         //get privileges
         _privRequester = GetComponent<MLPrivilegeRequesterBehavior>();
         _privRequester.OnPrivilegesDone += HandlePrivilegesDone;
-        instance = this;
     }
 
     void HandlePrivilegesDone(MLResult result)

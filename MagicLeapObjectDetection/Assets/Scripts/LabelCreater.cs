@@ -5,12 +5,17 @@ using UnityEngine.UI;
 
 public class LabelCreater : MonoBehaviour
 {
-    public static LabelCreater instance;
+    public static LabelCreater instance = null;
     public GameObject MarkerObjectDetection;
     public GameObject MarkerCustomPrediction;
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
     public List<GameObject> objectdetectionMarkers = new List<GameObject>();
     public List<GameObject> custompredictionMarkers = new List<GameObject>();

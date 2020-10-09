@@ -5,10 +5,15 @@ using UnityEngine;
 public class TestLabels : MonoBehaviour
 {
     public GameObject display;
-    public static TestLabels instance;
+    public static TestLabels instance = null;
     void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
     public GameObject sphere;
 

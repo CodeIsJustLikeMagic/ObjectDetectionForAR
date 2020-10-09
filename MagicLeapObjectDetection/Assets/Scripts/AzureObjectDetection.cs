@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class AzureObjectDetection : MonoBehaviour
 {
-    public static AzureObjectDetection instance;
+    public static AzureObjectDetection instance = null;
 
     // you must insert your service key here!    
     private string authorizationKey = ""; //Todo: this key is the opposite of secure
@@ -14,7 +14,12 @@ public class AzureObjectDetection : MonoBehaviour
     
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
         TextAsset txt = (TextAsset)Resources.Load("authorizationKey", typeof(TextAsset));
         authorizationKey = txt.text;
     }
