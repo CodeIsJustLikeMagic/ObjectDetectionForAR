@@ -174,41 +174,6 @@ Neben dem Spatial Mapping unterstützt Lumin OS das Verarbeiten vom Input des Co
 Es können niemals mehrere Applikationen zugriff auf die physikalische Kamera der Magic Leap One haben. Kamera Ressource
 Permission stufen
 
-
-\subsubsection{Unity Applikationen für Magic Leap One}
-
-Unity ist ein eine Entwicklungsumgebung mit der Applikationen für Lumin OS erstellt werden können. Ein Unity Projekt besteht aus mindestens einer Szene, in der mehrere GameObjects exsiteren. Alle Elemente die in der Szene existieren sind GameObjects. GameObjects können über child GameObjects und über Components verfügen. 
-
-
-Components implementieren Funktionalitäten. Einige Components sind bereits in Unity integriert. So hat jedes GameObject eine Transform Component, die die Position in der Szene angibt. Über einen Mesh Renderer kann einem Objekt eine geometrische Form gegeben werden.
-
-Um neue Funktionalitäten hinzuzufügen, kann ein C\# Script geschrieben werden und einem GameObject als Component zugewiesen werden.
-
-Magic Leap unterstützt die Entwicklung von Applikationen für Lumin OS mit Unity. Ein Unity Project Template von Magic Leap erleichtert das Set up der Applikation. dazu gehört Build Optionen und die Einstellungen der Haupt Kamera der Szene, der Unity Kamera. Die Unity Kamera rendert die Szene für das Display der Magic Leap One. Zusätzlich verfolgt die Kamera die Bewegungen der Magic Leap Brille im Raum. %Die Szene bleibt somit stationär und die Kamera bewegt sich in ihr, so wie der Nutzer der Magic Leap sich in einer Umgebung bewegt.
-
-Das Unity Template verfügt über vorgefterigte Skripte, die auf Funktionalitäten von Lumin OS zugreifen:
-
-\begin{itemize}
-	\item MLInput stellt Informationen über den Controller zur Verfügung. Damit können die Knöpfe und Touchpad Gesten überwacht werden.
-	\item MLCamera greift auf die Foto-Kamera zu. Über dieses Skript kann die Applikation sich mit der Kamera-Ressource verbinden. Nur eine Applikation kann mit der Kamera verbunden sein. Nur die verbundene Applikation kann Foto-Anfragen stellen und Aufgenommene Fotos erhalten. Anfragen und Resultatdaten werden ebenfalls durch MLCamera behandelt.
-	\item MLRaycast greift auf die Spatial Mapping Funktionalitäten von Lumin OS zu. Es ermöglicht der Applikation einen Raycast auf die Rekonstruktion der Umgebung durchzuführen. Dafür muss das Mesh der Umgebung nicht sichtbar sein.
-	\item MLPrivilegeRequestBehavior ermöglicht es den Nutzer um das recht zu fragen bestimmte auf bestimmte Teile des AR Systems zuzugreifen. Beispielsweise muss nach Permission gefragt werden, um die Foto-Kamera Ressource zu verwenden. 
-	\item MLSpatialMapper zeigt die Rekonstrukion der Umgebung als Mesh an. Das Mesh besteht aus GameObjects, die von MLSpatialMapper erzeugt werden. Sie werden ständig aktualisiert, um das geometrische Verständnis von Lumin OS widerzuspiegeln.
-\end{itemize}
-
-Scripts können von der Klasse Monobehavior erben. Monobehaviors verfügen über methoden, die von Unity bei Unterschieldichen Events während der Laufzeit ausgeführt werden. Nur Skripts die eine Componente eines GameObjects sind, werden aufgerufen.
-
-\begin{itemize}
-	\item Awake - Wenn ein GameObject initialisiert wird, werden die Awake() Methoden Componenten aufgerufen.
-	\item Update - Die Update methoden der Scripts werden zu jedem Frame aufgerufen.
-	\item OnDestory - Diese Methode wird aufgerufen, wenn das GameObject aus der Szene gelöscht wird.
-\end{itemize}
-
-Globale Variablen von Monobehaviors können, wenn sie einem GameObject als Component angehören, in Unity modifiziert werden. Dadurch kann einem Skript eine Referenz auf ein bestimmtes GameObject gegeben werden.
-
-Monobehaviors können als Singleton fungieren, indem sie eine globale statische Referenz auf sich selber anlegen, wenn ihre Awake Methode aufgerufen wird. Dadurch kann jedes andere Script, durch die Referenz auf die Instanz des Singletons, auf das Singleton zugreifen.
-
-Ein Prefab ist ein vorgefertigtes, Abgespeichertes GameObjekt. Die child Objects, Compnenten und globaen Variaben der Componenten werden dabei festgelegt. Ein Prefab kann während der Laufzeit durch ein Skript initialisiert werden. Währen der Initialiiserung kann eine Position in dem gloaben Koordinatensystem für das neue GameObject angegeben werden. Wenn das Objekt initialisiert wurde, kann auf seine Components und Scripts zugegriffen werden.
 \subsection{Grundlagen zu 3D Szenen für AR}
 
 %todo was ist ein raycast?
@@ -245,15 +210,84 @@ Die hintere Clipping Plane limitiert wie weit Objekte entfernt sein können, bev
 
 %to myself: yay :) you're doing well I believe in you!
 
+\subsection{Unity Applikationen für Magic Leap One}
+
+Unity ist ein eine Entwicklungsumgebung mit der Applikationen für Lumin OS erstellt werden können. Ein Unity Projekt besteht aus mindestens einer Szene, in der mehrere GameObjects exsiteren. Alle Elemente die in der Szene existieren sind GameObjects. GameObjects können über child GameObjects und über Components verfügen. 
+
+
+Components implementieren Funktionalitäten. Einige Components sind bereits in Unity integriert. So hat jedes GameObject eine Transform Component, die die Position in der Szene angibt. Über einen Mesh Renderer kann einem Objekt eine geometrische Form gegeben werden.
+
+Um neue Funktionalitäten hinzuzufügen, kann ein C\# Script geschrieben werden und einem GameObject als Component zugewiesen werden.
+
+Magic Leap unterstützt die Entwicklung von Applikationen für Lumin OS mit Unity. Ein Unity Project Template von Magic Leap erleichtert das Set up der Applikation. dazu gehört Build Optionen und die Einstellungen der Haupt Kamera der Szene, der Unity Kamera. Die Unity Kamera rendert die Szene für das Display der Magic Leap One. Zusätzlich verfolgt die Kamera die Bewegungen der Magic Leap Brille im Raum. %Die Szene bleibt somit stationär und die Kamera bewegt sich in ihr, so wie der Nutzer der Magic Leap sich in einer Umgebung bewegt.
+
+Das Unity Template verfügt über vorgefertigte Skripts, die auf Funktionalitäten von Lumin OS zugreifen:
+
+\begin{itemize}
+	\item MLInput stellt Informationen über den Controller zur Verfügung. Damit können die Knöpfe und Touchpad Gesten überwacht werden.
+	\item MLCamera greift auf die Foto-Kamera zu. Über dieses Skript kann die Applikation sich mit der Kamera-Ressource verbinden. Nur eine Applikation kann mit der Kamera verbunden sein. Nur die verbundene Applikation kann Foto-Anfragen stellen und Aufgenommene Fotos erhalten. Anfragen und Resultatdaten werden ebenfalls durch MLCamera behandelt.
+	\item MLRaycast greift auf die Spatial Mapping Funktionalitäten von Lumin OS zu. Es ermöglicht der Applikation einen Raycast auf die Rekonstruktion der Umgebung durchzuführen. Dafür muss das Mesh der Umgebung nicht sichtbar sein.
+	\item MLPrivilegeRequestBehavior ermöglicht es den Nutzer um das recht zu fragen bestimmte auf bestimmte Teile des AR Systems zuzugreifen. Beispielsweise muss nach Permission gefragt werden, um die Foto-Kamera Ressource zu verwenden. 
+	\item MLSpatialMapper zeigt die Rekonstrukion der Umgebung als Mesh an. Das Mesh besteht aus GameObjects, die von MLSpatialMapper erzeugt werden. Sie werden ständig aktualisiert, um das geometrische Verständnis von Lumin OS widerzuspiegeln.
+\end{itemize}
+
+Scripts können von der Klasse Monobehavior erben. Monobehaviors verfügen über methoden, die von Unity bei Unterschieldichen Events während der Laufzeit ausgeführt werden. Nur Skripts die eine Componente eines GameObjects sind, werden aufgerufen.
+
+\begin{itemize}
+	\item Awake - Wenn ein GameObject initialisiert wird, werden die Awake() Methoden der Componenten aufgerufen.
+	\item Update - Die Update methoden der Scripts werden zu jedem Frame aufgerufen.
+	\item OnDestory - Diese Methode wird aufgerufen, wenn das GameObject aus der Szene gelöscht wird.
+\end{itemize}
+
+Globale Variablen von Monobehaviors können, wenn sie einem GameObject als Component angehören, in Unity modifiziert werden. Dadurch kann einem Skript eine Referenz auf ein bestimmtes GameObject gegeben werden.
+
+Monobehaviors können als Singleton fungieren, indem sie eine globale statische Referenz auf sich selber anlegen, wenn ihre Awake Methode aufgerufen wird. Dadurch kann jedes andere Script, durch die Referenz auf die Instanz des Singletons, auf das Singleton zugreifen.
+
+Ein Prefab ist ein vorgefertigtes, Abgespeichertes GameObjekt. Die Child Objects, Components und globalen Variablen der Components werden dabei festgelegt. Ein Prefab kann während der Laufzeit durch ein Skript initialisiert werden. Währen der Initialisierung kann eine Position in dem globalen Koordinatensystem für das neue GameObject angegeben werden. Wenn das Objekt initialisiert wurde, kann auf seine Components und Scripts zugegriffen werden.
+
 \subsection{Computer Vision}
-In dem Bereich der Bildverarbeitung gibt es viele Algorithmen, die es ermöglichen Objekte in einem Bild erkennbar zu machen und zu verarbeiten.
+Computer Vision setzt das Ziel die Inhalte digitaler Bilder und Videos zu verstehen. Sowohl semantische als auch geometrische Inhalte werden dabei analysiert. 
+
+Im diesem Feld kommen Statistik, Bilderverarbeitung und Maschinelles Lernen zum Einsatz. Maschinelles Lernen  um neuronale Netze zu formen, die Bild und Video Analysen durchführen können. Diese Netze müssen mit großen Mengen an Beispieldaten Trainiert werden und können dann, Aufgaben, wie Objekterkennung, Menschen Erkennen und Bewegungen in Videos Nachverfolgen.\citep{intortodeeplearingmedical}
+
+Maschine Learning ist darauf ausgelegt eine automatische Entscheidung über einen Gegebenen Datensatz zu treffen. In einer Trainings Phase In Computer Vision wird maschine learning besteht die aufgabe generell darin eine automatische Entscheidung zu treffen. 
+
+
+Eine Grundlegende Aufgabe ist das Image Classification. Die Aufgabe besteht darin eine automatische Entscheidung zu treffen
+%what is deep learning?
+%Deep Learing 
+%
+%Machine Learning trifft eine automatische Entscheidungen. Beispielweise zwischen apfel und birne
+%Training Phase. Mit TrainigsDaten die vorbereitet sind und bedeutende features extrahiert sind.
+%vorbereitet durch preprocessing mathoden. Dabei werden Bilder verändert um beispielsweise rauschen zu entfernen. Die Form der Daten bleibt gleich. Das Resultat von Preprocessing ist ein Bild.
+%Freature extracion ist die aufgabe einen algorithmus zu erstellen, der eine eindeutige und komplete preräsnetnation eines features aus den Eingabedaten erheben kann. 
+%
+%Feature Extracion lässt sich nicht generealisieren. Für jede Applikation muss ein neues set and Traingsdaten erstellt werden, wobei die features die in den Daten erkannt werden sollen per hand angegeben werden. ein neuer feature Extraktion algorithmus entworfen werden. 
+%
+%Ein Algorithmus wird  
+
+%Image Segmentation
+%
+%Bei der Image Classification wird ein Bild mit einem Objekt als Input gegeben. Die aufgebae gesteht darin die Klasse oder den Typ des Objektes zu bestimmen.
+%
+%Objekt Localization 
+%
+%Die Typen or der Klassen von Objekten in einem Bild finden. 
+%
+%Der Input ist ein Bild mit einem einzigen Objekt.
+%Der Output identifiziert die klassen. 
+
 %todo more about this
 
 \subsubsection{Object Detection}
-Objekt Detection ist eine Aufgabe der Computer Vision. Dabei werden Objekte in einem Bild erkannt. 
+
+Objekt Detection ist eine Aufgabe der Computer Vision. Es sollen mehrere Objekte in einem Bild erkannt werden. Spezialisierungen von Object Detection sind beispielsweise Gesichtserkennung oder Fußgänger erkennen. Durch eine Objekterkennung werden semantische Inhalte eines Bildes automatisch erhoben. 
+
 Für die Objekte wird eine Klasse und eine Bounding Box bestimmt. 
-Die Klasse gibt an, um welche Art von Objekt es sich handeln. Beispielsweise ob es eine Tastatur oder ein Computerbildschirm ist.
-Die Bounding Box gibt ein Viereck auf dem Bild an, in dem sich das Objekt befindet.
+Die Klasse gibt an, um welche Art von Objekt es sich handeln. Beispielsweise ob es eine Tastatur oder ein Computerbildschirm ist. (Object classification)
+Die Bounding Box gibt ein Viereck in dem Bild an, in dem sich das Objekt befindet.(object localization)
+
+Object Detection besteht aus drei 
 
 
 
@@ -282,39 +316,94 @@ Convolutional Neural Networks werden hauptsächlich eingesetzt um Muster in Bild
 
 Die Knoten in einer Ebene eines Convolutional Neural Network sind nur mit wenigen Knoten der vorherigen Ebene verbunden. So sinkt die Menge an Informationen mit jeder Ebene. Das CNN wird gezwungen sich auf wesentliche Teile des Bildes zu konzentrieren, mit denen beispielsweise ein Objekt oder  Muster erkannt werden kann. \citep{introToCNN,surveyOfDeepLearing}
 
-%\subsection{REST Anfragen}
-%todo
-%REST, was ist eine API, POST, Repsonse, ResponceCode
-%%todo: this
+\subsection{REST Anfragen}
+
+Rest Representational State Transfer. 
+
+REST, was ist eine API, POST, Repsonse, ResponceCode
+%todo: this
 
 \subsubsection{Azure Computer Vision}
 Microsoft Azure bietet einen Computer Vision Service an. Dabei handelt es sich um mehrere KIs, die für unterschiedliche Aufgaben trainiert wurden. Dazu gehört unter anderem ein Service für Object Detection.
 
-Dabei sendet der Anwender ein Bild an Microsoft, dort wird es verarbeitet und ein Ergebnis zurückgeschickt.\citep{getAzure,whatIsAzure,objDetectAzure,Azure302Doc}
+Dabei sendet der Anwender ein Bild an Microsoft, dort wird es verarbeitet und ein Ergebnis in Form einer Json Datei zurückgeschickt.\citep{getAzure,whatIsAzure,objDetectAzure,Azure302Doc}
 
 Die Object Detection basiert auf einem trainierten KI Modell. Dieses kann nur Objekte erkennen, für die es trainiert wurde.
 Zusätzlich können Objekte, die in dem Foto sehr klein sind oder nah bei anderen Objekten liegen, nicht erkannt werden.\citep{azureobjdetec}
 
 Der Service ist durch eine REST-API erreichbar. Mit einer Post Anforderung werden die Bilddaten übertragen und die Analyse angefragt. Die Response Nachricht beinhaltet eine Json-Datei, welche die gefundene Objekte und deren Positionen auf dem Foto beinhaltet. 
-%Um den Service zu nutzen wird eine Http Post Anforderung an die WebAdresse geschickt. 
+Um den Service zu nutzen wird eine Http Post Anforderung an die WebAdresse geschickt. Als Endpoint wird die Web Adresse des der REST-API Angegeben. die Nachricht muss folgenden Inhalt haben:
+\begin{itemize}
+	\item Ein Authentifizierungs-schlüssel, der mit einem Azure Account verbunden ist
+	\item und Bilddaten
+\end{itemize}
 
-%{"objects":[{"rectangle":{"x":1377,"y":900,"w":157,"h":138},"object":"computer mouse","confidence":0.681},{"rectangle":{"x":1336,"y":0,"w":584,"h":841},"object":"display","confidence":0.873},{"rectangle":{"x":315,"y":25,"w":906,"h":622},"object":"display","confidence":0.839},{"rectangle":{"x":447,"y":800,"w":862,"h":166},"object":"computer keyboard","confidence":0.71}],"requestId":"a77e261a-7d40-4159-bf78-19d8fb61ad92","metadata":{"height":1080,"width":1920,"format":"Jpeg"}}
+Das Resultat der Analyse wird in der ResponseNachricht zurückgeschickt. Der Responsecode 200 gibt an, das die Analyse durchgeführt wurde. In diesem Falle wird eine Json Datei mitgeschickt. Beispielhaft:
+
+\begin{lstlisting}
+{"objects":[{"rectangle":{"x":1377,"y":900,"w":157,"h":138},"object":"computer mouse","confidence":0.681},
+{"rectangle":{"x":1336,"y":0,"w":584,"h":841},"object":"display","confidence":0.873},
+{"rectangle":{"x":315,"y":25,"w":906,"h":622},"object":"display","confidence":0.839},
+{"rectangle":{"x":447,"y":800,"w":862,"h":166},"object":"computer keyboard","confidence":0.71}],
+"requestId":"a77e261a-7d40-4159-bf78-19d8fb61ad92",
+"metadata":{"height":1080,"width":1920,"format":"Jpeg"}}
+\end{lstlisting}
+
+Die gefundenen Objekte befinden sich in der Liste mit dem Key 'objects'. Jedes Element der Liste hat ein Bounding Box 'rectangle' und eine Klassenbezeichnung 'object'. Zusätzlich hat jedes Object einen 'confidence' Score. Dieser gibt die Wahrscheinlichkeit an, das das Objekt korrekt erkannt wurde. 
+Neben den Objekten wird noch eine requestId und Metadaten über das Bild zurückgeschickt.
 
 \subsubsection{Azure Custom Vision}
 Azure bietet zusätzlich einen Computer Vision Service an, den der Nutzer trainieren kann. 
 Das verwendete KI Modell ist für Objekt Detection entwickelt und ist nicht vor-trainiert.
-
-Das Trainieren wird über eine Webseite 
-
 Custom Vision kann dann verwendet werden, wenn Azure Object Detection für Objekte nicht trainiert ist.\citep{Azure302bDoc}
 
+Das KI Modell lässt sich für Image Klassifizierung oder Objekt Detection trainieren. Über eine Webseite lässt sich der Trainingprozess des Modells steuern und auswerten. Der Nutzer lädt Fotos hoch und fügt jedem Foto händisch einen oder mehrere Tags hinzu. Die Tags geben die Objekt-Klasse an, die sich in dem Bild befindet. Um das Modell für Object Detection zu trainieren, kann eine rechteckige Region in dem Foto markiert werden, um das Objekt zu lokalisieren. Siehe Abbildung \ref{img:trainingone}. In einem Bild können mehrere Regionen markiert werden. Jede Region wird mit einem Tag annotiert.
 
-dass es sich bei einem erkannten Objekt tatsächlich um eine Nivea Dose handelt
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{images/trainingone.png}
+	\caption[]{Trainingsbild für die Objekterkennung einer Haarbürste.}
+	\label{img:trainingone}
+\end{figure}
 
+Für jede Objekt-Klasse müssen mindestens 15 Bilder hochgeladen werden, in denen der entsprechende Tag vorkommt. Nur kann kann der Trainingsprozess gestartet werden. Mit mehr Bildern in dem Trainingsset wird die Objekterkennung des Modells jedoch robuster. Azure empfehlt es mindestens 50 Bilder pro Tag zu verwenden. Wenn mit nur wenigen Bildern trainiert wird, haben die einzelnen gewählten Bilder einen sehr großen Einfluss auf das Modell.
 
-todo: was ist die Prediction? 
-Erkälre die Iterations
-Erkläre was die Genauigkeit der Predation aussagt.
-%todo write more about this
+Durch das Trainieren wird eine Iteration des Modells erzeugt. Diese Iteration kann verwendet werden, um Objekt Detection durchzuführen. Wird erneut der Trainingsprozess gestartet, wird eine weitere Iteration erstellt. Die Iterationen werden alle unter einen Projekt ID gespeichert.
+
+Die Iterationen des Modells werden hinsichtlich ihrer Robustheit evaluiert. Für jede Objekt-Klasse werden drei Metriken angesetzt. 
+\begin{itemize}
+	\item Precision - die Wahrscheinlichkeit das ein gefundenen Objekt, tatsächlich der angegeben Klasse angehört. (Die Wahrscheinlichkeit das es kein false positive ist.)
+	\item Recall - Aus einer Menge an Objekten die einer Klasse angehören, der Prozentsatz an Objekten, die das Model korrekt lokalisieren und klassifizieren konnte.
+	\item a.p (Average Percision) - Eine Gesammtwertung für die Evaluierung basierend auf Percision und Recall. 
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{images/trainingevaluation.png}
+	\caption[]{Die Evaluierung des Modells}
+	\label{img:trainineval}
+\end{figure}
+
+Mit einer Erstellen Iteration des Modells können Fotos auf Objekte untersucht werden. Ähnlich wie Azure Object Detection ist das Custom Modell durch eine REST-Api erreichbar. 
+Der Endpoint beinhaltet die ID des Projektes, und die Nummer der Iteration, die verwendet werden soll.
+In der Post Nachricht wird ein Authentifizierungsschlüssel und ein zu analysierendes Bild mitgeschickt.
+
+Das Resultat der Analyse ist eine Json Datei. 
+Der Aufbau des Resultats unterscheidet sich vom dem von Azure Object Detection leicht. Informationen über die Iteration, die für die Analyse verwendet wurde werden wiedergegeben. 
+
+\begin{lstlisting}
+{"id":"9cb0cc50-1dca-4b4a-b4d1-95d6bd25c352",
+"project":"ac915246-5268-461f-bd11-cf0c1826d509",
+"iteration":"2254989e-9263-499a-888b-f91cc88304a4",
+"created":"2020-10-10T02:40:40.107Z",
+"predictions":[{"probability":0.997380137,"tagId":"d390d34e-afc4-4ff4-8dcd-3ee8fe79cb8f","tagName":"Haarbürste","boundingBox":{"left":0.258805573,"top":0.226171583,"width":0.303168833,"height":0.329167157}},
+{"probability":0.0141124222,"tagId":"d390d34e-afc4-4ff4-8dcd-3ee8fe79cb8f","tagName":"Haarbürste","boundingBox":{"left":0.542580664,"top":0.507969,"width":0.2195471,"height":0.3491398}},
+{"probability":0.0116642443,"tagId":"263b3042-8958-4775-9a19-e2602d19c9b7","tagName":"Nivea","boundingBox":{"left":0.542580664,"top":0.507969,"width":0.2195471,"height":0.3491398}}]}
+\end{lstlisting}
+
+Die gefundenen Objekte werden in der Liste "predictions" aufgezählt. Die Objekt Klassen werden in "tagName" gespiechert. "probability" gibt die Konfidenz des Modells an, das das Objekt korrekt erkannt wurde. Die erkannten Objekte sollten nach ihrer probability gefitert werden.
+
+%todo filtern nach objekten in implementierung
+%todo raycast explain
 
 

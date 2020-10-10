@@ -10,7 +10,8 @@ public class TestDetection : MonoBehaviour
     {
         if(Input.GetKeyDown("q"))
         {
-            TestAzureDetection();
+            TestCustomPrediction();
+            //TestAzureDetection();
         }
     }
     /// <summary>
@@ -39,7 +40,7 @@ public class TestDetection : MonoBehaviour
     private void TestCustomPrediction()
     {
         Debug.Log("testing custom prediction");
-        string filename = "C:/ObjectDetectionForAR/MagicLeapObjectDetection/Assets/TestImages/Nivea.jpg";
+        string filename = "C:/ObjectDetectionForAR/MagicLeapObjectDetection/Assets/TestImages/IMG_20200828_152817.jpg";
         string filePath = Path.Combine(Application.persistentDataPath, filename);
         Debug.Log(filePath);
         byte[] imageBytes = GetImageAsByteArray(filePath);
