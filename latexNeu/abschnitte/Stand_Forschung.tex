@@ -2,85 +2,88 @@
 
 \subsection{\cite{LabelingLanguageLearning}: In-Situ Labeling for Augmented Reality Language Learning}
 %Huynh-2019 In-Situ Labeling for Augmented Reality Language Learning.
-\cite{LabelingLanguageLearning} schafft ein Framework, mit dem die Lernmethode "loci" in Augmented Reality umgesetzt und erweitert werden kann. Die Lernmethode beruht darauf, Gegenstände der Welt mit Notizen zu beschriftet. 
+\cite{LabelingLanguageLearning} schaffen ein Framework, mit dem die Lernmethode 'loci' in Augmented Reality umgesetzt und erweitert werden kann. Die Lernmethode beruht darauf, Gegenstände der Welt mit Notizen zu beschriften. 
 
-Dafür wurde folgende automatische real-time Objekt Erkennung entwickelt:
+Dafür wurde folgende automatische Real-Time Objekt Erkennung entwickelt:
 
-Mithilfe von Image Based Object Detection werden Objekte auf Fotos der AR Umgebung erkannt. Diese Objekte werden dann in die 3D Szene der Umgebung übernommen. 
+Mithilfe von Image Based Object Detection werden Objekte auf RGB-Fotos der AR Umgebung erkannt. Diese Objekte werden dann in die 3D Szene der Umgebung übernommen. 
 
-Die AR Brille hat zu wenig Rechenleistung, um Image Based Object Detection durchzuführen. Daher wurde eine Server Client Architektur aufgesetzt.
+Die AR Brille hat zu wenig Rechenleistung, um Image Based Object Detection durchzuführen, daher wurde eine Server-Client Architektur aufgesetzt. Die Videokamera der AR Brille wird verwendet, um Bilder von der Umgebung aufzunehmen. Die einzelnen Frames werden an den Server geschickt. Dieser nutzt ein neuronales Netzwerk, um alle erkennbaren Objekte in dem Bild zu finden und mit Bounding Boxen zu lokalisieren.
 
-Die Videokamera der AR Brille wird verwendet um Bilder von der Umgebung aufzunehmen. Die einzelnen Frames werden an den Server geschickt. Dieser nutzt ein Object Recognition Learning Modell um alle erkennbaren Objekte in dem Bild zu finden und mit Bounding Boxen zu lokalisieren.
+Die ObjectDetection API von TensorFlow wird verwendet. Es findet mehrere Objekte in einem Foto in einer Analyse und gibt Bounding Boxen an. Die Objekterkennung soll in Real-Time durchgeführt werden. Um die Laufzeit dieser möglichst gering zu halten, wird die niedrigste Kameraauflösung mit 896x504 Pixel verwendet und die Fotos werden als JPEG komprimiert. Damit braucht die Analyse 30 ms pro Foto. Dies ermöglicht eine Real-Time Erkennung mit 30 Frames pro Sekunde. 
 
-Die ObjectDetection API von TesnorFlow wird verwendet. Es findet mehrere Objekte in einem Foto in einer Analyse und gibt Bounding Boxen an. Damit die Objekt Erkennung in real-time durchgeführt werden kann, wird die niedrigste Kamera Auflösung mit 896x504 verwendet. Zusätzlich werden die Fotos als JPEG mit 50 Prozent Qualität komprimiert. Damit braucht die Analyse 30 ms pro Foto, was eine Real-Time Erkennung mit 30 Frames per Second erlaubt. 
+Trotzdem ist die Erkennung in der Applikation durch einen Netzwerk Delay von 150 ms zwischen der Hololens und dem Server verspätet.
 
-Trotzdem ist die Erkennung in der Applikation verspätet, durch einen Netzwerk Delay von 150ms zwischen der Hololens und dem Server, der die Foto-Analyse durchführt.
+Die Hololens nummeriert die Frames, die an den Server geschickt werden. Zusätzlich wird für jedes Frame die Kameraposition gespeichert, mit der es aufgenommen wurde. So können Frames asynchron analysiert werden. 
 
-Die Hololens nummeriert die Frames, die an den Server geschickt werden. Zusätzlich wird für jedes der Frames, die Kameraposition gespeichert, mit der es aufgenommen wurde. So können Frames asynchrom analysiert werden. 
+Ist die Analyse durchgelaufen, werden die Bounding Boxen der Objekte und die Kameraposition genutzt, um die Objekte in der 3D Umgebung zu lokalisieren. Dafür wird der Mittelpunkt jeder Bounding Box mithilfe eines Raycastes in die 3D Szene projiziert.
 
-Ist die Analyse durchgelaufen, wird die Bounding Boxen der Objekte und die Kameraposition genutzt, um die Objekte in der 3D Umgebung zu lokalisieren. Dafür wird der Mittelpunkt jeder Bounding Box mithilfe eines Raycastes in die 3D Szene projiziert.
+Ein Objekt wird erst markiert, wenn es auf mehreren Fotos gefunden wurde, um Fehlern bei der Objekterkennung entgegenzuwirken. Durch die Analyse des ersten Fotos, wird eine ungefähre Position in der AR Umgebung für das Objekt ermittelt. Dieses Objekt wird dann mit den Objekten verglichen, die während der nächsten 60 Frames erkannt wurden. Haben die Objekte dieselbe semantische Bedeutung und eine ähnliche Position in der AR Umgebung, wird davon ausgegangen, dass es sich um ein einziges Objekt handelt, welches in den 60 Frames mehrmals aufgenommen wurde. 
 
-Um Fehlern bei der Object Erkennung entgegenzuwirken, wird ein Objekt erst als endgültig erkannt angesehen, wenn es auf mehren Fotos erkannt erkannt wurde. Mehrere Frames werden verwendet um die Position des Objekte abzuschätzen. Dann werden bereits existierende Label untersucht, die in den letzten 60 Frames aufgenommen wurden. Wenn die Labels nah beieinander liegen wird davon ausgegangen, das es sich um dasselbe Objekt handelt. Der Mittelpunkt der Labels wird zu der Position des Objektes und wird mit einem endgültigen Label versehen.
+Unser Vorgehen zur Objekterkennung ähnelt dem Framework von \cite{LabelingLanguageLearning}. Auch hier soll die AR Umgebung durch das Hinzufügen von Labels semantisch angereichert werden. Es wird ebenfalls ein neuronales Netz verwendet, um die Object Detection auf RGB-Bildern durchzuführen. Wir haben dafür keinen eigenen Server aufgesetzt, sondern nutzen einen Cloud Service von Microsoft Azure. Durch Abspeichern von erhobenen semantischen Informationen ist eine Real-Time Detektion nicht relevant. Daher kann die Bild-Analyse länger dauern, was es erlaubt, mehrere neuronale Netze zu verwenden, die nach unterschiedlichen semantischen Informationen suchen.
 
-User Vorgehen zur Objekt Erkennung ähnelt dem Framework von \cite{LabelingLanguageLearning}. Auch hier soll die AR Umgebung durch das hinzufügen von Labels angereichert werden. Es wird ebenfalls ein neuronales Netz verwendet um Object Detection auf RGB-Bildern durchzuführen. Wir setzten keinen eigenen Server dafür auf, sondern nutzen Microsoft Azure Services. Durch abspeichern von erhobenen semantischen Informationen, ist eine Echtzeit Detektion nicht relevant. Daher kann die Bild Analyse länger dauern, was es erlaubt mehre neuronale Netze zu verwenden, die nach unterschiedlichen semantischen Informationen zu suchen. 
+In Unserem Verfahren werden erkannte Objekte schon in der Umgebung markiert, wenn sie ein einziges mal erkannt wurden. Wenn das Objekt erneut aufgenommen wird, wird die neue Analyse dem Objekt die gleiche Klasse und eine ähnliche Position der AR Umgebung zuweisen. Daran lässt sich erkennen, das es sich um dasselbe Objekt handelt.
 
-
-%wenn das Objekt detection Model gut ist, muss man nicht so viele Position und false positive dinger ausmerzen.
-%nicht echt zeit machen. 
+Die Erste Position die für das Objekt berechnet wurde und die Position, die aus der zweite Aufnahme hervorgeht, unterscheiden sich mit hoher Wahrscheinlichkeit ein wenig voneinander. Daher werden die Positionen gemittelt um eine akkuratere Position für das Label des Objektes zu finden. 
+\citep{LabelingLanguageLearning}
 
 \subsection{\cite{viewmanagement3d}: View Management for Virtual and Augmented Reality}
 
-\cite{viewmanagement3d} beschreibt View Management für interaktive 3D Benutzeroberflächen. Als View Management wird das positionieren von Labels bezeichnet.
-Die Labels können sich auf eine 2D Ebene beschränken, oder im 3D Raum liegen. Das Ziel des View Management für AR ist es die Lables so zu positionieren, das sie einander und relevante reale Objekte nicht verdecken. Gleichzeitig sollen die Label Gegenständen der Realen Welt  auf eine verständliche weise annotieren. Sie sollen beispielsweise nahe bei den Objekten liegen, zu denen sie gehören.
+\cite{viewmanagement3d} beschreiben View Management für interaktive 3D Benutzeroberflächen. Als View Management wird die Positionierung von Labels bezeichnet.
+Die Labels können sich auf eine 2D Ebene beschränken oder im 3D Raum liegen. View Management zielt darauf ab die Labels so zu positionieren, dass sie einander und relevante reale Objekte nicht verdecken. Gleichzeitig sollen die Labels die Gegenstände der Realen Welt auf eine verständliche Art annotieren. Labels sollen nahe bei den Objekten liegen, zu denen sie gehören.
 
-Unsere Applikation, würde durch View Management profitieren. Erkannte Gegenstände werden mit Labels markiert, die im 3D Raum liegen.  Die Lesbarkeit der Label kann durch View Management verbessert werden, indem die Positionen der Labels über Zeit verändert werden, wenn mehr Labels hinzukommen. Idealerweise würden die Labels einander nicht verdecken und zusätzlich die Gegenstände der realen Welt nicht verdecken, die mit einem Label annotiert werden. 
+Unsere Applikation würde durch View Management profitieren. Nachdem Gegenstände in der Umgebung erkannt wurden, werden sie in dem 3D Raum durch Labels markiert. Die Lesbarkeit dieser Labels kann durch View Management verbessert werden, indem ihre Positionen über Zeit verändert werden. 
 
-View Management geht jedoch über den Rahmen dieser Arbeit hinaus.\citep{viewmanagement3d}
+Es müsste auf Veränderungen des Betrachtungswinkels und auf Hinzukommen von neuen Labels reagiert werden. Idealerweise würden die Labels einander und zusätzlich die Gegenstände der realen Welt nicht verdecken, die mit einem Label annotiert sind. 
 
-%4] K. Been, E. Daiches, and C. Yap. Dynamic map labeling. IEEE Transactions on Visualization and Computer Graphics, 12(5):773–780, Sep. 2006. doi: 10.1109/TVCG.2006.136
-%[5] B. Bell, S. Feiner, and T. H¨ollerer. View management for virtual and augmented reality. In Proceedings of the 14th Annual ACM Symposium on User Interface Software and Technology, UIST ’01, pp. 101–110.
+View Management geht jedoch über den Rahmen dieser Arbeit hinaus und konnte nicht implementiert werden. \citep{viewmanagement3d}
 
 \subsection{\cite{contextawaremixedreality}: Context-Aware Mixed Reality: A Framework for Ubiquitous Interaction}
 
-\cite{contextawaremixedreality} stellen ein Framework vor, in dem einer AR Umgebung semantische Eigenschaften zugewiesen wird um realistische Interaktionen zwischen virtuellen und realen Objekten zu erreichen. 
-Insbesondere sollen physikalische Interaktionen realistischer werden.
+\cite{contextawaremixedreality} stellen ein Framework vor, das einer AR Umgebung semantische Eigenschaften zuweist, um realistische Interaktionen zwischen virtuellen und realen Objekten zu erreichen. 
+Insbesondere sollen physikalische Interaktionen an Realismus gewinnen.
 
-Das Framework reichert die Umgebung mit Informationen über die Materialien an, aus denen reale Oberflächen und Gegenstände bestehen. Die Materialien werden mit Labels versehen und die physikalischen Interaktionen berücksichtigen die Materialien der Umgebung.
+Das Framework reichert die Umgebung mit Informationen über die Materialien an, aus denen reale Oberflächen und Gegenstände in der Umgebung bestehen. 
+Die Umgebung wird in einer 3D Szene durch ein Mesh repräsentiert. Die einzelnen Voxel des Meshes werden mit Labels annotiert, um ihnen Semantik zuzuweisen.
 
-Als beispielhafte Applikation wurde ein First-Person-Shooter vorgestellt, bei dem das aussehen von Einschusslöchern davon anhängt auf welches Material geschossen wurde.
+Als beispielhafte Applikation wurde ein First-Person-Shooter vorgestellt, bei dem das Aussehen von Einschusslöchern davon abhängt auf welches Material geschossen wurde.
 
-Für die Erkennung der Materialien werden mehrere Frames der Hololens nach Materialien segmentiert. Diese Analyse ist nicht Echtzeit fähig, die Interaktionen können jedoch in Echtzeit ablaufen. 
-Die semantischen Informationen werden abgespeichert um bei späteren Interaktionen abgerufen zu werden. Die Erkennung der Materialien ist nicht Echtzeit fähig, aber durch das speichern der Materialien im Raum können die Interaktionen in echt Echtzeit ablaufen. Die Semantischen Informationen müssen nicht mit jedem Frame bestimmt werden, sondern nur in Abständen erhoben werden. 
+Für die Erkennung der Materialien werden mehrere Frames der Hololens segmentiert.
+Die dadurch entstehenden semantischen Informationen werden abgespeichert, um bei späteren Interaktionen der AR Applikation abgerufen werden zu können. Die Erkennung der Materialien ist nicht echtzeitfähig, aber durch das Speichern der Materialien im Raum können die Interaktionen in Echtzeit ablaufen. Die Semantischen Informationen müssen nicht mit jedem Frame bestimmt werden.
 
-Um die Semantik der Umgebung zu erheben, werden RGB-Bilder von ihr aufgenommen und mit einem neuronales Netzwerk analysiert. Das neuronale Netz wurde von \cite{contextawaremixedreality} für den First-Person-Shooter trainiert. Es kann 23 unterschiedliche Materialien erkennen und segmentiert Bilder danach. Dabei wird für jedes Pixel ein Material angegeben.
+RGB-Bilder der Umgebung werden aufgenommen und mit einem neuronalen Netzwerk analysiert, um semantische Informationen zu erheben. Das neuronale Netz wurde von \cite{contextawaremixedreality} für den First-Person-Shooter aufgesetzt. Das Netz wurde darauf trainiert 23 unterschiedliche Materialien zu erkennen und Bilder nach ihnen zu segmentieren. Dabei wird für jedes Pixel ein Material angegeben.
 
-Mithilfe der Camera Position des Frames werden die Material-Informationen auf ein 3D Modell der Umgebung, ähnlich einer Textur, projiziert. Als Resultat wird an jede Stelle des 3D Modells ein Label gehängt, das die semantische Information wiedergibt.
-Ein Direkten Mappen kann dazu führen, das semantische Informationen überlagert wird. Die Segmentierungen werden über mehre Frames akkumuliert. Das führt dazu, das Bildbereich, die schwer einzuordnen sind, in unterschiedlichen Frames unterschiedlich segmentiert werden. 
+Mithilfe der Camera Position des Frames werden die Material-Informationen auf ein 3D Modell der Umgebung, ähnlich einer Textur, projiziert. Als Resultat wird an jedes Voxel des 3D Modells ein Label pro Frame gehängt, das die semantische Information wiedergibt, die in dem Frame erkannt wurde.
 
-Um sicherzustellen, das jede Stelle des 3D Modells nur eine semantische Bedeutung hat, werden die gesetzten Label mit einer Baysian Fusion und einem neuronalen Netz überarbeitet.
+Bei der Segmentierung können Fehler auftreten, bei denen das auf dem Foto erkannte Material nicht dem realen Material entspricht. Um diesen Fehlern entgegenzuwirken werden mehrere Frames aufgenommen und analysiert. %Bildbereich, die schwer einzuordnen sind, werden in unterschiedlichen Frames unterschiedlich segmentiert. 
 
-In unserem Verfahren werden semantische Informationen nicht Pixelweise angegeben. Daher hat nicht jede Stelle des 3D Meshes eine Label. Mit mehreren Aufgenommenen RGB-Bildern, werden mehrere leicht unterschiedliche Positionen für die Label erkannt und in der 3D Szene lokalisiert. Diese Positionen werden miteinander verrechnet, um das Label zu platzieren.  
+Die Informationen aus den Frames bilden sich auf die Voxel ab. Durch die Kumulierung der Segmentierungen erhält jedes Voxel eine Menge an Labels. Voxel die in schwer einzuordnenden Bildbereichen liegen, erhalten Labels die unterschiedliche Informationen beinhalten.
+
+Um sicherzustellen, das jedes Voxel des 3D Modells nur eine semantische Bedeutung hat, werden die gesetzten Labels mit einer Baysian Fusion und einem neuronalen Netz überarbeitet. Als Resultat hat jedes Voxel nur ein einziges Label.
+
+User Verfahren versucht ebenfalls das Verständnis der AR Umgebung durch semantische Informationen zu erweitern. Auch Wir nutzen ein neuronales Netzwerk um RGB-Fotos der Umgebung zu analysieren.
+In unserem Verfahren erhält nicht jeder Pixel semantische Informationen, sonder nur Pixel, die die Position eines Gegenstandes markieren. Daher haben nur ausgewählte Voxel des 3D Meshes ein Label.\citep{contextawaremixedreality}
 
 \newpage
 \section{Grundlagen}
 \subsection{Grundlagen zu Augmented Reality}
 \subsubsection{Augmented Reality} %Einfürhung in AR
 
-Augmented Reality vermischt die reale Welt mit digitalen (virtuellen) Elementen um dem Nutzer eine erweiterte Wahrnehmung zu ermöglichen. Es können 3D Objekte, 2D Overlays oder Audioelemente verwendet werden um eine reale Umgebung mit Informationen zu bereichern. 
+Augmented Reality vermischt die reale Welt mit digitalen (virtuellen) Elementen, um dem Nutzer eine erweiterte Wahrnehmung zu ermöglichen. Es können 3D Objekte, 2D Overlays oder Audioelemente verwendet werden um eine reale Umgebung mit Informationen zu bereichern. 
 
-Die Umgebung bezeichnet den Teil der realen Welt, der in Augmented Reality abgebildet und erweitert werden soll. Beispielweise ein Zimmer, in dem eine AR Anwendung ausgeführt wird.
+Die Umgebung beinhaltet den Teil der realen Welt, der in Augmented Reality abgebildet und erweitert werden soll. Beispielweise ein Zimmer, in dem eine AR Anwendung ausgeführt wird.
 Die AR Umgebung umfasst die reale Umgebung und die virtuellen Elemente.
 
-Augmented Reality weist drei grundlegende Merkmale auf. 
+Augmented Reality weist drei grundlegende Merkmale auf: 
 \begin{itemize}
-	\item Die Kombination der Realität mit dem Virtuellen. Besteht darin, das die Realität mit virtuellen Elementen überlagert wird.
-	\item Die Interaktion mit virtuellen Elementen erfolgt in Echtzeit.
+	\item Die Realität wird mit dem Virtuellen kombiniert. Sie besteht darin, das die Realität mit virtuellen Elementen überlagert wird.
+	\item Interaktion mit virtuellen Elementen erfolgen in Echtzeit.
 	\item Virtuelle Elemente haben einen festen räumlichen Platz in der AR Umgebung.
 \end{itemize}
 
 Die Merkmal unterstützen ein möglichst nahtloses verschmelzen der realen Welt mit den virtuellen Elementen.
 
-Die Navigation in einer AR Umgebung funktioniert, indem der Nutzer sich durch physikalisch durch die reale Umgebung bewegt. Die reale Umgebung und die virtuellen Elemente stehen immer in dem gleichen räumlichen Verhältnis zueinander.
+In einer AR Umgebung kann navigiert werden, indem der Nutzer sich physikalisch durch die reale Umgebung bewegt. Die reale Umgebung und die virtuellen Elemente stehen immer in dem gleichen räumlichen Verhältnis zueinander. Für AR ist keine andere Art der Navigation möglich, da sie die Verschmelzung der realen Welt und den digitalen Elementen brechen würden.
 
 Da die reale Welt immer zu sehen ist, gibt sie eine Referenz und einen Kontext für die virtuellen Objekte an. 
 Beispielsweise steht die Größe von virtuellen Objekten immer in Relation zu der realen Umgebung.\citep{GrundlagenAR}
@@ -90,20 +93,31 @@ Beispielsweise steht die Größe von virtuellen Objekten immer in Relation zu de
 
 \subsubsection{AR System}
 
-Ein AR System besteht aus Hardware und Software, die benötigt wird um die Wahrnehmung der realen Welt mit virtuellen Elementen zu erweitern.
+Ein AR System besteht aus der Hardware und Software, die benötigt wird um eine AR Umgebung zu erzeugen.
 
-Die Vermischung der realen Welt mit virtuellen Elementen muss angezeigt werden.
+Das System muss die Vermischung der realen Welt mit virtuellen Elementen anzeigen und Interaktionen des Nutzers mit virtuellen Elementen, sowie Interaktion von virtuellen Elementen mit der realen Welt simulieren
 
-Die Interaktion des Nutzers mit virtuellen Elementen, und die Interaktion von virtuellen Elementen mit der realen Welt muss Simuliert werden.
-
-Ein AR System ist in der Regel nicht an einen bestimmten Ort gebunden. Das System kann in unterschiedlichen Umgebungen eingesetzt werden, die unterschiedliche reale Gegenstände aufweisen. AR Applikationen müssen unterschiedliche Umgebungen unterstützen.\citep{GrundlagenAR}
+Ein AR System ist in der Regel nicht an einen bestimmten Ort gebunden. Es kann in unterschiedlichen Umgebungen eingesetzt werden, die unterschiedliche reale Gegenstände aufweisen. AR Applikationen müssen diese unterstützen.\citep{GrundlagenAR}
 
 %book Virutal reality chapter 1
 
-\subsubsection{Spatial Mapping} 
-Um virtuelle Objekte an eine Umgebung anzupassen und die Interaktion zwischen virtuellen Objekten und der realen Umgebung zu ermöglichen, benötigt ein AR System Informationen über die Geometrie der Umgebung.
+\subsubsection{Grundlagen zu 3D Szenen für AR}
 
-Mit den Sensoren der AR Hardware werden Informationen gesammelt, die aussagen über die Geometrie der Umgebung geben. Beispielsweise haben AR Geräte eine Tiefenkamera, die die Entfernung messen kann. Die Daten der Sensoren werden gesammelt und in Relation zu der Bewegung des Gerätes gesetzt um die Umgebung zu Rekonstruieren. Dieser Vorgang nennt sich Spatial Mapping. 
+
+%todo was ist ein raycast?
+%todo add something about szene graph
+
+Die Virtuellen Inhalte der AR Anwendung werde in einer einer Virtuellen Szene gespeichert. 
+AR Anwendungen müssen in Echtzeit laufen. Daher muss die Virtuelle Szene echtzeitfähig sein.
+Im besten Fall kann ein Nutzer kein Unterschied zwischen der virtuellen Welt und der realen Welt, bezüglich auf zeitliche Verzögerungen, bemerken.
+
+Um Interaktion mit digitalen Elementen zu ermöglichen, werden relevante Teile der realen Welt in der 3D Szene repräsentiert. 
+So werden beispielsweise die Wände und der Boden eines Raumes in der Szene abgebildet. Auch die Position eines Controllers und die Blickrichtung des Nutzers kann mit Sensoren verfolgt und in die Szene miteinbezogen werden.
+
+\subsubsection{Spatial Mapping} 
+Um virtuelle Objekte an eine Umgebung anzupassen und Interaktion zwischen virtuellen Objekten und der realen Umgebung zu ermöglichen, benötigt ein AR System Informationen über die Geometrie der Umgebung.
+
+Mit den Sensoren der AR Hardware werden Informationen gesammelt, die Aussagen über die Geometrie der Umgebung treffen. Beispielsweise haben AR Geräte eine Tiefenkamera, die Entfernung messen kann. Die Daten der Sensoren werden gesammelt und in Relation zu der Bewegung des Gerätes gesetzt um die Umgebung zu Rekonstruieren. Dieser Vorgang nennt sich Spatial Mapping. 
 
 Mit der Entstehenden Spatial Map können digitale Elemente mit der Umgebung interagieren, diese verdecken oder von ihr verdeckt werden.\citep{spatialMapping} 
 
@@ -115,8 +129,19 @@ Mit der Entstehenden Spatial Map können digitale Elemente mit der Umgebung inte
 \end{figure}
 
 \subsubsection{View Management}
-Die virtuelle Information, die einen teil der realen Welt bereichern werden meistens als 3D Elemente angezigt. 
-Die Information kann jedoch auch in 2D Elementen angezeigt werden, die sich auf eine 2D Ebene beschränkt. Insbesondere Labels, die reale Objekte erklären, können auf diese Art angezeigt werden.
+
+%\cite{viewmanagement3d} beschreiben View Management für interaktive 3D Benutzeroberflächen. Als View Management wird die Positionierung von Labels bezeichnet.
+%Die Labels können sich auf eine 2D Ebene beschränken oder im 3D Raum liegen. View Management zielt darauf ab die Labels so zu positionieren, dass sie einander und relevante reale Objekte nicht verdecken. Gleichzeitig sollen die Labels die Gegenstände der Realen Welt auf eine verständliche Art annotieren. Labels sollen nahe bei den Objekten liegen, zu denen sie gehören.
+%
+%Unsere Applikation würde durch View Management profitieren. Nachdem Gegenstände in der Umgebung erkannt wurden, werden sie in dem 3D Raum durch Labels markiert. Die Lesbarkeit dieser Labels kann durch View Management verbessert werden, indem ihre Positionen über Zeit verändert werden. 
+%
+%Es müsste auf Veränderungen des Betrachtungswinkels und auf Hinzukommen von neuen Labels reagiert werden. Idealerweise würden die Labels einander und zusätzlich die Gegenstände der realen Welt nicht verdecken, die mit einem Label annotiert sind. 
+%
+%View Management geht jedoch über den Rahmen dieser Arbeit hinaus und konnte nicht implementiert werden. \citep{viewmanagement3d}
+
+
+Die virtuellen Informationen die einen Teil der realen Welt bereichern, werden meistens als 3D Elemente angezeigt. 
+Die Informationen kann jedoch auch in 2D Elementen angezeigt werden, die sich auf eine 2D Ebene beschränkt. Insbesondere Labels, die reale Objekte erklären, können auf diese Art angezeigt werden.
 
 Das Layout der 2D Elemente auf der Ebene wird durch View Management optimiert.
 Idealerweise werden die Elemente so positioniert, das sie sich Gegenseitig nicht verdecken, relevante Bereiche der realen Welt nicht verdecken.
@@ -130,9 +155,11 @@ Zusätzlich sollen sie nah an den Gegenständen der Realen Welt bleiben, die sie
 \end{figure}
 Das Layout muss angepasst werden, wenn sich der View verändert. Gleichzeitig soll das Layout stabil bleiben und sich nicht verändern, wenn ein Anderes Layout ein wenig besser wäre, um ein hin und her springen zwischen zwei möglichen Layouts zu vermeiden.\citep{viewmanagement}
 
+%todo rework this a little
+
 \subsection{Magic Leap AR Brille}
 
-Die Magic Leap One Lightwear ist eine Augmented Reality Brille, die von dem Unternehmen Magic Leap entwickelt wurde. Sie verfügt über ein Head-Mounted Display und einer Recheneinheit die über ein Kabel mit dem Display verbunden ist. Die Recheneinheit kann an der Hüfte getragen werden, was die AR Brille komplett Mobil macht. 
+Die Magic Leap One Lightwear ist eine Augmented Reality Brille, die von dem Unternehmen Magic Leap entwickelt wurde. Sie verfügt über ein Head-Mounted Display und einer Recheneinheit die über ein Kabel mit dem Display verbunden ist. Die Recheneinheit kann an der Hüfte getragen werden, was die AR Brille Mobil macht. 
 
 
 \subsubsection{Hardware}
@@ -143,8 +170,8 @@ Sie besitzt neun Sensoren und mehrere Kameras. Dazu gehören:
 \begin{itemize}
 	\item ein Infrarot Tiefen-Sensor,
 	\item ein Eye Tracker,
-	\item eine Foto und Video Kamera, die im Format 16:9 mit einer Auflösung von 1920 x 1080 Pixeln aufnehmen,
-	\item Umgebungskameras die in unterschiedliche Richtungen ausgerichtet sind. \citep{mlofficialsalespitch,mlglossary}
+	\item eine Foto und Video Kamera, die im Format 16:9 mit einer Auflösung von 1920 x 1080 Pixeln aufnehmen und
+	\item mehrere Umgebungskameras die in unterschiedliche Richtungen ausgerichtet sind. \citep{mlofficialsalespitch,mlglossary}
 \end{itemize}
 
 Der Output geschieht über ein Display mit einem 50 Grad Field of View und einem Seitenverhältnis von 4:3. Das Display ist transparent. Daher kann die reale Welt immer betrachtet werden. Selbst wenn ein weißes Objekt angezeigt wird, schimmert die reale Welt noch durch. 
@@ -166,24 +193,54 @@ Dabei werden mit den Sensoren und Kameras der Brille Daten aufgenommen und in ei
 
 Lumin OS bietet es Applikationen an,
 \begin{itemize}
-	\item Raycast auf die Umgebung durchzuführen und
+	\item Raycasts auf die Umgebung durchzuführen und
 	\item ein Mesh der Rekonstruktion zu erhalten.
 \end{itemize}
-Neben dem Spatial Mapping unterstützt Lumin OS das Verarbeiten vom Input des Controllers und verwaltet die Zugriffsrechte der Applikationen. Dazu gehört beispielsweise der Zugriff auf die Fotokamera und das Netzwerk.\citep{mlluminfeatures,mlappsecurity}
+Neben dem Spatial Mapping unterstützt Lumin OS das Verarbeiten vom Input des Controllers und verwaltet die Zugriffsrechte der Applikationen. Dazu gehört beispielsweise das Recht (Permission) die Fotokamera und das Netzwerk zu nutzen.\citep{mlluminfeatures,mlappsecurity}
+
+Selbst wenn mehrere Applikationen das recht dazu haben, kann nur eine Applikation zum gleichen Zeitpunkt auf die Fotokamera zugreifen. Die Applikationen müssen sich mit der Kamera-Ressource von Lumin 0S verbinden, diese reguliert, welche Applikation Foto-Anfragen stellen kann und die Aufgenommenen Fotos erhält. 
+
+
+%MLCamera greift auf die Foto-Kamera zu. Über dieses Skript kann die Applikation sich mit der Kamera-Ressource verbinden. Nur eine Applikation kann mit der Kamera verbunden sein. Nur die verbundene Applikation kann Foto-Anfragen stellen und Aufgenommene Fotos erhalten. Anfragen und Resultatdaten werden ebenfalls durch MLCamera behandelt.
 
 Es können niemals mehrere Applikationen zugriff auf die physikalische Kamera der Magic Leap One haben. Kamera Ressource
 Permission stufen
 
-\subsection{Grundlagen zu 3D Szenen für AR}
+\subsubsection{Unity Applikationen für Magic Leap One}
+%
+Unity ist ein eine Entwicklungsumgebung, mit der Applikationen für Lumin OS erstellt werden können. Ein Unity Projekt besteht aus mindestens einer Szene, in der mehrere GameObjects exsiteren. 'GameObject' ist ein Oberbegriff für alle Elemente, die in der Szene existieren. Sie bilden eine Heirarchische Strukur, in der GameObjects Parents und Children anderen GameObjects sind.\citep{unitygameobject}
 
-%todo was ist ein raycast?
+GameObjects haben in sich keine Funktionalität und kein Aussehen. Diese werden durch Components hinzugefügt. Einige Components sind bereits in Unity integriert. Sie geben einem GameObject eine Position in der Szene (Transform Component), machen sie Sichtbar (Mesh Renderer) und führen alle sonstige Programmlogik durch, die notwendig ist. Um eine neue Funktionalitäten zu implementieren, kann ein C\# Script geschrieben werden und einem GameObject als Component zugewiesen werden.
 
-Die Virtuellen Inhalte der AR Anwendung werde in einer einer Virtuellen Szene gespeichert. 
-AR Anwendungen müssen in Echtzeit laufen. Daher muss die Virtuelle Szene Echtzeitfähig sein.
-Im Besten Fall ist fü den Nutzer kein Unterschied zwischen der virtuellen Welt und der realen Welt zu bemerken bezüglich auf zeitliche Verzögerungen.
+Magic Leap unterstützt die Entwicklung von Applikationen für Lumin OS mit Unity. Ein Unity Project Template von Magic Leap erleichtert das Set up der Applikation. Dazu gehören Build Optionen und das Einstellen der Haupt Kamera der Szene - der Unity Kamera. Die Unity Kamera rendert die Szene für das Display der Magic Leap One. Die Kamera verfolgt die Bewegung der Magic Leap Brille und kopiert diese in der Unity Szene. %Die Szene bleibt somit stationär und die Kamera bewegt sich in ihr, so wie der Nutzer der Magic Leap sich in einer Umgebung bewegt.
 
-Für eine AR Anwendung werden relevante Teile der realen Welt in der 3D Szene repräsentiert, um die Interaktion mit ditigalen Elementen zu ermöglichen.
-So sind beispielsweise die Wände und der Boden eines Raumes, sowie die Position und die Blickrichtung des Nutzers. Auch die Position eines Eingabe Controllers und die Blickrichtung des Nutzers kann mit entsendenden Sensoren verfolgt und in die Szene miteinbezogen werden.
+Das Unity Template verfügt über vorgefertigte Skripts, die auf Funktionalitäten von Lumin OS zugreifen:
+
+\begin{itemize}
+	\item MLInput stellt Informationen über den Controller zur Verfügung. Damit können die Knöpfe und Touchpad-Gesten überwacht werden.
+	\item MLCamera greift auf die Foto-Kamera zu. Foto-Anfragen und Resultatdaten werden ebenfalls durch MLCamera behandelt.
+	\item MLPrivilegeRequestBehavior ermöglicht es den Nutzer um das Recht zu Fragen, auf bestimmte Teile des AR Systems zuzugreifen. Beispielsweise muss nach Permission gefragt werden, um die Foto-Kamera Ressource zu verwenden. 
+	\item MLRaycast greift auf die Spatial Mapping Funktionalitäten von Lumin OS zu. Es frage das Betriebssystem darum, einen Raycast auf die Rekonstruktion der Umgebung durchzuführen. 
+	\item MLSpatialMapper zeigt Rekonstruktion der Umgebung von Lumin OS als Mesh an. Das Mesh besteht aus GameObjects, die von MLSpatialMapper erzeugt werden. Sie werden ständig aktualisiert, um das geometrische Verständnis von Lumin OS widerzuspiegeln.
+\end{itemize}
+
+Scripts können von der Klasse Monobehavior erben. Monobehaviors verfügen über Methoden, die von Unity zu unterschiedlichen Events der Laufzeit ausgeführt werden. Nur Skripts die ein Component eines GameObjects sind, werden aufgerufen.
+
+\begin{itemize}
+	\item Awake - Diese Methode wird aufgerufen, wenn das GameObject initialisiert wird. %Wenn ein GameObject initialisiert wird, werden die Awake() Methoden der Componenten aufgerufen.
+	\item Update - Die Update Methoden der Scripts werden zu jedem Frame aufgerufen.
+	\item OnDestory - Diese Methode wird aufgerufen, wenn das GameObject aus der Szene gelöscht wird.
+\end{itemize}
+
+Monobehaviors können über Globale Variablen verfügen. Wenn das Skript einem GameObject als angehören, kann der Inhalt der Globalen Variable in Unity modifiziert werden. Dadurch kann einem Skript eine Referenz auf ein bestimmtes GameObject gegeben werden. %todo show this one?
+
+Monobehaviors können als Singleton fungieren, indem sie eine globale statische Referenz auf sich selber anlegen, wenn ihre Awake Methode aufgerufen wird. Dadurch kann jedes andere Script, die Instanz des Singletons aufrufen, indem sie die statische Referenz der Klasse des Singletons verwenden %auf die instanz der  ohne aufwändig nach dem Component zu suchen in dem es sich befindet. durch die Instanz durch die Referenz auf die Instanz des Singletons, auf das Singleton zugreifen.
+%todo add code examples of this I guess.
+%todo gmaobjects have lokal koordinatensystem. szene has global. unity camera has camera space
+Skripts können während der Laufzeit GameObjects erzeugen. Um festzulegen, wie das GameObject aussehen soll, kann in dem Unity Editor ein Prefab erstellt werden. Ein Prefab ist ein vorgefertigtes, Abgespeichertes GameObjekt, dessen Child Objects, Components und globalen Variablen der Components werden festgelegt werden. Das Prefab fungiert als Vorlage für GameObjects die zur Run Time initialisiert werden.
+
+Währen der Initialisierung wird die Position in dem globalen Koordinatensystem für das neue GameObject angegeben werden. Nachdem das Objekt initialisiert wurde, kann auf seine Components und Scripts zugegriffen werden.\citep{unityprefabs}
+
 
 \subsubsection{Lokale und globale Koordinatensysteme in 3D Szenen}
 %\newline
@@ -209,41 +266,6 @@ Die vordere Clipping Plane liegt nah an der Kamera. Alle Objekte die zwischen de
 Die hintere Clipping Plane limitiert wie weit Objekte entfernt sein können, bevor sie nicht mehr zu sehen sind.
 
 %to myself: yay :) you're doing well I believe in you!
-
-\subsection{Unity Applikationen für Magic Leap One}
-
-Unity ist ein eine Entwicklungsumgebung mit der Applikationen für Lumin OS erstellt werden können. Ein Unity Projekt besteht aus mindestens einer Szene, in der mehrere GameObjects exsiteren. Alle Elemente die in der Szene existieren sind GameObjects. GameObjects können über child GameObjects und über Components verfügen. 
-
-
-Components implementieren Funktionalitäten. Einige Components sind bereits in Unity integriert. So hat jedes GameObject eine Transform Component, die die Position in der Szene angibt. Über einen Mesh Renderer kann einem Objekt eine geometrische Form gegeben werden.
-
-Um neue Funktionalitäten hinzuzufügen, kann ein C\# Script geschrieben werden und einem GameObject als Component zugewiesen werden.
-
-Magic Leap unterstützt die Entwicklung von Applikationen für Lumin OS mit Unity. Ein Unity Project Template von Magic Leap erleichtert das Set up der Applikation. dazu gehört Build Optionen und die Einstellungen der Haupt Kamera der Szene, der Unity Kamera. Die Unity Kamera rendert die Szene für das Display der Magic Leap One. Zusätzlich verfolgt die Kamera die Bewegungen der Magic Leap Brille im Raum. %Die Szene bleibt somit stationär und die Kamera bewegt sich in ihr, so wie der Nutzer der Magic Leap sich in einer Umgebung bewegt.
-
-Das Unity Template verfügt über vorgefertigte Skripts, die auf Funktionalitäten von Lumin OS zugreifen:
-
-\begin{itemize}
-	\item MLInput stellt Informationen über den Controller zur Verfügung. Damit können die Knöpfe und Touchpad Gesten überwacht werden.
-	\item MLCamera greift auf die Foto-Kamera zu. Über dieses Skript kann die Applikation sich mit der Kamera-Ressource verbinden. Nur eine Applikation kann mit der Kamera verbunden sein. Nur die verbundene Applikation kann Foto-Anfragen stellen und Aufgenommene Fotos erhalten. Anfragen und Resultatdaten werden ebenfalls durch MLCamera behandelt.
-	\item MLRaycast greift auf die Spatial Mapping Funktionalitäten von Lumin OS zu. Es ermöglicht der Applikation einen Raycast auf die Rekonstruktion der Umgebung durchzuführen. Dafür muss das Mesh der Umgebung nicht sichtbar sein.
-	\item MLPrivilegeRequestBehavior ermöglicht es den Nutzer um das recht zu fragen bestimmte auf bestimmte Teile des AR Systems zuzugreifen. Beispielsweise muss nach Permission gefragt werden, um die Foto-Kamera Ressource zu verwenden. 
-	\item MLSpatialMapper zeigt die Rekonstrukion der Umgebung als Mesh an. Das Mesh besteht aus GameObjects, die von MLSpatialMapper erzeugt werden. Sie werden ständig aktualisiert, um das geometrische Verständnis von Lumin OS widerzuspiegeln.
-\end{itemize}
-
-Scripts können von der Klasse Monobehavior erben. Monobehaviors verfügen über methoden, die von Unity bei Unterschieldichen Events während der Laufzeit ausgeführt werden. Nur Skripts die eine Componente eines GameObjects sind, werden aufgerufen.
-
-\begin{itemize}
-	\item Awake - Wenn ein GameObject initialisiert wird, werden die Awake() Methoden der Componenten aufgerufen.
-	\item Update - Die Update methoden der Scripts werden zu jedem Frame aufgerufen.
-	\item OnDestory - Diese Methode wird aufgerufen, wenn das GameObject aus der Szene gelöscht wird.
-\end{itemize}
-
-Globale Variablen von Monobehaviors können, wenn sie einem GameObject als Component angehören, in Unity modifiziert werden. Dadurch kann einem Skript eine Referenz auf ein bestimmtes GameObject gegeben werden.
-
-Monobehaviors können als Singleton fungieren, indem sie eine globale statische Referenz auf sich selber anlegen, wenn ihre Awake Methode aufgerufen wird. Dadurch kann jedes andere Script, durch die Referenz auf die Instanz des Singletons, auf das Singleton zugreifen.
-
-Ein Prefab ist ein vorgefertigtes, Abgespeichertes GameObjekt. Die Child Objects, Components und globalen Variablen der Components werden dabei festgelegt. Ein Prefab kann während der Laufzeit durch ein Skript initialisiert werden. Währen der Initialisierung kann eine Position in dem globalen Koordinatensystem für das neue GameObject angegeben werden. Wenn das Objekt initialisiert wurde, kann auf seine Components und Scripts zugegriffen werden.
 
 \subsection{Computer Vision}
 Computer Vision setzt das Ziel die Inhalte digitaler Bilder und Videos zu verstehen. Sowohl semantische als auch geometrische Inhalte werden dabei analysiert. 
@@ -279,7 +301,10 @@ Eine Grundlegende Aufgabe ist das Image Classification. Die Aufgabe besteht dari
 
 %todo more about this
 
+
+
 \subsubsection{Object Detection}
+Image Based Object detection reinbauen :)
 
 Objekt Detection ist eine Aufgabe der Computer Vision. Es sollen mehrere Objekte in einem Bild erkannt werden. Spezialisierungen von Object Detection sind beispielsweise Gesichtserkennung oder Fußgänger erkennen. Durch eine Objekterkennung werden semantische Inhalte eines Bildes automatisch erhoben. 
 
@@ -316,14 +341,40 @@ Convolutional Neural Networks werden hauptsächlich eingesetzt um Muster in Bild
 
 Die Knoten in einer Ebene eines Convolutional Neural Network sind nur mit wenigen Knoten der vorherigen Ebene verbunden. So sinkt die Menge an Informationen mit jeder Ebene. Das CNN wird gezwungen sich auf wesentliche Teile des Bildes zu konzentrieren, mit denen beispielsweise ein Objekt oder  Muster erkannt werden kann. \citep{introToCNN,surveyOfDeepLearing}
 
-\subsection{REST Anfragen}
+\subsubsection{Azure Computer Vision Services}
 
-Rest Representational State Transfer. 
+Über eine REST API erreichbar. 
 
-REST, was ist eine API, POST, Repsonse, ResponceCode
-%todo: this
+Rest steht für Representational State Transfer. Eine Rest API ist eine Programmierschnittstelle die sich am dem Verhalten des world wide web orinetiert. Die Kommunikation zwischen einem client und dem server orientiert sich an REST.
+Rest steht für Representation State Transfer und bezeichnet einen Architenkturansatz wie verteile Systeme miteinander kommunizieren können. REST verlangt unter anderem ein Client-Server Modell eine zustandslose Kommunikationen zwischen ihnen. Jede Anfrage eines Client beinhaltet alle Informationen die der Server benötigt um sie zu beantworten. %rest is just an idea. describe it a bit more
 
-\subsubsection{Azure Computer Vision}
+Eine Rest-Api kann mit http/s realisiert werden. Der Server / Service kann durch eine URL angespochen werden. Diese wird auch Endpoint genannt. HTTP-Methoden, wie GET und POST kommunizieren an den Service welche Operation durchgeführt werden soll. Diese werden auch Http-Anfragen oder HTTP Request genannt. Mit Get werden Daten von dem Server angefordert. Die Post Methode erlaubt das übermitteln von zusätzlichen Daten an der Server.
+
+Aufbau eines HTTP Requests. Start Line. HTTP methode, get, put. endpoint url. http version die die strukutr der rest der nachricht definiert.
+headers. in den headers können beispielsweise eine autentifizierung für die API sein.
+
+Body. Manche HTTP Methoden, wie zum beispiels POST müssen dem Server Daten übertragen. diese werden in dem Body der Nachricht untergebracht.
+  
+Auf jede Http-Anfrage wird ein HTTP-Responsecode als Antwort zurückgeschickt. Mit dem Code wird dem client mitgetial, ob die anfrage erfolgreich bearbeitet wurde. Wenn ein Error aufgetreten ist, gibt der Statuscode Auskunft über die Art des Errors. 
+
+Beispiel Responsecodes:
+\begin{itemize}
+	\item 404 - Url nicht gefunden
+	\item 401 - Zugriff verweigert wegen ungültiger Authentifizierung
+	\item 400 - Fehlerhafte Anfrage. Der Service konnte die Anfrage nicht verstehen
+	\item 200 - Anfrage wurde erfolgreich bearbeitet
+\end{itemize}
+
+Eine API wird, bei einer erfolgreichen Bearbeitung der Anfrage in dem Körper der HTTP-Response die erfragten Daten mitschicken.
+HTTP Response aufbau.
+status line gibt den response code an, die protocol version und einen status text, der den response code erklären kann.
+headers
+body. abhänig von dem response code werden in der Response Daten übertragen. diese sind im Body.
+Headers gegeben Art der Daten und Länge an.
+
+%todo: make pretty
+
+\subsubsection{Azure Object Detection}
 Microsoft Azure bietet einen Computer Vision Service an. Dabei handelt es sich um mehrere KIs, die für unterschiedliche Aufgaben trainiert wurden. Dazu gehört unter anderem ein Service für Object Detection.
 
 Dabei sendet der Anwender ein Bild an Microsoft, dort wird es verarbeitet und ein Ergebnis in Form einer Json Datei zurückgeschickt.\citep{getAzure,whatIsAzure,objDetectAzure,Azure302Doc}
@@ -401,9 +452,4 @@ Der Aufbau des Resultats unterscheidet sich vom dem von Azure Object Detection l
 {"probability":0.0116642443,"tagId":"263b3042-8958-4775-9a19-e2602d19c9b7","tagName":"Nivea","boundingBox":{"left":0.542580664,"top":0.507969,"width":0.2195471,"height":0.3491398}}]}
 \end{lstlisting}
 
-Die gefundenen Objekte werden in der Liste "predictions" aufgezählt. Die Objekt Klassen werden in "tagName" gespiechert. "probability" gibt die Konfidenz des Modells an, das das Objekt korrekt erkannt wurde. Die erkannten Objekte sollten nach ihrer probability gefitert werden.
-
-%todo filtern nach objekten in implementierung
-%todo raycast explain
-
-
+Die gefundenen Objekte werden in der Liste "predictions" aufgezählt. Die Objekt Klassen werden in "tagName" gespiechert. "probability" gibt die Konfidenz des Modells an, das das Objekt korrekt erkannt wurde. Die erkannten Objekte müssen bei nach ihrer probability gefiltert werden, da auch Objekte mit einer sehr niedrigen probability in in der Json Datei enthalten sind. 

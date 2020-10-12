@@ -22,7 +22,7 @@ public class AzureCustomPrediction : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(this.gameObject);
         TextAsset txt = (TextAsset)Resources.Load("predictionKey", typeof(TextAsset));
-        predictionKey = txt.text;
+        predictionKey = txt.text+"blabla";
         predictionEndpoint = predictionEndpointStart + iteration + "/image";
         InformationUI.instance.ShowIteration(iteration);
     }

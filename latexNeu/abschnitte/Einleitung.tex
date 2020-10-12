@@ -1,7 +1,6 @@
 \section{Einleitung}
-%noch ein bsichen lang. kann die beschreibung der zwei schlechteren methoden verkürzen. Abschnitte 2 3 4 
 
-Augmented Reality (AR) ist eine Vermischung der realen Welt mit virtuellen Elementen. Es wird durch Anzeigegeräte, wie Handys, Tablets oder Augmented Reality Brillen präsentiert und bietet ein intuitives Benutzerinterface um Informationen über Objekten der realen Welt anzuzeigen. Eine AR Umgebung bietet dem Nutzer eine erweiterte Wahrnehmung der realen Welt, indem sie diese anzeigt und gleichzeitig 3D Objekte, 2D Overlays oder Audioelemente  hinzufügt. %Eine häufige AR Anwendung besteht darin, Kommentare oder Label zu Objekten der Realen Welt anzuzeigen.
+Augmented Reality (AR) ist eine Vermischung der realen Welt mit virtuellen Elementen. Es wird durch Anzeigegeräte, wie Handys, Tablets oder Augmented Reality Brillen präsentiert und bietet ein intuitives Benutzerinterface, um Objekte der realen Welt mit Informationen anzureichern. Eine AR Umgebung bietet dem Nutzer eine erweiterte Wahrnehmung der realen Welt, indem sie diese anzeigt und gleichzeitig 3D Objekte, 2D Overlays oder Audioelemente  hinzufügt. %Eine häufige AR Anwendung besteht darin, Kommentare oder Label zu Objekten der Realen Welt anzuzeigen.
 
 Die Interaktion der virtuellen Elemente miteinander, mit dem Nutzer und der realen Umgebung ist ein Grundbestandteil von AR Anwendungen.
 Um die Interaktion mit der Umgebung zu ermöglichen müssen Informationen über die Geometrie der Umgebung vorliegen. Es gibt somit ein grobes Verständnis davon, wie ein Mesh der Umgebung aussieht. 
@@ -18,29 +17,29 @@ Wenn man Markierungen in der realen Welt umgehen möchte, kann man den Nutzer de
 Beide der Verfahren lassen sich schlecht skalieren um große AR Umgebungen abzudecken. Nur eine vollautomatische Objekterkennung ist skalierbar. Damit könnte man mit deutlich weniger aufwand Semantische Informationen über eine reale Umgebung erfahren und somit Komplexere Anwendungsgebiete für AR erschließen.
 
 %object detection funktoniert was bilder angeht.
-Um diese Automatisierung zu erreichen, kann Image based Object Detection aus dem Bereich der Computer Vision verwendet werden.
+Um diese Automatisierung zu erreichen, kann Image Based Object Detection aus dem Bereich der Computer Vision verwendet werden.
 Dieses Verfahren ist darauf ausgelegt Objekte in Bildern zu erkennen. Die Objekterkennung mithilfe von 2D Abbildungen ist am performantesten.
 Und Besser als versuche 3D Wolken zu interpretieren.\citep{introToCNN}
 
-%Diese Automatisierung wollen wir in dieser Thesis mit einer Hololens durchführen. quasi zeigen das es geht.
-
+%Diese Automatisierung wollen wir in dies
 \subsection{Zielsetzung}
 
-In dieser Thesis wird das Erkennen und Labeln von Objekten in einer AR Umgebung, mithilfe von Image based Objekt Detection, automatisiert. 
-Das AR Gerät Magic Leap One Lightwear wird als Benutzerinterface und Plattform verwendet.
+In dieser Thesis wird das Erkennen und Labeln von Objekten in einer AR Umgebung, mithilfe von Image Based Object Detection, automatisiert. 
+Die AR-Brille Magic Leap One Lightwear wird als Benutzerinterface und Plattform verwendet.
 
 %Als Ziele wurden formuliert:
 %\begin{itemize}
-%	\item 1. Objekterkennung auf 3D Bildern der Umgebung
+%	\item 1. Objekterkennung auf 3D Bier Thesis mit einer Hololens durchführen. quasi zeigen das es geht.
+%ldern der Umgebung
 %	\item 2. Erkannte Objekte in der 3D Abbildung der Umgebung lokalisieren
 %	\item 3. Objekte in der AR Abbildung mit einen Label markieren
 %	\item 4. Darstellung der Labels als virtuelles Element mit der Magic Leap One
 %\end{itemize}
 
 Das Minimalziel besteht darin Fotos der Umgebung zu analysieren und gefundene Objekte in einer 3D Szene mit Labels zu versehen. 
-Mithilfe der Kamera des AR Gerätes werden Fotos von der Umgebung aufgenommen. Diese Fotos werden, durch ein trainiertes Neuronales Netzwerk nach Objekten durchsucht. Dies Positionen der werden in einer digitalen Abbildung der Umgebung lokalisiert und mit Labels markiert.
+Mithilfe der Kamera des AR Gerätes werden Fotos von der Umgebung aufgenommen. Diese Fotos werden, durch ein trainiertes neuronales Netzwerk, nach Objekten durchsucht. Diese Positionen werden in einer digitalen Abbildung der Umgebung lokalisiert und mit Labels markiert.
 
-Das erweitere Ziel besteht darin ein zweites Neuronales Netzwerk in die Objekt Erkennung einzubinden. Dieses kann trainiert werden, spezifischen Objekten zu erkennen und damit die Semantische Information zu erweitern die Erkannt werden kann.
+Das erweitere Ziel besteht darin, ein zweites neuronales Netzwerk in die Objekterkennung einzubinden. Dieses kann trainiert werden, spezifischen Objekten zu erkennen und damit die semantischen Informationen zu erweitern, die erkannt werden können.
 
 Als Maximalziel werden die Labels der erkannten Objekte als virtuelle Elemente mit der Magic Leap One dargestellt.
 %Mithilfe der Kameras der Hololens werden Fotos von der Umgebung aufgenommen. Diese Fotos werden, durch ein trainiertes Neuronales Netzwerk, nach Objekten durchsucht. 

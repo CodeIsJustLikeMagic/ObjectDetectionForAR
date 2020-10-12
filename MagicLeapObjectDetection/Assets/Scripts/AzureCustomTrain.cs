@@ -25,7 +25,7 @@ public class AzureCustomTrain : MonoBehaviour
     {
         instance = this;
         TextAsset txt = (TextAsset)Resources.Load("trainingKey", typeof(TextAsset));
-        trainingKey = txt.text;
+        trainingKey = txt.text +"blablA";
     }
     public IEnumerator UploadImage()
     {
