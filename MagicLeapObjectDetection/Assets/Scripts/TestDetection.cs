@@ -45,10 +45,5 @@ public class TestDetection : MonoBehaviour
         Debug.Log(filePath);
         byte[] imageBytes = GetImageAsByteArray(filePath);
         StartCoroutine(AzureCustomPrediction.instance.AnalyseImage(imageBytes, new SavedCameraState(Camera.main)));
-
-
-        MySingletonClass.instance.DoSomething();
-
-
     }
 }

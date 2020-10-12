@@ -5,7 +5,6 @@ using UnityEngine;
 public class MySingletonClass : MonoBehaviour
 {
     public static MySingletonClass instance = null;
-    // Start is called before the first frame update
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -15,8 +14,5 @@ public class MySingletonClass : MonoBehaviour
         instance = this;
     }
 
-
-    public void DoSomething()
-    {
-    }
+    public void DoSomething() { }
 }
