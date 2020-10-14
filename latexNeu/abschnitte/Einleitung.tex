@@ -1,26 +1,25 @@
 \section{Einleitung}
 
-Augmented Reality (AR) ist eine Vermischung der realen Welt mit virtuellen Elementen. Es wird durch Anzeigegeräte, wie Handys, Tablets oder Augmented Reality Brillen präsentiert und bietet ein intuitives Benutzerinterface, um Objekte der realen Welt mit Informationen anzureichern. Eine AR Umgebung bietet dem Nutzer eine erweiterte Wahrnehmung der realen Welt, indem sie diese anzeigt und gleichzeitig 3D Objekte, 2D Overlays oder Audioelemente  hinzufügt. %Eine häufige AR Anwendung besteht darin, Kommentare oder Label zu Objekten der Realen Welt anzuzeigen.
+Augmented Reality (AR) ist eine Vermischung der realen Welt mit virtuellen Elementen. Es wird durch Anzeigegeräte, wie Handys, Tablets oder Augmented Reality Brillen präsentiert und bietet ein intuitives Benutzerinterface, um Objekte der realen Welt mit Informationen anzureichern. Eine AR Umgebung bietet dem Nutzer eine erweiterte Wahrnehmung der realen Welt, indem sie diese anzeigt und gleichzeitig 3D Objekte, 2D Overlays oder Audioelemente  hinzufügt. 
 
 Die Interaktion der virtuellen Elemente miteinander, mit dem Nutzer und der realen Umgebung ist ein Grundbestandteil von AR Anwendungen.
-Um die Interaktion mit der Umgebung zu ermöglichen müssen Informationen über die Geometrie der Umgebung vorliegen. Es gibt somit ein grobes Verständnis davon, wie ein Mesh der Umgebung aussieht. 
+Um die Interaktion mit der Umgebung zu ermöglichen, müssen Informationen über die Geometrie der Umgebung vorliegen. Es gibt somit ein grobes Verständnis davon, wie ein Mesh der Umgebung aussieht. 
 
 Dieses Geometrische Verständnis kann durch ein semantisches Verständnis der Umgebung erweitert werden. Dieses ermöglicht komplexere, Interaktionen zwischen digitalen und virtuellen Elementen. Semantische Informationen über die Umgebung können durch die Gegenstände erschlossen werden, die sich darin befinden.
 
 %wie wird objekt erkennung gemacht
-Es gibt mehrere Möglichkeiten Gegenstände zu erkennen. Zum einen können Markierungen in der realen Welt verwendet werden. Dabei handelt es sich um statische Bilder, beispielsweise ein Foto, oder ein QR Code, die von einer Kamera eingescannt werden. Der Marker ist einzigartig für jedes Objekt, damit sie voneinander unterschieden werden können. Der Nachteil bei diesem Vorgehen ist der Arbeitsaufwand, der damit verbunden ist, jeden Gegenstand einzeln zu markieren.% und die Bedeutung der AR Applikation die Marker bekannt zu machen. 
-%Außerdem können Marker leicht verdeckt werden und nicht an jedes Object lassen sich Marker anbringen. 
+Es gibt mehrere Möglichkeiten Gegenstände zu erkennen. Zum einen können Markierungen in der realen Welt verwendet werden. Dabei handelt es sich um statische Bilder, beispielsweise ein Foto, oder ein QR Code, die von einer Kamera eingescannt werden. Der Marker ist einzigartig für jedes Objekt, damit sie voneinander unterschieden werden können. Der Nachteil bei diesem Vorgehen ist der Arbeitsaufwand, der damit verbunden ist, jeden Gegenstand einzeln zu markieren.
 
 Wenn man Markierungen in der realen Welt umgehen möchte, kann man den Nutzer der Applikation bitten, beispielsweise per Geste auf Objekte der realen Welt zu weisen, die erkannt werden sollen. Für jedes der Objekte muss der Nutzer angeben, um welche Art von Gegenstand es sich handeln, damit die Applikation unterschiedliche Objekte auseinander halten kann und die korrekten Informationen mit ihren assoziiert. Auch hier ist der Arbeitsaufwand hoch.
 
 %also basically per hand. was ziemlich schlecht ist. % es bleibt nur übrig automatisch zu tracken
-Beide der Verfahren lassen sich schlecht skalieren um große AR Umgebungen abzudecken. Nur eine vollautomatische Objekterkennung ist skalierbar. Damit könnte man mit deutlich weniger aufwand Semantische Informationen über eine reale Umgebung erfahren und somit Komplexere Anwendungsgebiete für AR erschließen.
+Beide der Verfahren lassen sich schlecht skalieren um große AR Umgebungen abzudecken. Nur eine vollautomatische Objekterkennung ist skalierbar. Damit könnte man mit deutlich weniger aufwand Semantische Informationen über eine reale Umgebung erfahren und somit komplexere Anwendungsgebiete für AR erschließen.
 
 %object detection funktoniert was bilder angeht.
 Um diese Automatisierung zu erreichen, kann Image Based Object Detection aus dem Bereich der Computer Vision verwendet werden.
-Dieses Verfahren ist darauf ausgelegt Objekte in Bildern zu erkennen. Die Objekterkennung mithilfe von 2D Abbildungen ist am performantesten.
+Dieses Verfahren ist darauf ausgelegt Objekte in Bildern zu erkennen. Die Objekterkennung mithilfe von 2D Abbildungen ist sehr performant.
 Und Besser als versuche 3D Wolken zu interpretieren.\citep{introToCNN}
-
+%todo vergleich zu 3d interpretationen
 %Diese Automatisierung wollen wir in dies
 \subsection{Zielsetzung}
 
@@ -51,7 +50,6 @@ Als Maximalziel werden die Labels der erkannten Objekte als virtuelle Elemente m
 %\subsection*{Maximalziel}
 %Es wird ein Neuronales Netzwerk von Grund an erzeugt und trainiert um die Objekte zu detektieren und die Labels werden von der Hololens in Augmented Reality angezeigt.
 
-%todo Motivation und Ziele. MinmimalZiel, Maximalzielt etc
 
 %\subsection{Zitate}
 %\cite{mlglossary} sagen hier steht ein Text. \\ %<-- Magic Leap (2020b) sais

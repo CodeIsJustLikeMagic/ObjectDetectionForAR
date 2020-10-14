@@ -19,6 +19,7 @@ public class LabelCreater : MonoBehaviour
     }
     public List<GameObject> objectdetectionMarkers = new List<GameObject>();
     public List<GameObject> custompredictionMarkers = new List<GameObject>();
+    public GameObject spatialNodes;
     public void CreateMarker(Vector3 point, Vector3 normal, string text, int material)
     {
         if (!IfObjektalreadymarked(point, normal, text, material))
@@ -94,10 +95,11 @@ public class LabelCreater : MonoBehaviour
     int showState = 0;
     public void ToggleShow()
     {
-        showState = (showState + 1) % 3 ;
+        showState = (showState + 1) % 4 ;
         if(showState == 0)//showAll
         {
             showorhide(true, true);
+            spatialNodes.SetActive(true);
         }
         else if(showState == 1)//only red
         {
@@ -106,6 +108,11 @@ public class LabelCreater : MonoBehaviour
         else if(showState == 2)//only blue
         {
             showorhide(false, true);
+        }
+        else if (showState == 3)
+        {
+            showorhide(true, true);
+            spatialNodes.SetActive(false);
         }
     }
 

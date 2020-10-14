@@ -27,7 +27,7 @@ public class AzureObjectDetection : MonoBehaviour
     {
         float starttime = Time.time;
         //ResultAsText.instance.Show(authorizationKey);
-        InformationUI.instance.Add(starttime + " WebRequest with AzureObjectDetection");
+        InformationUI.instance.Add(starttime + " AzureObjectDetection (od) Webrequest");
         WWWForm webForm = new WWWForm();
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(visionAnalysisEndpoint, webForm))
         {
@@ -37,6 +37,7 @@ public class AzureObjectDetection : MonoBehaviour
             unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
             // the upload handler will help uploading the byte array with the request
             unityWebRequest.uploadHandler = new UploadHandlerRaw(imageBytes);
+            //InformationUI.instance.Add("od image byte array size " + imageBytes.Length);
             unityWebRequest.uploadHandler.contentType = "application/octet-stream";
             yield return unityWebRequest.SendWebRequest();
 
@@ -47,7 +48,7 @@ public class AzureObjectDetection : MonoBehaviour
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
                 //InformationUI.instance.Add(jsonResponse);
-                InformationUI.instance.Add(Time.time + " web request took: " + (Time.time - starttime));
+                //InformationUI.instance.Add(Time.time + " od web request took: " + (Time.time - starttime));
                 //ShowOnCanvas(imageBytes);
                 HandleJsonResponse(jsonResponse, cameraState);
             }
@@ -89,17 +90,17 @@ public class AzureObjectDetection : MonoBehaviour
         //c# dosn't like "public string object"
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
-        InformationUI.instance.Add(Time. time + " Handle Json took: "+(Time.time - starttime));
+        InformationUI.instance.Add(Time. time + " ob Handle Json took: "+(Time.time - starttime));
         starttime = Time.time;
         foreach (DetectedObject obj in det.objectNames)
         {
             Debug.Log(obj.objectName);
             int x = obj.rectangle.x + (obj.rectangle.w / 2);
             int y = obj.rectangle.y + (obj.rectangle.h / 2);
-            //InformationUI.instance.Add("object '"+obj.objectName+"'");
+            InformationUI.instance.Add(obj.objectName+" "+x+" "+y);
             PixelToWorld.instance.Cast(x, y, cpos, obj.objectName);
         }
-        InformationUI.instance.Add(Time.time + " Created "+det.objectNames.Length+" Labels. Took: " + (Time.time - starttime));
+        InformationUI.instance.Add(Time.time + " ob Created "+det.objectNames.Length+" Labels. Took: " + (Time.time - starttime));
     }
 
     public Renderer renderer;

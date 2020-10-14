@@ -29,7 +29,7 @@ Die Magic Leap One übernimmt alle Berechnungen im 3D Raum und führt Spatial Ma
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{images/dia_flow.png}
-	\caption[]{Diagramm der Architektur inklusive Bearbeitungsschritte und Informationsweitergabe.}
+	\caption[Diagramm der Architektur]{Diagramm der Architektur inklusive Bearbeitungsschritte und Informationsweitergabe.}
 	\label{dia:flow}
 \end{figure}
 
@@ -46,7 +46,7 @@ Das Klassendiagramm auf Abbildung \ref{dia:classdiagramm} zeigt die Scripts und 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{images/klassendiagramm.png}
-	\caption[]{Klassendiagramme der Scripte}
+	\caption[Klassendiagramm der Skripts]{Klassendiagramme der Scripts}
 	\label{dia:classdiagramm}
 \end{figure}
  
@@ -88,7 +88,7 @@ Neben dem UI Element und den Labels wird auch ein Mesh angezeigt, das die Spatia
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\textwidth]{images/ML_20201004_19.09.17_2.jpg}
-	\caption[]{Ausgabe}
+	\caption[UI Ausgabe in der Szene]{Ausgabe}
 	\label{img:ausgabe}
 \end{figure}
 
@@ -119,7 +119,7 @@ Die Methode OnCaptureRawImageComplete wird von MLCamera aufgerufen, wenn das Fot
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\textwidth]{images/dia_azureobjectdetection.PNG}
-	\caption[]{Klassendiagramm AzureObjectDetection}
+	\caption[Klassendiagramm von AzureObjectDetection]{Klassendiagramm von AzureObjectDetection}
 	\label{dia:azureobjectdetection}
 \end{figure}
 
@@ -133,7 +133,7 @@ Die Json-Datei wird in HandleJsonResponse verarbeitet. Für den erwarteten Aufba
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\textwidth]{images/dia_json.PNG}
-	\caption[]{Umwandeln der Json Datei in Objekte.}
+	\caption[Klassendiagramm für Json umwandelung]{Klassendiagramm für die umwandeln der Json Datei in Objekte.}
 	\label{dia:jsonClasses}
 \end{figure}
 
@@ -143,7 +143,7 @@ Dafür wird für jedes DetectedObject die Methode Cast von der Klasse PixelToWor
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{images/code_handleJson.PNG}
-	\caption[]{Umwandeln der Json Datei in Objekte.}
+	\caption[Quellcode Umwandelung der Json Datei in Objekte]{Quellcode Umwandeln der Json Datei in Objekte.}
 	\label{code:handlejson}
 \end{figure}
 
@@ -152,7 +152,7 @@ Dafür wird für jedes DetectedObject die Methode Cast von der Klasse PixelToWor
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.45\textwidth]{images/dia_pixeltoworld.PNG}
-	\caption[]{Klassendiagramm PixelToWorld}
+	\caption[Klassendiagramm von PixelToWorld]{Klassendiagramm von PixelToWorld}
 	\label{dia:pixeltoworld}
 \end{figure}
 
@@ -165,18 +165,18 @@ Die x und y Dimensionen beschreiben die Achsen, die horizontal und vertikal zur 
 
 Es wurden Werte für x und y ausprobiert, mit denen die Ränder des Fotos auf der Clipping Plane angegeben werden können. Dabei wurde auf die unterschiedlichen Seitenverhältnisse des Fotos und des Displays geachtet. Darüber hinaus ist der Bildausschnitt des Displays kleiner. Daher liegen die Ränder des Fotos außerhalb des View Frustum. 
 
-Sind diese x und y Werte bekannt, ergibt sich für die Achsen jeweils ein Intervall, die kombiniert alle Foto-Koordinaten auf die Clipping Plane abbilden können. Die Intervall lauten: [-0.295,0.2281] für x und [0.1546,-0.1507] für y. Mit den Intervallen wird die Position und Skalierung des Fotos in Relation zu dem Display - und der Hauptkamera - berücksichtigt. Siehe Kapitel \ref{section:devpixeltoworld} für die Entwickelung der Cast Methode und die Ermittlung der Intervallwerte.
+Sind diese x und y Werte bekannt, ergibt sich für die Achsen jeweils ein Intervall, die kombiniert alle Foto-Koordinaten auf die Clipping Plane abbilden können. Die Intervall lauten: [-0.2949,0.2295] für x und [0.1546,-0.1507] für y. Mit den Intervallen wird die Position und Skalierung des Fotos in Relation zu dem Display - und der Hauptkamera - berücksichtigt. Siehe Kapitel \ref{section:devpixeltoworld} für die Entwickelung der Cast Methode und die Ermittlung der Intervallwerte.
 
 Es werden zwei lineare Funktionen aufgestellt:
 \begin{itemize}
-	\item Die Funktion X bildet das Intervall für u [0,1920] auf das Intervall für x [-0.295,0.2281] ab.
+	\item Die Funktion X bildet das Intervall für u [0,1920] auf das Intervall für x [-0.2949,0.2295] ab.
 	\item Die Funktion Y bildet das Intervall für v [0,1080] auf das Intervall für y [0.1546,-0.1507] ab.
 \end{itemize}
 Siehe Abbildung \ref{code:uvtoxy}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\textwidth]{images/code_uv_to_xy_scale.PNG}
-	\caption[]{Funktionen X und Y}
+	\caption[Quellcode der Funktionen X und Y]{Quellcode der Funktionen X und Y}
 	\label{code:uvtoxy}
 \end{figure}
 
@@ -185,7 +185,7 @@ Mit den Funktionen wird eine Position im Camera Space, auf der Clipping Plane, f
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.2\textwidth]{images/code_cast_method.PNG}
-	\caption[]{Cast Methode}
+	\caption[Quellcode der Cast Methode]{Quellcode der Cast Methode}
 	\label{code:castmethod}
 \end{figure}
 \subsubsection{Raycast}
@@ -193,7 +193,7 @@ Mit den Funktionen wird eine Position im Camera Space, auf der Clipping Plane, f
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.45\textwidth]{images/dia_raycast.PNG}
-	\caption[]{Klassendiagramm Raycast}
+	\caption[Klassendiagramm von Raycast]{Klassendiagramm von Raycast}
 	\label{dia:raycast}
 \end{figure}
 
@@ -217,7 +217,7 @@ Siehe Abbildung \ref{code:raycastparams}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{images/code_raycastparams.PNG}
-	\caption[]{Cast Methode}
+	\caption[Quellcode Erzeugung der Raycast Parameter]{Quellcode Erzeugung der Raycast Parameter}
 	\label{code:raycastparams}
 \end{figure}
 
@@ -226,12 +226,12 @@ Diese wird an die Methode CreateMarker von der Klasse LabelCreater weitergegeben
 
 \subsubsection{LabelCreater}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=0.5\textwidth]{images/dia_labelcreater.PNG}
-	\caption[]{Markierungen in der Welt}
-	\label{dia:labelcreater}
-\end{figure}
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=0.5\textwidth]{images/dia_labelcreater.PNG}
+%	\caption[]{Markierungen in der Welt}
+%	\label{dia:labelcreater}
+%\end{figure}
 
 CreateMarker erhält den Punkt point, der getroffen wurde und die Bezeichnung für das DetectedObject. An der Position von point wird ein Prefab GameObject instanziiert, das als Markierung für das DetectedObject in der 3D Umgebung dient.
 
@@ -240,7 +240,7 @@ Das Prefab besteht aus einer Kugel und einem Schriftzug, der den Namen des Detec
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/ML_20201004_19.10.05_2.jpg}
-	\caption[]{Labels in der Welt}
+	\caption[Labels in der Szene]{Labels in der Szene}
 	\label{image:labels}
 \end{figure}
 
@@ -250,34 +250,37 @@ So  wird die Position des Objektes genauer, wenn es häufiger erkannt wurde. Sie
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/ML_20201004_19.12.40.jpg}
-	\caption[]{Haarbürste zwei mal Erkannt}
+	\includegraphics[width=0.7\textwidth]{images/ML_multi1.jpg}
+	\caption[Haarbürste zwei mal Erkannt]{Haarbürste zwei mal Erkannt. Graue Sphären hier in gelb markiert.}
 	\label{image:multi1}
 \end{figure}
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/ML_20201004_19.13.07.jpg}
-	\caption[]{Haarbürste drei mal Erkannt}
+	\includegraphics[width=0.7\textwidth]{images/ML_multi2.jpg}
+	\caption[Haarbürste drei mal Erkannt]{Haarbürste drei mal Erkannt. Graue Sphären hier in gelb markiert.}
 	\label{image:multi2}
 \end{figure}
-%todo graue kugeln in den bildern pink machen
 
 Die erzeugten Labels werden in den Listen MarkerCustomPredicton und MarkerObjectDetection gespeichert, je nachdem welcher Azure Service verwendet wurde. 
-Zu jedem Frame der Applikation werden die Labels in den Listen zur Kamera hingedreht sodass sie rechtwinklig zur Kamera ausgerichtet sind. Als Resultat werden die Labels der Bewegung der Kamera nachgeführt. Solange das Label in dem View Frustum liegt, kann der Nutzer es lesen.
+Zu jedem Frame der Applikation werden die Labels in den Listen zur Kamera hingedreht sodass sie rechtwinklig zur Kamera ausgerichtet sind. Als Resultat werden die Labels der Bewegung der Kamera nachgeführt. Solange das Label in dem View Frustum liegt, kann der Nutzer es lesen. Siehe Anhang \ref{appendix:blickwinkel}.
 
 \subsubsection{Azure Custom Vision}
 
 Neben der Bildanalyse mit Azure Object Detection wird auch Azure Custom Vision verwendet.
 Die AI wurde über die Webseite trainiert.
 
-Die Anfrage an den Service geschieht in der Klasse AzureCustomPrediction. Ähnlich wie bei AzureObjectDetection wird ein Webrequest erstellt mit einem Authorization Key und einem Foto.
+Die Anfrage an den Service geschieht in der Klasse AzureCustomPrediction. Ähnlich wie bei AzureObjectDetection wird ein Webrequest erstellt mit einem Authorization Key und einem Foto. Die Anfragen an die beiden REST-APIs werden parallel in unterschiedlichen Threads erstellt und bearbeitet.
 
 In der Antwort wird eine Json Datei zurückgeschickt, die die gefundenen Objekte angibt.
 Da die Json Datei eine etwas anderes Format hat, wurde eine eigene HandleJsonResponse Methode dafür geschrieben.
 
-Für jedes erkannte Objekt wird die Methode Cast von PixelToWorld aufgerufen, um das Objekt in der realen Welt zu lokalisieren und zu markieren.
+Azure Custom Vision gibt für jedes Detected Object eine Probability an. Diese gibt das Vertrauen des Modells darin an, dass das Objekt korrekt erkannt wurde.
+
+Es wurde ein Schwellwert definiert, der entscheidet wie hoch die Probability mindestens sein muss, um das Objekt zu akzeptieren und in der Szene zu markieren.
+
+Für jedes akzeptierte Objekt wird die Methode Cast von PixelToWorld aufgerufen, um das Objekt in der realen Welt zu lokalisieren und zu markieren.
 
 \paragraph{Das Trainieren}
 
@@ -291,31 +294,86 @@ Zunächst wurde probiert Tuben von Acrylfarbe zu erkennen. In der Nutzung dieser
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{images/customVisionPaint.PNG}
-	\caption[]{Beispielfoto Iteration 1. Eine Wasserflasche und eine Farbtube wurden beide als Farbtuben erkannt. Das Modell war sich zu 55.7 Prozent sicher, das es sich bei der Wasserflasche um eine Farbtube handelte. Bei der tatsächlichen Farbtube hatte das Modell eine Konfident von 47.5 Prozent.}
+	\caption[Iteration 1 Analysebeispiel]{Iteration 1 Analysebeispiel. Eine Wasserflasche und eine Farbtube wurden beide als Farbtuben erkannt. Die Wasserflasche wurde mit einer Probability von 55.7 Prozent markiert, während die tatsächliche Farbtube eine Probability von 47.5 Prozent hat.}
 	\label{image:customVisionPaint}
 \end{figure}
 
+Die Evaluierung des Modelles lautet: 66.7\% Precision, 66.7\% Recall, 89.7\% mean Average Precision.
+
+\begin{itemize}
+	\item Precision - die Wahrscheinlichkeit das ein gefundenes Objekt, tatsächlich der angegeben Klasse angehört. (Die Wahrscheinlichkeit das es kein false positive ist.)
+	\item Recall - Aus einer Menge an Objekten die einer Klasse angehören, der Prozentsatz an Objekten, die das Modell korrekt lokalisieren und klassifizieren konnte.
+	\item m.a.p (mean Average Precision) - Eine Gesamtwertung für die Evaluierung basierend auf Precision und Recall. 
+\end{itemize}
+
 \paragraph{Iteration 2}
 
-In der zweiten Iteration wurde probiert das Modell darauf zu trainieren, eine blaue Dose von Nivea Hautcreme zu erkennen. Die Form und Farbe der Dose ist sehr simpel, daher wurde davon ausgegangen, dass sie leichter zu erkennen ist. Die berechnete Prediction Wahrscheinlichkeit während des Trainings lag bei 80 Prozent.
+In der zweiten Iteration wurde probiert, das Modell darauf zu trainieren, eine blaue Dose von Nivea Hautcreme zu erkennen. Die Form und Farbe der Dose ist sehr simpel, daher wurde davon ausgegangen, dass sie leichter zu erkennen ist. Die berechnete Prediction des Modells lag bei 80 Prozent. Wenn eine Nivea Dose erkannt wurde, ist das Modell sich zu 80 Prozent sicher, dass es sich tatsächlich um eine Nivea Dose handelt.
+
+Die Evaluierung des Modells lautet: 80\% Precision, 100\% Recall, 100\% mean Average Precicion.
+In einer Testphase konnte das Modell alle auf den Bildern erhaltenen Nivea Dosen zu erkennen (100\% Recall), es hat jedoch auch Objekte fälschlicherweise als Dosen markiert (80\% Precision).
 
 Trotzdem wurden in vielen Fotos fälschlicherweise Nivea Dosen erkannt. 
+
 
 \paragraph{Iteration 3}
 
 In der dritten Iteration wurde versucht die vorherige Iteration zu verbessern. Es wurden ausgewählte Trainingsfotos entfernt, die die Dose von einem seitlichen Winkel zeigten. Die Erwartung war, dass die Detektion der Dose aus dem Blickwinkel von oben konsistenter wird. Zusätzlich wurden mehr Fotos von der Dose auf unterschiedlich gefärbten und gemusterten Untergründen hinzugefügt. 
 
-Die Genauigkeit der Prediction sank auf 75 Prozent.
+Die Precision sank auf 75 Prozent.
+
+Die Evaluierung des Modells lautet: 75\% Precision, 100\% Recall, 100\% mean Average Precicion.
+Dises Modell hat in der Testphase häufiger Objekte fälschlicherweise als Dosen markiert.
 
 \paragraph{Iteration 4}
 
-In der vierten Iteration wurden zwei Fotos von der Nivea Dose entfernt, was die Genauigkeit auf 100 Prozent steigen ließ. In der Umsetzung mit der Magic Leap Anwendung wurden trotzdem häufig Objekte fälschlicherweise als Nivea Dose markiert.
+In der vierten Iteration wurden zwei Fotos von der Nivea Dose entfernt, was die Precision auf 100 Prozent steigen ließ. In der Umsetzung mit der Magic Leap Anwendung wurden trotzdem häufig Objekte fälschlicherweise als Nivea Dose markiert.
 
 Neben der Dose wurde diese Iteration darauf trainiert eine bestimmte Holzhaarbürste zu erkennen. Aufgrund von dem komplexeren, und markanten Aussehen der Bürste wurde davon ausgegangen, das die Bürste besser von anderen Objekte zu unterschieden ist. 
 Die Bürste wurde nur mit den Borsten nach oben fotografiert.
 
-Die Genauigkeit für die Bürste lag bei 100 Prozent. 
-In der Umsetzung mit der Magic Leap Anwendung wird die Bürste häufig nicht erkannt, obwohl sie im Bild ist und mit den Borsten nach oben liegt. Es werden jedoch keine Objekte fälschlicherweise als Haarbürste erkannt.
+Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion.
+
+Objekte die mit einer Wahrscheinlichkeit von über 80 Prozent als Haarbürsten markiert wurden, waren in der Anwendung tatsächlich Haarbürsten. Durch das Setzen dieses Schwellenwertes wurden keine Objekte fälschlicherweise als Haarbürste erkannt. Siehe Abbildung \ref{img:it4}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/it4notpretty.png}
+	\caption[Iteration 4 Analysebeispiel]{Iteration 4 Analysebeispiel. Die Tatsächliche Haarbürste wurde mit einer Probability von 92 Prozent erkannt. Eine Blume auf einer Decke wurde zu 71,3 Prozent als Haarbürste erkannt.}
+	\label{img:it4}
+\end{figure}
+
+Wenn die Haarbürste in dem Foto kleiner abgebildet ist, sind die Probability so weit, das die Bürste sich nicht mehr anhand des Schwellenwert von anderen Objekten unterscheiden lässt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/it4notpretty2.png}
+	\caption[Iteration 4 zweites Analysebeispiel]{Iteration 4 Analysebeispiel. Die Tatsächliche Haarbürste wurde mit einer Probability von 40,4 Prozent erkannt.}
+	\label{img:it4}
+\end{figure}
+\paragraph{Iteration 5}
+
+Iteration 5 ist eine Variation von Iteration 4. Die Objekterkennung der Nivea Dose entfernt. Die Iteration ist nur noch darauf trainiert die Haarbürste zu erkennen. 
+
+Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion.
+
+\paragraph{Iteration 6}
+
+In der Iteration 6 wurde die Erkennung der Haarbürste verbessert. Den Empfehlungen von Azure folgend, wurde die Menge an Trainingsbildern auf 51 erhöht. Auf den Trainingsbildern ist die Haarbürste teilweise recht klein zu sehen. Siehe Anhang \ref{appendix:it4train}. Dieser Iteration wurde eine Stunde Zeit gelassen, um das Training durchzuführen. Vorherige Iteration hatten ca. 10 Minuten.
+
+Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion.
+
+Haarbürsten, die kleiner in einem Foto sind, konnten von dieser Iteration erkannt werden. Siehe Abbildung \ref{img:it6}. Mit den vorherigen Iterationen war das nicht möglich. Die Haarbürste musste immer recht groß im Bild sein. 
+
+In den Bildern, die von Iteration 6 analysiert wurden, waren alle Objekte, die das Model mit einer Wahrscheinlichkeit von über 50 Prozent als Haarbürste markiert hatte, tatsächlich Haarbürsten.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/it6pretty.png}
+	\caption[Iteration 6 Analysebeispiel]{Iteration 6 Analysebeispiel. Haarbürste mit einer Probability von 73,7 Prozent erkannt.}
+	\label{img:it6}
+\end{figure}
+
 
 \subsection{Entwicklung der Foto-Repräsentation}
 \label{section:devpixeltoworld}
@@ -335,7 +393,7 @@ Wenn die Kamera am Ursprung des globalen Koordinatensystem liegt und eine neutra
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/sphärenTest.PNG}
-	\caption[]{Die blaue Sphäre liegt auf dem linken Rand der Clipping Plane.}
+	\caption[Ränder der Near Clipping Plane in Unity finden]{Die blaue Sphäre liegt auf dem linken Rand der Clipping Plane.}
 	\label{illustration:speretest}
 \end{figure}
 
@@ -370,21 +428,21 @@ Um die x und y Intervalle bestimmen zu können, wurde das Fotoanzeige-UI-Element
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/canvasinyourface.PNG}
-	\caption[]{Das aufgenommene Foto füllt das gesamte Display aus, wenn es angezeigt wird. Die blaue Sphäre liegt auf dem linken Rand des Foto-Anzeige-Elementes.}
+	\includegraphics[width=0.8\textwidth]{images/canvasinyourface.PNG}
+	\caption[Ränder des Foto-Anzeige-Elements finden]{Das aufgenommene Foto füllt das gesamte Display aus, wenn es angezeigt wird. Die blaue Sphäre liegt auf dem linken Rand des Foto-Anzeige-Elementes.}
 	\label{illustration:canvasinsourface}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/canvasinyourfaceTopDown.PNG}
-	\caption[]{Die blaue Sphäre befindet sich nicht mehr in dem View Frustum und das Foto-Anzeige-Element befindet sich ein wenig hinter der Near Clipping Plane.}
+	\caption[Tiefe des Foto-Anzeige-Elements finden]{Die blaue Sphäre befindet sich nicht mehr in dem View Frustum und das Foto-Anzeige-Element befindet sich ein wenig hinter der Near Clipping Plane.}
 	\label{illustration:canvasinsourfacetodown}
 \end{figure}
 
 Die Ränder des UI Elementes wurden genutzt, um die Intervalle für x und y zu bestimmen.
 \begin{itemize}
-	\item für x: [-0.295, 0.2281]
+	\item für x: [-0.2949, 0.2295]
 	\item für y: [0.1546, -0.1507]
 	\item Zusätzlich wurde z = -0.4 gesetzt. Das UI Element musste ein wenig weiter von der Clipping Plane entfernt sein um angezeigt zu werden.
 \end{itemize}
@@ -393,75 +451,130 @@ Mit diesen Intervallen konnten DetectedObjects gut lokalisiert werden und es wur
 
 \newpage
 \section{Auswertung}
-%todo
-in welchem raum getestet. wie groß sind die fotos?
+
+In diesem Kapitel geht es um die Evaluierung und Auswertung der vorgestellten Anwendung.
 
 \subsection{Laufzeitanalyse}
 
-Die Laufzeit der Objekterkennung wurde aufgezeichnet. Die Erkennung beginnt damit ein Foto aufzunehmen und endet mit der Erzeugung der Labels. Siehe Abbildung \ref{img:laufzeit}
+Die Laufzeit der Objekterkennung wurde aufgezeichnet. Die Erkennung beginnt damit ein Foto aufzunehmen und endet mit der Erzeugung der Labels.
+
+Die genutzte Netzwerkverbindung hatte eine Dowloadgeschwindigkeit von 180 Mbps und ein Uploadgeschwindigkeit von 18 Mbps.
+
+Bilder haben Auflösung von 1090 x 1820 Pixel. Wenn sie in den HTTP-Anfragen verschickt haben, sie die Größe von 5 Mb.
+
+Der Netzwerk Delay zwischen den REST-APIs und der Applikation wurde getestet, indem HTTP-Anfragen mit einem inkorrekten Authentifizierungsschlüssel gestellt wurden. In dem Body des Anfrage wurde ein Bild mitgeschickt, dieses wurde jedoch nicht analysiert. 
+
+Im Durchschnitt beträgt die Round Trip Time 0,18 Sekunden in 14 Durchführungen dieses Tests. (Minimal 0,13 Sekunden, Maximal 0,28 Sekunden.)
+
+Siehe Abbildung \ref{img:laufzeit}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\textwidth]{images/ML_20201005_16.12.36.jpg}
-	\caption[]{Durchlauf mit Laufzeit Aufzeichnung}
+	\includegraphics[width=0.9\textwidth]{images/ML_20201014_02.30.11.jpg}
+	\caption[Laufzeit einer Objekterkennung]{Durchlauf mit Laufzeit Aufzeichnung}
 	\label{img:laufzeit}
 \end{figure}
 
-Über 11 Aufgenommene Fotos wurden gefunden, das das Aufnehmen des Fotos im Durchschnitt 0,9 Sekunden dauert. Das Anfragen des Azure Object Detection Services, inklusive Netzwerk Response Time liebt durchschnittlich bei 1,01 Sekunden. Die Anfrage an den Azure Custom Vision Service, inklusive Netzwerk Response Time, dauert im durchschnitt 1,28 Sekunden. 
+Über 13 aufgenommene Fotos wurde festgestellt, dass das Aufnehmen des Fotos im Durchschnitt 1,11 Sekunden dauert. Die Anfragen an den Azure Object Detection Services, inklusive Netzwerk Response Time liegen Durchschnittlich bei 0,96 Sekunden. Die Anfragen an den Azure Custom Vision Service, inklusive Netzwerk Response Time, dauern im Durchschnitt 1,84 Sekunden. Für Azure Custom Vision wurde Iteration 6 verwendet. 
 
-Das auslesen der Json Antworten, lokalisieren der Objekten in der 3D Szene und das Label erstellen, benötigt weniger als eine Mikrosekunde.
+Azure Object Detection und Azure Custom Vision werden parallel zueinander in unterschiedlichen Threads durchgeführt. Die durchschnittliche Gesamtlaufzeit der Objekterkennung liegt bei 2,95 Sekunden.
 
-Insgesamt dauert das Aufnehmen und Analysieren eines Fotos somit durchschnittlich 3,19 Sekunden. Siehe Abbildung \ref{table:laufzeitanalyse} und \ref{table:laufzeitanalyse2}.
+Das Auslesen der Json Antworten, das Lokalisieren der Objekten in der 3D Szene und die Labelerstellung, benötigt weniger als eine Mikrosekunde. Siehe Abbildung \ref{table:laufzeitanalyse} und \ref{table:laufzeitanalyse2}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{images/table_Laufzeitanalyse.PNG}
-	\caption[]{Laufzeitanalyse über 11 Bild-Analysen.}
+	\includegraphics[width=1\textwidth]{images/table_Laufzeitanalyseneu.PNG}
+	\caption[Laufzeitanalyse über 13 Bild-Analysen]{Laufzeitanalyse über 13 Bild-Analysen.}
 	\label{table:laufzeitanalyse}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\textwidth]{images/table_Laufzeitanalyse2.PNG}
-	\caption[]{Diagramm Laufzeitanalyse}
+	\includegraphics[width=0.95\textwidth]{images/table_Laufzeitanalyse2neu.PNG}
+	\caption[Diagramm Laufzeitanalyse]{Diagramm Laufzeitanalyse}
 	\label{table:laufzeitanalyse2}
 \end{figure}
 
-Gedanken dazu: Für die Laufzeit ist es besser ein einziges Network zu nehmen. Und das Image Capture so lange dauert ist eigenldich unacceptable. Das sollte schneller gehen. Dadurch statt einzelne Fotos aufzunehmen ein contiousouls video aufnehmen und frames davon zu analysieren wäre besser. Ist auf jeden Fall nicht real time.
+Der Prozess ist somit deutlich zu langsam um in Echtzeit ausgeführt zu werden. 
 
-Durchschnittlich wurden durch Objekt Detection 1.64 Objekte pro bild erkannt und durch custom detection 0.73.
+Ein einziges neuronales Netzwerk für die Objekterkennung zu verwenden, würde die Laufzeit verringern. Allerdings geht dann die Möglichkeit verloren, mehrere neuronale Netze zu verwenden die unterschiedliche Computer Vision Aufgaben erledigen. Aus einem RGB-Bild können beispielsweise mehr semantische Informationen extrahiert werden, wenn Image Segmentation und Object Detection kombiniert werden.
 
-\subsection{Analyse durch Azure Objekt Detection}
+%Allerdings muss dann ein neuronales Netzwerk eingesetzt werden, dass speziell für die Applikation trainiert ist. Durch das verwenden von mehreren neuronalen Netzwerken besteht jedoch die Möglichkeit mehr semantische Informationen auf den RGB-Bilder zu erhalten als mit einem Netzwerk möglich wäre. So kann ein Netzwerk beispielsweise 
 
-Wie sieht der raum aus?
-Welche objekte wurden erkannt. 
-Wie wurden sie misinterpretet.
-Objekte erkennen auch wenn sie nicht komplett im screen sind.
+Neben den Objekterkennung-Prozessen braucht das Aufnehmen der Fotos mit durchschnittlich 0.9 Sekunden einen großen Teil der Laufzeit. Durch ein Umstieg von Fotos auf Frames eines Videostreams kann die Aufnahmezeit reduziert werden.  
 
-\subsection{Azure Custom Vision}
+%Durchschnittlich wurden durch Objekt Detection 1.64 Objekte pro Bild erkannt und durch Custom Detection 0.73.
 
-kommt halt darauf an wie es trainiert ist. 
+\subsection{Evaluierung der Objekterkennung durch Azure Objekt Detection}
 
-\subsection{Objekte in 3D Szene Lokalisieren}
+Die Anwendung wurde in einem Schlaf- und Arbeitszimmer getestet. Durch Azure Object Detection konnten folgende Object-Klasse erkannt werden: Television, Person, Bottle, Keyboard, Computermouse, cat, bed, luggage, chair, laptop.
 
-generell gut. Durch mehrere detectionen wird lokation verbessert, besonders wenn durch leicht unterschiedliche Blickwinkel. Aber auch bei nur einer Erkennung ist die Position in der 3D Szene ganz gut. 
+Azure Object Detection erkennt die Objekte mit unterschiedlicher Verlässlichkeit. Tastaturen und Personen wurden in den meisten Aufnahmen korrekt erkannt. Das Lightwear Gerät der Magic Leap One wurde gelegentlich als Computermaus interpretiert und Computerbildschirme wurden durchweg als Television oder als Laptop markiert.
 
-%todo
+\subsection{Evaluierung der Objekterkennung durch Azure Custom Vision}
 
-spatial mapping braucht manchmal ne weilse, das dazu führt, das das label nicht an der richtigen stelle ist.
-passiert bei objekten die sich oft bewegen, wie ein stuhl. Siehe Abbildung \ref{img:stuhl}.
+Die Genauigkeit der Objekterkennungen durch Azure Custom Vision wird durch das Training des Modells bestimmt. Dieser Cloud Service hat sich als effektiv erweisen, um Azure Object Detection zu ergänzen. Mit der Iteration 6, die mit 51 Bildern eine Stunde lang trainiert wurde, kann die Haarbürste zuverlässig erkannt werden. 
+
+Für Regionen in denen sich keine Haarbürste befindet, berechnet das Modell eine Probability von weniger als 5 Prozent dafür, dass sich dort fälschlicherweise eine Haarbürste befindet. 
+
+Regionen, die mit einer Probability von über 50 Prozent einer Haarbürste enthalten, beinhalteten in der Anwendung immer eine Haarbürste.
+
+Durch die niedrige Rate an false positives konnte die Akzeptanzschwelle auf 60 Prozent gesetzt werden, um die Rate der false negatives zu verringern. Dadurch wird die Haarbüste fast immer korrekt erkannt, wenn sie auf einem Bild ist.
+
+
+\subsection{Objekte in 3D Szene lokalisieren}
+
+In diesem Teil wird evaluiert wie akkurat Objekte, die in einem Foto erkannt wurden, in der 3D Umgebung markiert werden.
+Um die Lokalisierung zu evaluieren, wurden die RGB-Bild festgehalten, mit denen Objekterkennung durchgeführt wurde. Auf den RGB-Bildern wurde der Mittelpunkt der Bounding Boxen markiert. Siehe Abbildung \ref{img:markedonimage}. Das Label, das in der Szene gesetzt wird, soll mit dieser Position korrespondieren. Siehe Abbildung \ref{img:labelsszene}. 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{images/ML_20201004_19.18.02.jpg}
-	\caption[]{Laufzeitanalyse }
+	\includegraphics[width=0.8\textwidth]{images/ML_markedOnImage2.jpg}
+	\caption[Erkennt Objekte auf RGB-Bilde markiert]{Die Mittelpunkte der erkannten Objekte wurden, auf dem Foto per Hand in rot-gelb markiert. Die Klassen und die u,v Foto-Koordinaten der Objekten sind angegeben.}
+	\label{img:markedonimage}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/ML_20201014_13.39.00.jpg}
+	\caption[Erkannte Objekte in der Szene markiert]{Objekte in der 3D Szene markiert.}
+	\label{img:labelsszene}
+\end{figure}
+
+Die Positionierungen der Labels weichen um weniger als 2 cm von der vorgesehenen Position ab.
+
+
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=0.95\textwidth]{images/ML_20201014_02.57.37.jpg}
+%	\caption[]{erste erkennung}
+%	\label{table:laufzeitanalyse2}
+%\end{figure}
+%
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=0.95\textwidth]{images/ML_20201014_02.58.02.jpg}
+%	\caption[]{zweite erkennung}
+%	\label{table:laufzeitanalyse2}
+%\end{figure}
+
+Die Lokalisierung der Objekte hängt von dem geometrischen Verständnis der AR-Brille an. Objekte die häufig bewegt werden, wie beispielsweise ein Stuhl, werden erst in die Spatial Map eingefügt, wenn sie über längere Zeit nicht bewegt wurden. Das Einfügen des Objektes in die Map dauert ca. 2 Minuten. 
+
+Wenn der Objekte Detection Prozess auf ein Objekt angewandt wird, das noch nicht oder nicht komplett in der Spatial Map ist, wird es nicht korrekt markiert. Siehe Abbildung \ref{img:stuhl}. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/ML_20201004_19.18.02_sup.jpg}
+	\caption[Label  setzten, bei fehlerhafter Spatial Map]{Spatial Map des Stuhles in weiß umrandet. Tatsächlicher Stuhl in orange umrandet. Label des Stuhls in gelb markiert. Das Label befindet sich in der Szene hinter dem Stuhl auf dem Boden.}
 	\label{img:stuhl}
 \end{figure}
 
-Halb Tranzparente Objekte sind auch eine challenge für sptaial mapping. werden nicht richtig gemapped. Siehe Abbildung \ref{img:flasche}.
+In diesem Beispiel ist ein Stuhl noch nicht in der Spatial Map. Wenn die Applikation einen Raycast auf die Umgebung durchführt, um das gefundene Objekt zu markieren, schießt der Raycast durch das tatsächliche Objekte hindurch, da es  nicht in der Map ist. Der Raycast trifft den Boden hinter dem Objekt und markiert diesen. Der Stuhl wurde von der Objekterkennung korrekt erkannt, jedoch nicht korrekt in der Szene markiert.
+
+Halb transparente Objekte werden ebenfalls nicht korrekt gemapped. Daher wird das Label eines Flaschen-Objekts nicht korrekt positioniert. Siehe Abbildung \ref{img:flasche}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/ML_20201004_19.12.13.jpg}
-	\caption[]{Label für Bottle liegt hinter dem Tatsächlichen Objekt. Die Flasse wurde nicht korrekt gemapped.}
+	\caption[Spatial Mapping Transparenter Objekte]{Das Label für Bottle liegt hinter dem tatsächlichen Objekt. Die Flasche wurde nicht korrekt gemapped.}
 	\label{img:flasche}
 \end{figure}

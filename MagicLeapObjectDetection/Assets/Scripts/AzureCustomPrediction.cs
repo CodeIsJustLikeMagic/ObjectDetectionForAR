@@ -12,7 +12,7 @@ public class AzureCustomPrediction : MonoBehaviour
     private string predictionEndpointStart = "https://detectiontrainingforar.cognitiveservices.azure.com/customvision/v3.0/Prediction/ac915246-5268-461f-bd11-cf0c1826d509/detect/iterations/";
     private string predictionEndpoint = "";
     [HideInInspector] public byte[] imageBytes;
-    public string iteration = "Iteration4";
+    public string iteration = "Iteration5"; //set in unity editor
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -22,7 +22,7 @@ public class AzureCustomPrediction : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(this.gameObject);
         TextAsset txt = (TextAsset)Resources.Load("predictionKey", typeof(TextAsset));
-        predictionKey = txt.text+"blabla";
+        predictionKey = txt.text;
         predictionEndpoint = predictionEndpointStart + iteration + "/image";
         InformationUI.instance.ShowIteration(iteration);
     }
@@ -31,7 +31,7 @@ public class AzureCustomPrediction : MonoBehaviour
     {
         //ResultAsText.instance.Show(authorizationKey);
         float starttime = Time.time;
-        InformationUI.instance.Add(starttime +" Custom Prediction Webrequest");
+        InformationUI.instance.Add(starttime +" CustomPrediction (cp) Webrequest");
         WWWForm webForm = new WWWForm();
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(predictionEndpoint, webForm))
         {
@@ -54,7 +54,7 @@ public class AzureCustomPrediction : MonoBehaviour
                 InformationUI.instance.Add("responseCode " + responseCode);
                 string jsonResponse = null;
                 jsonResponse = unityWebRequest.downloadHandler.text;
-                InformationUI.instance.Add(Time.time + " web request took: " + (Time.time - starttime));
+                InformationUI.instance.Add(Time.time + " cp web request took: " + (Time.time - starttime));
                 Debug.Log(jsonResponse);
                 HandleJson(imageBytes, jsonResponse, cameraState);
             }
@@ -97,7 +97,7 @@ public class AzureCustomPrediction : MonoBehaviour
         float starttime = Time.time;
         DetectionResponse det = new DetectionResponse();
         det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
-        InformationUI.instance.Add(Time.time + " Handle Json took: " + (Time.time - starttime));
+        InformationUI.instance.Add(Time.time + " cp Handle Json took: " + (Time.time - starttime));
         Texture2D texture = new Texture2D(8, 8);
         texture.LoadImage(imageBytes);
         Debug.Log(texture.width + " " + texture.height);
@@ -105,7 +105,7 @@ public class AzureCustomPrediction : MonoBehaviour
         int i = 0;
         foreach (DetectedObject obj in det.predictions)
         {
-            if(obj.probability >= 0.8)
+            if(obj.probability >= 0.6)
             {
                 i = i + 1;
                 Debug.Log(obj.tagName);
@@ -119,6 +119,6 @@ public class AzureCustomPrediction : MonoBehaviour
                 PixelToWorld.instance.Cast(u, v, cpos, obj.tagName, 2); //make it use second material to differentiate between Object Detection and Custom Vision
             }
         }
-        InformationUI.instance.Add(Time.time + " Created "+i+" Labels. Took: " + (Time.time - starttime));
+        InformationUI.instance.Add(Time.time + " cp Created "+i+" Labels. Took: " + (Time.time - starttime));
     }
 }

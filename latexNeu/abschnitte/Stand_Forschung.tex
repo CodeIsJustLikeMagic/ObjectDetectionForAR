@@ -8,7 +8,7 @@ Dafür wurde folgende automatische Real-Time Objekt Erkennung entwickelt:
 
 Mithilfe von Image Based Object Detection werden Objekte auf RGB-Fotos der AR Umgebung erkannt. Diese Objekte werden dann in die 3D Szene der Umgebung übernommen. 
 
-Die AR Brille hat zu wenig Rechenleistung, um Image Based Object Detection durchzuführen, daher wurde eine Server-Client Architektur aufgesetzt. Die Videokamera der AR Brille wird verwendet, um Bilder von der Umgebung aufzunehmen. Die einzelnen Frames werden an den Server geschickt. Dieser nutzt ein neuronales Netzwerk, um alle erkennbaren Objekte in dem Bild zu finden und mit Bounding Boxen zu lokalisieren.
+Die AR Brille hat zu wenig Rechenleistung, um Image Based Object Detection durchzuführen, daher wurde eine Server-Client Architektur aufgesetzt. Die Videokamera der AR Brille nimmt ein Video der Umgebung auf, das dann frameweise an den Server geschickt werden. Die einzelnen Frames werden an den Server geschickt. Dieser nutzt ein neuronales Netzwerk, um alle erkennbaren Objekte in dem Bild zu finden und mit Bounding Boxen zu lokalisieren.
 
 Die ObjectDetection API von TensorFlow wird verwendet. Es findet mehrere Objekte in einem Foto in einer Analyse und gibt Bounding Boxen an. Die Objekterkennung soll in Real-Time durchgeführt werden. Um die Laufzeit dieser möglichst gering zu halten, wird die niedrigste Kameraauflösung mit 896x504 Pixel verwendet und die Fotos werden als JPEG komprimiert. Damit braucht die Analyse 30 ms pro Foto. Dies ermöglicht eine Real-Time Erkennung mit 30 Frames pro Sekunde. 
 
@@ -18,20 +18,20 @@ Die Hololens nummeriert die Frames, die an den Server geschickt werden. Zusätzl
 
 Ist die Analyse durchgelaufen, werden die Bounding Boxen der Objekte und die Kameraposition genutzt, um die Objekte in der 3D Umgebung zu lokalisieren. Dafür wird der Mittelpunkt jeder Bounding Box mithilfe eines Raycastes in die 3D Szene projiziert.
 
-Ein Objekt wird erst markiert, wenn es auf mehreren Fotos gefunden wurde, um Fehlern bei der Objekterkennung entgegenzuwirken. Durch die Analyse des ersten Fotos, wird eine ungefähre Position in der AR Umgebung für das Objekt ermittelt. Dieses Objekt wird dann mit den Objekten verglichen, die während der nächsten 60 Frames erkannt wurden. Haben die Objekte dieselbe semantische Bedeutung und eine ähnliche Position in der AR Umgebung, wird davon ausgegangen, dass es sich um ein einziges Objekt handelt, welches in den 60 Frames mehrmals aufgenommen wurde. Siehe Abbildung \ref{img:60frames}.
+Ein Objekt wird erst markiert, wenn es auf mehreren Fotos gefunden wurde, um Fehlern bei der Objekterkennung entgegenzuwirken. Durch die Analyse des ersten Fotos wird eine ungefähre Position in der AR Umgebung für das Objekt ermittelt. Dieses Objekt wird dann mit den Objekten verglichen, die während der nächsten 60 Frames erkannt wurden. Haben die Objekte dieselbe semantische Bedeutung und eine ähnliche Position in der AR Umgebung, wird davon ausgegangen, dass es sich um ein einziges Objekt handelt, welches in den 60 Frames mehrmals aufgenommen wurde. Siehe Abbildung \ref{img:60frames}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/img_huynh.PNG}
-	\caption[]{Ungefähre Positionen des Objektes über 60 Frames aufgenommen in rot. Finale Position in grün.\citep{LabelingLanguageLearning}}
+	\caption[Objekterkennung von \cite{LabelingLanguageLearning}]{Ungefähre Positionen des Objektes über 60 Frames aufgenommen in rot. Finale Position in grün.\citep{LabelingLanguageLearning}}
 	\label{img:60frames}
 \end{figure}
 
 Unser Vorgehen zur Objekterkennung ähnelt dem Framework von \cite{LabelingLanguageLearning}. Auch hier soll die AR Umgebung durch das Hinzufügen von Labels semantisch angereichert werden. Es wird ebenfalls ein neuronales Netz verwendet, um die Object Detection auf RGB-Bildern durchzuführen. Wir haben dafür keinen eigenen Server aufgesetzt, sondern nutzen einen Cloud Service von Microsoft Azure. Durch Abspeichern von erhobenen semantischen Informationen ist eine Real-Time Detektion nicht relevant. Daher kann die Bild-Analyse länger dauern, was es erlaubt, mehrere neuronale Netze zu verwenden, die nach unterschiedlichen semantischen Informationen suchen.
 
-In Unserem Verfahren werden erkannte Objekte schon in der Umgebung markiert, wenn sie ein einziges mal erkannt wurden. Wenn das Objekt erneut aufgenommen wird, wird die neue Analyse dem Objekt die gleiche Klasse und eine ähnliche Position der AR Umgebung zuweisen. Daran lässt sich erkennen, das es sich um dasselbe Objekt handelt.
+In unserem Verfahren werden erkannte Objekte schon in der Umgebung markiert, wenn sie ein einziges Mal erkannt wurden. Wenn das Objekt erneut aufgenommen wird, wird die neue Analyse dem Objekt die gleiche Klasse und eine ähnliche Position der AR Umgebung zuweisen. Daran lässt sich erkennen, das es sich um dasselbe Objekt handelt.
 
-Die erste Position die für das Objekt berechnet wurde und die Position, die aus der zweite Aufnahme hervorgeht, unterscheiden sich mit hoher Wahrscheinlichkeit ein wenig voneinander. Daher werden die Positionen gemittelt um eine akkuratere Position für das Label des Objektes zu finden. 
+Die erste Position, die für das Objekt berechnet wurde und die Position, die aus der zweiten Aufnahme hervorgeht, unterscheiden sich mit hoher Wahrscheinlichkeit ein wenig voneinander. Daher werden die Positionen gemittelt, um eine akkuratere Position für das Label des Objektes zu finden. 
 \citep{LabelingLanguageLearning}
 
 \subsection{\cite{viewmanagement3d}: View Management for Virtual and Augmented Reality}
@@ -42,7 +42,7 @@ Die Labels können sich auf eine 2D Ebene beschränken oder im 3D Raum liegen. V
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/img_viewmanagement.PNG}
-	\caption[]{3D Labels durch View Management positioniert.\citep{viewmanagement3d}}
+	\caption[View Management von \cite{viewmanagement3d}]{3D Labels durch View Management positioniert.\citep{viewmanagement3d}}
 	\label{viewManagement}
 \end{figure}
 
@@ -66,12 +66,12 @@ Als beispielhafte Applikation wurde ein First-Person-Shooter vorgestellt, bei de
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/img_shootinggame.png}
-	\caption[]{Unterschiedliche Interaktionen wenn auf eine Wand (a), einen Tisch (b), einen Bildschirm (c) und einen Stuhl (d) geschossen wird.\citep{contextawaremixedreality}}
+	\caption[Context Aware Shooter von \cite{contextawaremixedreality}]{Es gibt unterschiedliche Interaktionen, wenn auf eine Wand (a), einen Tisch (b), einen Bildschirm (c) und einen Stuhl (d) geschossen wird.\citep{contextawaremixedreality}}
 	\label{img:game}
 \end{figure}
 
 Für die Erkennung der Materialien werden mehrere Frames der Hololens segmentiert.
-Die dadurch entstehenden semantischen Informationen werden abgespeichert, um bei späteren Interaktionen der AR Applikation abgerufen werden zu können. Die Erkennung der Materialien ist nicht echtzeitfähig, aber durch das Speichern der Materialien im Raum können die Interaktionen in Echtzeit ablaufen. Die Semantischen Informationen müssen nicht mit jedem Frame bestimmt werden.
+Die dadurch entstehenden semantischen Informationen werden abgespeichert, um bei späteren Interaktionen der AR Applikation abgerufen werden zu können. Die Erkennung der Materialien ist nicht echtzeitfähig, aber durch das Speichern der Materialien im Raum können die Interaktionen in Echtzeit ablaufen. Die semantischen Informationen müssen nicht mit jedem Frame bestimmt werden.
 
 RGB-Bilder der Umgebung werden aufgenommen und mit einem neuronalen Netzwerk analysiert, um semantische Informationen zu erheben. Das neuronale Netz wurde von \cite{contextawaremixedreality} für den First-Person-Shooter aufgesetzt. Das Netz wurde darauf trainiert 23 unterschiedliche Materialien zu erkennen und Bilder nach ihnen zu segmentieren. Dabei wird für jedes Pixel ein Material angegeben.
 
@@ -83,27 +83,27 @@ Die Informationen aus den Frames bilden sich auf die Voxel ab. Durch die Kumulie
 
 Um sicherzustellen, das jedes Voxel des 3D Modells nur eine semantische Bedeutung hat, werden die gesetzten Labels mit einer Baysian Fusion und einem neuronalen Netz überarbeitet. Als Resultat hat jedes Voxel nur ein einziges Label.
 
-Unser Verfahren versucht ebenfalls das Verständnis der AR Umgebung durch semantische Informationen zu erweitern. Auch wir nutzen ein neuronales Netzwerk um RGB-Fotos der Umgebung zu analysieren.
-In unserem Verfahren erhält nicht jeder Pixel semantische Informationen, sonder nur Pixel, die die Position eines Gegenstandes markieren. Daher haben nur ausgewählte Voxel des 3D Meshes ein Label.\citep{contextawaremixedreality}
+Unser Verfahren versucht ebenfalls das Verständnis der AR Umgebung durch semantische Informationen zu erweitern. Auch wir nutzen ein neuronales Netzwerk, um RGB-Fotos der Umgebung zu analysieren.
+In unserem Verfahren erhält nicht jeder Pixel semantische Informationen, sondern nur Pixel, die die Position eines Gegenstandes markieren. Daher haben nur ausgewählte Voxel des 3D Meshes ein Label.\citep{contextawaremixedreality}
 
 \newpage
 \section{Grundlagen}
 \subsection{Grundlagen zu Augmented Reality}
 \subsubsection{Augmented Reality} %Einfürhung in AR
 
-Augmented Reality vermischt die reale Welt mit digitalen (virtuellen) Elementen, um dem Nutzer eine erweiterte Wahrnehmung zu ermöglichen. Es können 3D Objekte, 2D Overlays oder Audioelemente verwendet werden um eine reale Umgebung mit Informationen zu bereichern. 
+Augmented Reality vermischt die reale Welt mit digitalen (virtuellen) Elementen, um dem Nutzer eine erweiterte Wahrnehmung zu ermöglichen. Es können 3D Objekte, 2D Overlays oder Audioelemente verwendet werden, um eine reale Umgebung mit Informationen zu bereichern. 
 
 Die Umgebung beinhaltet den Teil der realen Welt, der in Augmented Reality abgebildet und erweitert werden soll. Beispielweise ein Zimmer, in dem eine AR Anwendung ausgeführt wird.
 Die AR Umgebung umfasst die reale Umgebung und die virtuellen Elemente.
 
 Augmented Reality weist drei grundlegende Merkmale auf: 
 \begin{itemize}
-	\item Die Realität wird mit dem Virtuellen kombiniert. Sie besteht darin, das die Realität mit virtuellen Elementen überlagert wird.
+	\item Die Realität wird mit dem Virtuellen kombiniert. Dazu werden reale Elemente mit Virtuellen überlagert.
 	\item Interaktion mit virtuellen Elementen erfolgen in Echtzeit.
 	\item Virtuelle Elemente haben einen festen räumlichen Platz in der AR Umgebung.
 \end{itemize}
 
-Die Merkmal unterstützen ein möglichst nahtloses Verschmelzen der realen Welt mit den virtuellen Elementen.
+Die Merkmale unterstützen ein möglichst nahtloses Verschmelzen der realen Welt mit den virtuellen Elementen.
 
 In einer AR Umgebung kann navigiert werden, indem der Nutzer sich physikalisch durch die reale Umgebung bewegt. Die reale Umgebung und die virtuellen Elemente stehen immer in dem gleichen räumlichen Verhältnis zueinander. Für AR ist keine andere Art der Navigation möglich, da sie die Verschmelzung der realen Welt mit den digitalen Elementen brechen würden.
 
@@ -125,10 +125,6 @@ Ein AR System ist in der Regel nicht an einen bestimmten Ort gebunden. Es kann i
 
 \subsubsection{Grundlagen zu 3D Szenen für AR}
 
-
-%todo was ist ein raycast?
-%todo add something about szene graph
-
 Die virtuellen Inhalte der AR Anwendung werden in einer virtuellen Szene gespeichert. 
 AR Anwendungen müssen in Echtzeit laufen. Daher muss die virtuelle Szene echtzeitfähig sein.
 Im besten Fall kann ein Nutzer keinen Unterschied zwischen der virtuellen Welt und der realen Welt, bezüglich auf zeitliche Verzögerungen, bemerken.
@@ -146,7 +142,7 @@ Mit der entstehenden Spatial Map können digitale Elemente mit der Umgebung inte
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/ML_20201003_15.36.42.jpg}
-	\caption[]{Spatial Map. Die Farben des Meshes zeigen die Entfernung des Nutzers zu den Objekten an.}
+	\caption[Spatial Mapping]{Spatial Map. Die Farben des Meshes zeigen die Entfernung des Nutzers zu den Objekten an.}
 	\label{img:spatialmap}
 \end{figure}
 
@@ -177,7 +173,6 @@ Mit der entstehenden Spatial Map können digitale Elemente mit der Umgebung inte
 %\end{figure}
 %Das Layout muss angepasst werden, wenn sich der View verändert. Gleichzeitig soll das Layout stabil bleiben und sich nicht verändern, wenn ein Anderes Layout ein wenig besser wäre, um ein hin und her springen zwischen zwei möglichen Layouts zu vermeiden.\citep{viewmanagement}
 
-%todo rework this a little
 
 \subsection{Magic Leap AR Brille}
 
@@ -204,7 +199,7 @@ Eingaben erfolgen über einen 6 Degree of Freedom Controller. Er verfügt über 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/img_magicLeap.PNG}
-	\caption[]{Magic Leap One AR Brille.\citep{mlImage}}
+	\caption[Magic Leap One AR Brille.\citep{mlImage}]{Magic Leap One AR Brille.\citep{mlImage}}
 	\label{magcileap}
 \end{figure}
 
@@ -261,7 +256,7 @@ Monobehaviors können über globale Variablen verfügen. Wenn das Skript einem G
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/img_globalVars.png}
-	\caption[]{GameObject mit Components. Die Component Azure Object Detection verfügt über eine globale Variable (in gelb), die auf eine Mesh Renderer Component eines anderen Objektes verweist.}
+	\caption[Unity GameObject mit Components]{GameObject mit Components. Die Component Azure Object Detection verfügt über eine globale Variable (in gelb), die auf eine Mesh Renderer Component eines anderen Objektes verweist.}
 	\label{img:gloabvars}
 \end{figure}
 
@@ -270,7 +265,7 @@ Monobehaviors können als Singleton fungieren, indem sie eine globale statische 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/code_singleton.png}
-	\caption[]{Quellcode einer Singleton Klasse}
+	\caption[Quellcode Singleton Klasse]{Quellcode einer Singleton Klasse}
 	\label{code:singleton}
 \end{figure}
 
@@ -279,7 +274,7 @@ Jedes andere Script kann die Instanz des Singletons aufrufen, indem es die stati
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/code_singleton2.png}
-	\caption[]{Quellcode Aufruf des Singletons}
+	\caption[Quellcode Aufrug des Singletons]{Quellcode Aufruf des Singletons}
 	\label{code:singleton2}
 \end{figure}
 
@@ -314,7 +309,7 @@ Die hintere Clipping Plane limitiert wie weit Objekte entfernt sein können, bev
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/dia_ViewFrustum.png}
-	\caption[]{Diagramm des View Frustum mit Clipping Planes.\citep{unityclipping}}
+	\caption[View Frustum.\citep{unityclipping}]{Diagramm des View Frustum mit Clipping Planes.\citep{unityclipping}}
 	\label{dia:clipping}
 \end{figure}
 
@@ -355,27 +350,17 @@ Im diesem Feld kommen Statistik, Bilderverarbeitung und Maschinelles Lernen zum 
 %Der Input ist ein Bild mit einem einzigen Objekt.
 %Der Output identifiziert die klassen. 
 
-%todo more about this
 
 
 
 \subsubsection{Object Detection}
-Image Based Object detection reinbauen :)
 
-Objekt Detection ist eine Aufgabe der Computer Vision. Es sollen mehrere Objekte in einem Bild erkannt werden. Spezialisierungen von Object Detection sind beispielsweise Gesichtserkennung oder das Erkennen von Fußgängern. Durch eine Objekterkennung werden semantische Inhalte eines Bildes automatisch erhoben. 
+Objekt Detection ist eine Aufgabe der Computer Vision. Es sollen mehrere Objekte in einem Bild erkannt werden. Daher wird es auch Image Based Object Detection genannt.
+Spezialisierungen von Object Detection sind beispielsweise Gesichtserkennung oder das Erkennen von Fußgängern. Durch eine Objekterkennung werden semantische Inhalte eines Bildes automatisch erhoben. 
 
 Für die Objekte wird eine Klasse und eine Bounding Box bestimmt. 
 Die Klasse gibt an, um welche Art von Objekt es sich handeln. Beispielsweise ob es eine Tastatur oder ein Computerbildschirm ist. (Object classification)
 Die Bounding Box gibt ein Viereck in dem Bild an, in dem sich das Objekt befindet.(object localization)
-
-Object Detection besteht aus drei 
-
-
-
-%Object Detection Performance und Genauigkeit study
-%vs 
-%3d Basierte Detection
-%todo more about this
 
 \subsubsection{Artificial Neural Networks}
 Artificial Neural Networks sind Machine Learning Architekturen. Sie können beispielsweise Musik, Text oder Bilder nach Mustern durchsuchen. Sie sind für keine genaue Aufgabe programmiert, sondern lernen indem sie mit Beispieldaten trainiert werden. 
@@ -399,22 +384,20 @@ Die Knoten in einer Ebene eines Convolutional Neural Network sind nur mit wenige
 
 \subsubsection{Azure Computer Vision Services}
 
-%todo 
-Microsoft Azure verfügug über Cloud Services, die Computer Vision Aufgaben durchführen können.
-Sie sind über eine REST API erreichbar. 
+Microsoft Azure ist eine Cloud Computing Plattform von Microsoft. Seit 2010 stellt sie Cloud Services zur Verfügung, die unter andrem Computer Vision Aufgaben durchführen. 
+Diese sind über REST APIs erreichbar. 
 
 Rest steht für Representational State Transfer. Eine Rest API ist eine Programmierschnittstelle die sich am dem Verhalten des World Wide Web orientiert. Die Kommunikation zwischen einem Client und dem Server orientiert sich an REST.
 Rest steht für Representation State Transfer und bezeichnet einen Architekturansatz wie verteile Systeme miteinander kommunizieren können. REST verlangt unter anderem ein Client-Server Modell eine zustandslose Kommunikationen zwischen ihnen. Jede Anfrage eines Client beinhaltet alle Informationen die der Server benötigt um sie zu beantworten. %rest is just an idea. describe it a bit more
 
 Eine Rest-API kann mit http/s realisiert werden. Der Server / Service kann durch eine URL angesprochen werden. Diese wird auch Endpoint genannt. HTTP-Methoden, wie GET und POST kommunizieren an den Service welche Operation durchgeführt werden soll. Diese werden auch Http-Anfragen oder HTTP Request genannt. Mit Get werden Daten von dem Server angefordert. Die Post Methode erlaubt das übermitteln von zusätzlichen Daten an der Server.
 
-%todo
-Aufbau eines HTTP Requests. Start Line. HTTP methode, get, put. endpoint url. http version die die strukutr der rest der nachricht definiert.
-headers. in den headers können beispielsweise eine autentifizierung für die API sein.
-
-Body. Manche HTTP Methoden, wie zum beispiels POST müssen dem Server Daten übertragen. diese werden in dem Body der Nachricht untergebracht.
+Ein HTTP Request besteht aus einer Start Line, einer Menge an Headers und einem Body. Die Start Line gibt die HTTP-Methode (GET, POST, ...) und eine Endpoint-URL an.
+In den Headers werden weitere Informationen über die Anfrage an den Server angegeben.Für die Anwendung einer API, wird Authentifizierungsschlüssel des Clients in einem Header gespeichert.
+Zuletzt hat der Request einen Body. Abhängig von der HTTP-Methode, beinhaltet der HTTP-Request Daten für den Server. So speichert eine POST Nachricht ihre Daten, beispielsweise ein Foto, in dem Body. Die Länge und Art der Daten wird mit Headern angegeben.
   
-Auf jede Http-Anfrage wird ein HTTP-Responsecode als Antwort zurückgeschickt. Mit dem Code wird dem Client mitgeteilt, ob die Anfrage erfolgreich bearbeitet wurde. Wenn ein Error aufgetreten ist, gibt der Statuscode Auskunft über die Art des Errors. 
+Auf jede HTTP-Anfrage wird ein HTTP-Response als Antwort zurückgeschickt. 
+Die HTTP-Response besteht ebenfalls aus einer Start Line, Headern und einem Body. Die Start Line gibt einen Responsecode und einen Statustext an. Der Responsecode teilt dem Client mit, ob die Anfrage erfolgreich bearbeitet wurde. Wenn ein Error aufgetreten ist, gibt der Statuscode Auskunft über die Art des Errors. Der Statustext gibt eine kurze Erklärung des Response Codes.
 
 Beispiel Responsecodes:
 \begin{itemize}
@@ -424,14 +407,7 @@ Beispiel Responsecodes:
 	\item 200 - Anfrage wurde erfolgreich bearbeitet
 \end{itemize}
 
-Eine API wird, bei einer erfolgreichen Bearbeitung der Anfrage in dem Körper der HTTP-Response die erfragten Daten mitschicken.
-HTTP Response aufbau.
-status line gibt den response code an, die protocol version und einen status text, der den response code erklären kann.
-headers
-body. abhänig von dem response code werden in der Response Daten übertragen. diese sind im Body.
-Headers gegeben Art der Daten und Länge an.
-
-%todo: make pretty
+Eine API schickt, bei einer erfolgreichen Bearbeitung der Anfrage, in dem Body der HTTP-Response die erfragten Daten mit.
 
 \subsubsection{Azure Object Detection}
 Microsoft Azure bietet einen Computer Vision Service an. Dabei handelt es sich um mehrere KIs, die für unterschiedliche Aufgaben trainiert wurden. Dazu gehört unter anderem ein Service für Object Detection.
@@ -472,7 +448,7 @@ Das KI Modell lässt sich für Image Klassifizierung oder Objekt Detection train
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{images/trainingone.png}
-	\caption[]{Trainingsbild für die Objekterkennung einer Haarbürste.}
+	\caption[Trainingsbild für Azrue Custom Detection]{Trainingsbild für die Objekterkennung einer Haarbürste.}
 	\label{img:trainingone}
 \end{figure}
 
@@ -484,13 +460,15 @@ Die Iterationen des Modells werden hinsichtlich ihrer Robustheit evaluiert. Für
 \begin{itemize}
 	\item Precision - die Wahrscheinlichkeit das ein gefundenes Objekt, tatsächlich der angegeben Klasse angehört. (Die Wahrscheinlichkeit das es kein false positive ist.)
 	\item Recall - Aus einer Menge an Objekten die einer Klasse angehören, der Prozentsatz an Objekten, die das Modell korrekt lokalisieren und klassifizieren konnte.
-	\item a.p (Average Percision) - Eine Gesamtwertung für die Evaluierung basierend auf Precision und Recall. 
+	\item a.p (Average Precision) - Eine Gesamtwertung für die Evaluierung basierend auf Precision und Recall. 
 \end{itemize}
+
+Die Evaluierungen der einzelnen Objekt-Klassen werden in Precision, Recall und mean Average Percision Gemittelt. Siehe Abbildung  \ref{img:trainineval}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{images/trainingevaluation.png}
-	\caption[]{Die Evaluierung des Modells}
+	\caption[Evaluierung eines Azure Custom Detection Modells]{Die Evaluierung des Modells}
 	\label{img:trainineval}
 \end{figure}
 
@@ -511,4 +489,6 @@ Der Aufbau der Datei unterscheidet sich vom Dateiaufbau von Azure Object Detecti
 {"probability":0.0116642443,"tagId":"263b3042-8958-4775-9a19-e2602d19c9b7","tagName":"Nivea","boundingBox":{"left":0.542580664,"top":0.507969,"width":0.2195471,"height":0.3491398}}]}
 \end{lstlisting}
 
-Die gefundenen Objekte werden in der Liste "predictions" aufgezählt. Die Objekt Klassen werden in "tagName" gespeichert. "probability" gibt die Konfidenz des Modells an, das das Objekt korrekt erkannt wurde. Die erkannten Objekte müssen bei nach ihrer probability gefiltert werden, da auch Objekte mit einer sehr niedrigen probability in der Json Datei enthalten sind. 
+Die gefundenen Objekte werden in der Liste "predictions" aufgezählt. Die Objekt Klassen werden in "tagName" gespeichert. Die "probability" gibt das Vertrauen des Modells darin an, dass das Objekt korrekt erkannt wurde.
+
+Die erkannten Objekte müssen bei nach ihrer Probability gefiltert werden, da auch Objekte mit einer sehr niedrigen Probability in der Json Datei enthalten sind. 

@@ -33,7 +33,7 @@ public class TakePicture : MonoBehaviour
         }
         if (_granted)
         {
-            InformationUI.instance.Show("take an image..." + started);
+            InformationUI.instance.Show(started +" take an image...");
             TriggerAsyncCapture();
 
         }

@@ -49,8 +49,8 @@ public class PixelToWorld : MonoBehaviour
     private float vmin = 0;//up
     private float vmax = 1080;//down
     //Offset Vektor x and y ranges
-    private float xmin = -0.295F;//left
-    private float xmax = 0.2281F;//right
+    private float xmin = -0.299F;//left
+    private float xmax = 0.225F;//right
     private float ymin = 0.1546F;//up
     private float ymax = -0.1507F;//down
     private float X(float u)
