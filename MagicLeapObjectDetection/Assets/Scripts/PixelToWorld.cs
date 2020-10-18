@@ -36,12 +36,12 @@ public class PixelToWorld : MonoBehaviour
         //scale v,v to x,y range
         Vector3 offset = new Vector3(X(u), Y(v), -0.4F);
         Vector3 p = cpos.cameratoWorldMatrix.MultiplyPoint(offset);
-        Raycast.instance.StartCast(Raycast.instance.CreateRaycastParams(cpos.ctransform, p), objectName, material);
-        if (showClippingPlane)
+        Raycast.instance.StartCast(Raycast.instance.CreateRaycastParams(cpos.ctransform, p)
+            , objectName, material);
+        if (showClippingPlane)// show point on clipping plane
         {
-            GameObject sphere2 = Instantiate(clippingPlaneMarker, p, Quaternion.identity);// show point on clipping plane
+            GameObject sphere2 = Instantiate(clippingPlaneMarker, p, Quaternion.identity);
         }
-        //InformationUI.instance.Add(u + " " + v + " " + X(u) + " " + X(v) + " " + objectName + " object marked");
     }
     //Picture u and v ranges
     private float umin = 0;//left
@@ -49,8 +49,8 @@ public class PixelToWorld : MonoBehaviour
     private float vmin = 0;//up
     private float vmax = 1080;//down
     //Offset Vektor x and y ranges
-    private float xmin = -0.299F;//left
-    private float xmax = 0.225F;//right
+    private float xmin = -0.2949F;//left 299
+    private float xmax = 0.230F;//right
     private float ymin = 0.1546F;//up
     private float ymax = -0.1507F;//down
     private float X(float u)

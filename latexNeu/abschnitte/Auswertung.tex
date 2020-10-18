@@ -1,26 +1,41 @@
 \newpage
 \section{Umsetzung}
 
-Das Ziel ist das Erkennen und Labeln von Objekten in einer AR Umgebung, durch Image Based Object Detection.
+%todo - Das Kapitel Umsetzung sollte noch ein Kapitel/Absatz hervorgehen wo die Anforderungen erleutert werden - der erste satz von Kapitel 4 ist was kurz. 4.1 ist ok, aber, danach fehlt dann design von labels. 
+Das Ziel ist das Erkennen und Labeln von Objekten in einer AR Umgebung, durch Image Based Object Detection. RGB-Bilder der Umgebung werden aufgenommen und von neuronalen Netzen nach Objekten durchsucht. Gefundenen Objekte werden in einer 3D Rekonstruktion der Umgebung lokalisiert und mit Labels markiert. Durch diesen Vorgehen können Objekte der Umgebung automatisch erkannt und mit Labels ausgestattet werden.
 
-\subsection{Design des Vorgang der Objekternennung}
+\subsection{Anforderungen}
+%todo read this over. it is new
+Die Objekterkennung und das Setzten der Labels soll ohne Zutun eines menschlichen Nutzers ablaufen. Der Vorgang muss nicht in Echtzeit geschehen, soll jedoch eine Laufzeit haben, die das Labeln eines Raumes innerhalb von 10 Minuten erlaubt.
+
+Objekte werden anhand des Mittelpunktes ihrer Bounding Box markiert. Die Foto-Position des Objektes soll möglichst genau auf die 3D Szene übertragen werden. An die berechnete 3D Position der Szene wird ein Label gesetzt, das die Klasse des Objektes wiedergibt. Jedes Objekt wird durch maximal ein Label annotiert. Wenn ein Objekt mehrmals erkannt wird, soll kein neues Labels in der Szene erzeugt werden. Die Applikation soll erkennen, dass das Objekt bereits durch ein Label markiert ist.
+
+Die Applikation soll über ein Minimales View Management verfügen. Die Labels werden als 3D Objekte in der Szene platziert, wo das entsprechende Objekt lokalisiert wurde. Dabei wird nicht darauf geachtet, ob sie andere Labels oder reale Gegenstände verdecken. Wenn der Nutzer sich in der Szene bewegt sollen die Labels nachgeführt werden, damit der Schriftzug der Labels immer dem Nutzer zugewandt ist.
+
+%Label setzung ohne zutun eines menschen. keine Echtzeit. Labels abspeichern. Labels präzise platzieren, so wie durch Fotos erkannt wurde. Labels auch wenn man sich in der Szene bewegt noch lesen können. Labels markieren den Mittelpunkt des jeweiligen Objektes. Keine Doppelten erkennung desselben objektes. Mit möglichst wenigen Bildern semantische Information erhalten
+
+\subsection{Design der Objekternennung}
 
 Im Folgenden werden die Arbeitsschritte einer Detection beschrieben.
 
-Wenn der Nutzer das Signal gibt, beginnt die Detection. Als Erstes wird ein Foto mit der Kamera der AR Brille aufgenommen. 
-Dieses Foto wird dann an Azure Object Detection und Azure Custom Vision geschickt. 
+Wenn der Nutzer das Signal gibt, beginnt die Detection. Als Erstes wird ein Foto mit der Kamera der AR Brille aufgenommen. Dieses Foto wird dann an Azure Object Detection und Azure Custom Vision geschickt.
 Die Services untersuchen das Foto nach Objekten, geben deren Klasse und Position auf dem Foto an.
 
-Für jedes Objekt soll ein Label erstellt werden, das zeigt wo sich das Objekt in der realen Welt befindet.
-Dafür wird in der 3D Szene der AR Umgebung eine virtuelle Repräsentation des Fotos erschaffen. Die Fotorepräsentation muss die richtige Skalierung, Position und Rotation haben, um das räumliche Verhältnis zwischen der realen Foto-Kamera und der Umgebung nachzubilden.
+Für jedes Objekt soll ein Label erstellt werden, das zeigt, wo sich das Objekt in der realen Welt befindet.
+Dafür wird in der 3D Szene der AR Umgebung eine virtuelle Repräsentation des Fotos erschaffen. Die Fotorepräsentation muss die richtige Skalierung, Position und Rotation haben, um das räumliche Verhältnis zwischen der realen Fotokamera und der Umgebung nachzubilden.
 
-Da die Fotokamera und das Display nahe beieinander liegen und den gleichen Blickwinkel haben, kann die Position des Displays als Repräsentation des Fotos genutzt werden. In der 3D Szene ist das Display mit der Hauptkamera gleichgesetzt. Die Clipping Plane der Kamera hat somit die gleiche Rotation und eine zumindest ähnliche Position und Skalierung wie das Foto. 
+Da die Fotokamera und das Display nahe beieinander liegen und den gleichen Blickwinkel haben, kann die Position des Displays als Repräsentation des Fotos genutzt werden. In der 3D Szene ist das Display mit der Hauptkamera gleichgesetzt. Die Clipping Plane der Kamera hat somit die gleiche Rotation und eine zumindest ähnliche Position und Skalierung wie das Foto. Daher werden die Foto-Positionen auf Koordinaten der Clipping Plane abgebildet. Dabei werden verbleibende Positions- und Skalierungsunterschiede ausgeglichen. Für jedes Objekt wird so eine Koordinate auf der Clipping Plane bestimmt.
 
-Daher werden die Foto-Positionen auf Koordinaten der Clipping Plane abgebildet. Dabei werden verbleibende Positions- und Skalierungsunterschiede ausgeglichen. Für jedes Objekte wird so eine Koordinate auf der Clipping Plane bestimmt. 
+Als Nächstes wird ein Raycast, von der Kamera aus, durch die Clipping Plane Koordinate geschickt. Der Raycast schneidet sich mit einem Mesh, das die reale Welt abbildet. Die getroffene Position wird mit einem Schriftzug markiert. Dort befindet sich das Objekt, das auf dem Foto gefunden wurde. Alle Objekte, die Azure Object Detection und Azure Custom Vision gefunden haben, werden so für den Nutzer in der AR Umgebung markiert.
 
-Als Nächstes wird ein Raycast, von der Kamera aus, durch die Clipping Plane Koordinate geschickt. Der Raycast schneidet sich mit einem Mesh, das die reale Welt abbildet. Die getroffene Position wird mit einem Schriftzug markiert. Dort befindet sich das Objekt, das auf dem Foto gefunden wurde.
+\subsection{Design der Labels}
+%todo this is new
 
-Alle Objekte, die Azure Object Detection und Azure Custom Vision gefunden haben, werden so für den Nutzer in der AR Umgebung markiert.
+Die Labels der erkannten Objekte werden als 3D Objekte in der Szene platziert. Sie bestehen aus einer Kugel (Anchor) und einem Schriftzug. Die Kugel sitzt an der 3D Position des Objektes und der Schriftzug befindet sich über der Kugel. Er gibt die Klasse des Objektes wieder, das durch ein neuronales Netzwerk erkannt wurde.
+
+Um sicherzustellen, dass Objekte durch maximal ein Label annotiert werden, wird jedes Mal wenn ein Label in der Szene platziert werden soll, überprüft welche Labels sich in der Nähe befinden. Gibt es bereits ein Label mit demselben Schriftzug, wird davon ausgegangen, dass es sich auf dasselbe Objekt der realen Welt bezieht. Das bereits existierende Label wird dann mit den Daten der erneuten Erkennung aktualisiert. Die 3D Position in der Szene, die aus der erneuten Erkennung hervorgeht und die Position des existierenden Labels werden jeweils mit einem 3D Objekt markiert. Das Label des Objektes wird in den Mittelpunkt der Positionen gesetzt. Wird das Objekt öfter als 2 Mal erkannt, werden alle Positionen markiert, die durch die Objekterkennungen bestimmt wurden. Das Label sitzt in der Mitte der lokalisierten Positionen.
+
+Wenn der Nutzer sich in der Szene bewegt, rotieren die Labels sich um ihre Kugel, damit der Schriftzug dem Nutzer immer zugewandt bleibt.
 
 \subsection{Architektur}
 
@@ -35,13 +50,9 @@ Die Magic Leap One übernimmt alle Berechnungen im 3D Raum und führt Spatial Ma
 
 % https://developer.magicleap.com/en-us/learn/guides/get-started-developing-in-unity
 Das Projekt wurde in Unity umgesetzt und für die Magic Leap AR Brille entwickelt.
-Es wurde das Unity Project Template von Magic Leap verwendet. 
+Es wurde das Unity Project Template von Magic Leap verwendet. Zusätzlich werden einige vorgefertigte Klassen von Magic Leap verwendet. Dazu gehören \textit{MLInput}, \textit{MLCamera}, \textit{MLRaycast}, \textit{MLPrivilegeRequestBehavior} und \textit{MLSpatialMapper}. Diese Klassen greifen auf Funktionalitäten des Lumin OS zu.\citep{mlgetstarted}
 
-Zusätzlich werden einige vorgefertigte Klassen von Magic Leap verwendet. Dazu gehören MLInput, MLCamera, MLRaycast, MLPrivilegeRequestBehavior und MLSpatialMapper. Diese Klassen greifen auf Funktionalitäten des Lumin OS zu.
-
-Die benötigten Funktionalitäten für die Integration der Object Detection mit der REST-API wurde in mehreren Script Klassen umgesetzt. Der Großteil der Scripts verhält sich wie Singletons. Sie existieren nur einmalig in der Szene.
-
-Das Klassendiagramm auf Abbildung \ref{dia:classdiagramm} zeigt die Scripts und ihre Relationen zueinander.
+Die benötigten Funktionalitäten für die Integration der Object Detection mit der REST-API wurde in mehreren Script Klassen umgesetzt. Der Großteil der Scripts verhält sich wie Singletons. Sie existieren nur einmalig in der Szene. Das Klassendiagramm auf Abbildung \ref{dia:classdiagramm} zeigt die Scripts und ihre Relationen zueinander.
 
 \begin{figure}[H]
 	\centering
@@ -50,18 +61,15 @@ Das Klassendiagramm auf Abbildung \ref{dia:classdiagramm} zeigt die Scripts und 
 	\label{dia:classdiagramm}
 \end{figure}
  
-Die Klassen InputHandler, MoveDisplay, LabelCreater, InformationUI und MarkerBehavior sind für die Interaktion mit dem dem Nutzer zuständig. 
+Die Klassen \textit{InputHandler}, \textit{MoveDisplay}, \textit{LabelCreater}, \textit{InformationUI} und \textit{MarkerBehavior} sind für die Interaktion mit dem Nutzer zuständig. 
 
-TakePicture, SavedCameraState, AzureCustomPredicton,AzureObjectDetection,PixelToWorld und Raycast führen das Erkennen von Objekten anhand eines aufgenommenen Fotos durch und bestimmt eine Position für das Objekt in der 3D Umgebung. Der Prozess wird durch den InputHandler gestartet. 
+\textit{TakePicture}, \textit{SavedCameraState}, \textit{AzureCustomPredicton}, \textit{AzureObjectDetection}, \textit{PixelToWorld} und \textit{Raycast} führen das Erkennen von Objekten anhand eines aufgenommenen Fotos durch und bestimmt eine Position für das Objekt in der 3D Umgebung. Der Prozess wird durch den \textit{InputHandler} gestartet. 
 
-Wurde ein Objekt erkannt und eine Position auf dem Mesh der Umgebung bestimmt, wird der LabelCreater aufgerufen. Es erzeugt das Label mit dem entsprechenden Text.
-
-MarkerBehavior ist eine Script, das jedes Label GameObject hat, das erzeugt wird. Über das MarkerBehavior kann der Schriftzug des Labels angepasst werden.
+Wurde ein Objekt erkannt und eine Position auf dem Mesh der Umgebung bestimmt, wird der \textit{LabelCreater} aufgerufen. Er erzeugt das Label mit dem entsprechenden Text. \textit{MarkerBehavior} ist eine Script, das jedes Label-GameObject hat, das erzeugt wird. Über das \textit{MarkerBehavior} kann der Schriftzug des Labels angepasst werden.
 
 \subsection{Interaktion}
 
-InputHandler verarbeitet den Input des Nutzers und startet entsprechende Aktionen durch die MoveDisplay und TakePicture Klassen. 
-MLInput ist eine vorgefertigte Klasse von Magic Leap. Sie stellt Informationen über den Zustand des Controllers zur Verfügung. InputHandler überwacht den Controller und startet die Aktionen, wenn die entsprechende Taste gedrückt wurde.
+\textit{InputHandler} verarbeitet den Input des Nutzers und startet entsprechende Aktionen durch die \textit{MoveDisplay} und \textit{TakePicture} Klassen. Der Input ist durch \textit{MLInput} abfragbar. Diese Klasse stellt Informationen über den Zustand des Controllers zur Verfügung. \textit{InputHandler} nutzt \textit{MLInput} ,um den Controller zu überwachen. Wenn entsprechende Tasten des Controllers gedrückt wurden, startet \textit{InputHandler} Aktionen.
 
 \begin{itemize}
 	\item Trigger: Objekt Erkennung starten mit TakePicture
@@ -70,7 +78,7 @@ MLInput ist eine vorgefertigte Klasse von Magic Leap. Sie stellt Informationen �
 	\item Bumper halten: zuletzt erzeugten Label entfernen 
 \end{itemize}
 
-Das UI Element wird von InformationUI gesteuert. TakePicture nutzt InformationUI um das zuletzt aufgenommene Foto anzuzeigen. AzureCustomPrediction, Azure ObjectDetection und PixelToWorld dokumentieren ihre Arbeitsschritte mit dem UI Element und der LabelCreater lässt eine Liste aller Labels anzeigen, die in der Szene existieren. Siehe Abbildung \ref{img:ausgabe}.
+Das UI Element wird von \textit{InformationUI} gesteuert. \textit{TakePicture} nutzt \textit{InformationUI}, um das zuletzt aufgenommene Foto anzuzeigen. \textit{AzureCustomPrediction}, \textit{AzureObjectDetection} und \textit{PixelToWorld} dokumentieren ihre Arbeitsschritte mit dem UI Element und der \textit{LabelCreater} lässt eine Liste aller Labels anzeigen, die in der Szene existieren. Siehe Abbildung \ref{img:ausgabe}.
 
 %\begin{figure}[H]
 %	\centering
@@ -79,11 +87,10 @@ Das UI Element wird von InformationUI gesteuert. TakePicture nutzt InformationUI
 %	\label{image:UIElement}
 %\end{figure}
 
-Der LabelCreater ist für das Erstellen der Labels verantwortlich und sorgt dafür, dass die Labels für den Nutzer lesbar sind.
-Dafür werden die Labels in Richtung der Kamera ausgerichtet und mitgeführt.
-Des Weiteren kann der LabelCreater Labels verstecken und entfernen.
+Der \textit{LabelCreater} ist für das Erstellen der Labels verantwortlich und sorgt dafür, dass die Labels für den Nutzer lesbar sind. Dafür werden die Labels in Richtung der Kamera ausgerichtet und mitgeführt.
+Des Weiteren kann der \textit{LabelCreater} Labels verstecken und entfernen.
 
-Neben dem UI Element und den Labels wird auch ein Mesh angezeigt, das die Spatial Map der Umgebung wiedergibt. Das Spatial Mapping wird von Lumin OS durchgeführt und das Mesh wird durch die MLSpatialMapper Klasse von MagicLeap erzeugt. Siehe Abbildung \ref{img:ausgabe}.
+Neben dem UI Element und den Labels wird auch ein Mesh angezeigt, das die Spatial Map der Umgebung wiedergibt. Das Spatial Mapping wird von Lumin OS durchgeführt und das Mesh wird durch die Klasse \textit{MLSpatialMapper} von MagicLeap erzeugt. Siehe Abbildung \ref{img:ausgabe}.
 
 \begin{figure}[H]
 	\centering
@@ -93,7 +100,7 @@ Neben dem UI Element und den Labels wird auch ein Mesh angezeigt, das die Spatia
 \end{figure}
 
 
-\subsection{Implementierung der Objekt Erkennung}
+\subsection{Implementierung der Objekterkennung}
 
 Im Folgenden werden die Scripts besprochen, welche für die Objekterkennung zuständig sind.
 
@@ -106,29 +113,28 @@ Im Folgenden werden die Scripts besprochen, welche für die Objekterkennung zust
 %	\label{dia:takepicture}
 %\end{figure} remake this image
 
-Das Script TakePicture implementiert das Aufnehmen eines Fotos. Dabei wird MLCamera von MagicLeap genutzt, um die Kamera der Magic Leap Brille anzusteuern. Wenn die Applikation gestartet wird, stellt dieses Script sicher, das die Applikation die benötigte Permission hat die Kamera zu nutzen. Danach verbindet sich das Script über MLKamera mit der Kamera-Ressource. 
+Das Script \textit{TakePicture} implementiert das Aufnehmen eines Fotos. Dabei wird \textit{MLCamera} von Magic Leap genutzt, um die Kamera der AR Brille anzusteuern. Wenn die Applikation gestartet wird, stellt dieses Script sicher, das die Applikation die benötigte Permission hat die Kamera zu nutzen. Danach verbindet sich das Script über \textit{MLKamera} mit der Kamera-Ressource. 
 Die Kamera-Ressouce wird wieder abgegeben, wenn die Applikation terminiert oder pausiert wird.
 
-Wenn die Methode TakeImage aufgerufen wird, startet der Prozess der Objekterkennung.
-Das Aufnehmen der Fotos geschieht asynchron. Für jedes Foto wird ein Thread erzeugt, in dem MLCamera ein Foto aufnimmt. In diesem Thread wird zusätzlich die aktuelle Position der Unity Kamera als SavedCameraState gespeichert.
+Wenn die Methode \textit{TakeImage} aufgerufen wird, startet der Prozess der Objekterkennung.
+Das Aufnehmen der Fotos geschieht asynchron. Für jedes Foto wird ein Thread erzeugt, in dem \textit{MLCamera} ein Foto aufnimmt. In diesem Thread wird zusätzlich die aktuelle Position der Unity Kamera als \textit{SavedCameraState} gespeichert.
 
-Die Methode OnCaptureRawImageComplete wird von MLCamera aufgerufen, wenn das Foto fertig ist. Die Daten des Bildes und der SavedCameraState werden, an die Scripts AzureObjectDetection und AzureCustomPrediction, weitergegeben. Dort wird die Analyse der Bilder gestartet. 
+Die Methode \textit{OnCaptureRawImageComplete} wird von \textit{MLCamera} aufgerufen, wenn das Foto fertig ist. Die Daten des Bildes und der \textit{SavedCameraState} werden, an die Scripts \textit{AzureObjectDetection} und \textit{AzureCustomPrediction}, weitergegeben. Dort wird die Analyse der Bilder gestartet. 
 
 \subsubsection{Object Detection}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\textwidth]{images/dia_azureobjectdetection.PNG}
-	\caption[Klassendiagramm von AzureObjectDetection]{Klassendiagramm von AzureObjectDetection}
+	\caption[Klassendiagramm von \textit{AzureObjectDetection}]{Klassendiagramm von \textit{AzureObjectDetection}}
 	\label{dia:azureobjectdetection}
 \end{figure}
 
-In der Methode AnalyseImage von AzureObjectDetection wird ein Web Request zusammengestellt, um die Azure REST-API anzufragen. Der Request enthält eine Authentifizierung für die API und das zu analysierende Foto. %Siehe Abbildung \ref{dia:azureobjectdetection}.
+In der Methode \textit{AnalyseImage} von \textit{AzureObjectDetection} wird ein Web Request zusammengestellt, um die Azure REST-API anzufragen. Der Request enthält eine Authentifizierung für die API und das zu analysierende Foto. %Siehe Abbildung \ref{dia:azureobjectdetection}.
 
-Der Webrequest wird verschickt und auf die Antwort gewartet. Wenn die Antwort eintrifft, wird anhand des ResponseCodes geprüft, ob es bei dem Request einen Fehler gab. Beispielsweise kann die Internetverbindung gestört sein oder die Authentifizierung abgelehnt werden.
-Wenn es keinen Fehler gab, wurde eine Json-Datei bei der Antwort mitgeschickt. Darin wird für jedes gefundene Objekt auf dem Foto eine Bezeichnung (Klasse) und eine Bounding Box angegeben. 
+Der Webrequest wird verschickt und auf die Antwort gewartet. Wenn die Antwort eintrifft, wird anhand des ResponseCodes geprüft, ob es bei dem Request einen Fehler gab. Beispielsweise kann die Internetverbindung gestört sein oder die Authentifizierung abgelehnt werden. Wenn es keinen Fehler gab, wurde eine Json-Datei bei der Antwort mitgeschickt. Darin wird für jedes gefundene Objekt auf dem Foto eine Bezeichnung (Klasse) und eine Bounding Box angegeben. 
 
-Die Json-Datei wird in HandleJsonResponse verarbeitet. Für den erwarteten Aufbau der Datei wurden drei Klassen geschrieben. Der Json String wird mit JsonUtility in ein DetectionResponse Object umgewandelt. Dabei werden alle gefundenen Foto-Objekte in einer Liste von DetectedObjects abgelegt. Siehe Abbildung \ref{dia:jsonClasses}. \citep{fromjson}
+Die Json-Datei wird in \textit{HandleJsonResponse} verarbeitet. Für den erwarteten Aufbau der Datei wurden drei Klassen geschrieben. Der Json String wird mit \textit{JsonUtility} in ein \textit{DetectionResponse} Object umgewandelt. Dabei werden alle gefundenen Foto-Objekte in einer Liste von \textit{DetectedObjects} abgelegt. Siehe Abbildung \ref{dia:jsonClasses}. \citep{fromjson}
 
 \begin{figure}[H]
 	\centering
@@ -138,25 +144,43 @@ Die Json-Datei wird in HandleJsonResponse verarbeitet. Für den erwarteten Aufba
 \end{figure}
 
 Die gefundenen Objekte sollen im 3D Raum mit einem Label gekennzeichnet werden. 
-Dafür wird für jedes DetectedObject die Methode Cast von der Klasse PixelToWorld aufgerufen. Der Methode wird der Mittelpunkt der BoundingBox als u,v Foto-Koordinaten für das DetectedObject übergeben. Siehe Abbildung \ref{code:handlejson}.
+Dafür wird für jedes \textit{DetectedObject} die Methode \textit{Cast} von der Klasse \textit{PixelToWorld} aufgerufen. Der Methode wird der Mittelpunkt der BoundingBox als u,v Foto-Koordinaten für das \textit{DetectedObject} übergeben. Siehe Abbildung \ref{code:handlejson}.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1\textwidth]{images/code_handleJson.PNG}
-	\caption[Quellcode Umwandelung der Json Datei in Objekte]{Quellcode Umwandeln der Json Datei in Objekte.}
-	\label{code:handlejson}
-\end{figure}
+\begin{lstlisting}
+public void HandleJsonResponse(System.String jsonResponse, SavedCameraState cpos)
+{
+	float starttime = Time.time;
+	jsonResponse = jsonResponse.Replace("object", "objectName"); 
+	//c# dosn't like "public string object"
+	DetectionResponse det = new DetectionResponse();
+	det = JsonUtility.FromJson<DetectionResponse>(jsonResponse);
+	foreach (DetectedObject obj in det.objectNames)
+	{
+		Debug.Log(obj.objectName);
+		int x = obj.rectangle.x + (obj.rectangle.w / 2);
+		int y = obj.rectangle.y + (obj.rectangle.h / 2);
+		PixelToWorld.instance.Cast(x, y, cpos, obj.objectName);
+	}
+}
+\end{lstlisting}
+
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=1\textwidth]{images/code_handleJson.PNG}
+%	\caption[Quellcode Umwandelung der Json Datei in Objekte]{Quellcode Umwandeln der Json Datei in Objekte.}
+%	\label{code:handlejson}
+%\end{figure}
 
 \subsubsection{Von dem Foto zum 3D Raum}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.45\textwidth]{images/dia_pixeltoworld.PNG}
-	\caption[Klassendiagramm von PixelToWorld]{Klassendiagramm von PixelToWorld}
+	\caption[Klassendiagramm von \textit{PixelToWorld}]{Klassendiagramm von \textit{PixelToWorld}}
 	\label{dia:pixeltoworld}
 \end{figure}
 
-Ein gefundenes Foto-Objekt soll in der 3D Abbildung der realen Welt lokalisiert werden. Dafür nutzt die Methode Cast die u,v Foto-Koordinaten des Objekts und einen SavedCameraState. Der SavedCameraState beschreibt die Position der Unity Kamera zu dem Zeitpunkt als das Foto aufgenommen wurde. SavedCameraState beinhaltete die cameraToWorldMatrix und den Ursprung der Kamera.
+Ein gefundenes Foto-Objekt soll in der 3D Abbildung der realen Welt lokalisiert werden. Dafür nutzt die Methode \textit{Cast} die u,v Foto-Koordinaten des Objekts und einen \textit{SavedCameraState}. Der \textit{SavedCameraState} beschreibt die Position der Unity Kamera zu dem Zeitpunkt als das Foto aufgenommen wurde. \textit{SavedCameraState} beinhaltete die \textit{cameraToWorldMatrix} und den Ursprung der Kamera.
 
 Das Foto kann mit dem Display und somit mit der Clipping Plane der Hauptkamera approximiert werden.
 Die u,v Foto-Koordinaten werden zunächst in x,y,z Koordinaten in dem Camera Space umgewandelt. Der z Anteil gibt die Entfernung von dem Ursprung der Kamera in Blickrichtung an. Dabei befinden sich Punkte mit einer Entfernung von 0.4 Einheiten auf der Clipping Plane. In dem Camera Space mit z = -0.4 angegeben. 
@@ -165,29 +189,70 @@ Die x und y Dimensionen beschreiben die Achsen, die horizontal und vertikal zur 
 
 Es wurden Werte für x und y ausprobiert, mit denen die Ränder des Fotos auf der Clipping Plane angegeben werden können. Dabei wurde auf die unterschiedlichen Seitenverhältnisse des Fotos und des Displays geachtet. Darüber hinaus ist der Bildausschnitt des Displays kleiner. Daher liegen die Ränder des Fotos außerhalb des View Frustum. 
 
-Sind diese x und y Werte bekannt, ergibt sich für die Achsen jeweils ein Intervall, die kombiniert alle Foto-Koordinaten auf die Clipping Plane abbilden können. Die Intervall lauten: [-0.2949,0.2295] für x und [0.1546,-0.1507] für y. Mit den Intervallen wird die Position und Skalierung des Fotos in Relation zu dem Display - und der Hauptkamera - berücksichtigt. Siehe Kapitel \ref{section:devpixeltoworld} für die Entwickelung der Cast Methode und die Ermittlung der Intervallwerte.
+Sind diese x und y Werte bekannt, ergibt sich für die Achsen jeweils ein Intervall, die kombiniert alle Foto-Koordinaten auf die Clipping Plane abbilden können. Die Intervalle lauten: [-0.2949,0.2295] für x und [0.1546,-0.1507] für y. Mit den Intervallen wird die Position und Skalierung des Fotos in Relation zu dem Display – und der Hauptkamera –  berücksichtigt. Siehe Kapitel \ref{section:devpixeltoworld} für die Entwickelung der Cast Methode und die Ermittlung der Intervallwerte.
 
 Es werden zwei lineare Funktionen aufgestellt:
 \begin{itemize}
-	\item Die Funktion X bildet das Intervall für u [0,1920] auf das Intervall für x [-0.2949,0.2295] ab.
-	\item Die Funktion Y bildet das Intervall für v [0,1080] auf das Intervall für y [0.1546,-0.1507] ab.
+	\item Die Funktion \textit{X} bildet das Intervall für u [0,1920] auf das Intervall für x [-0.2949,0.2295] ab.
+	\item Die Funktion \textit{Y} bildet das Intervall für v [0,1080] auf das Intervall für y [0.1546,-0.1507] ab.
 \end{itemize}
-Siehe Abbildung \ref{code:uvtoxy}.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth]{images/code_uv_to_xy_scale.PNG}
-	\caption[Quellcode der Funktionen X und Y]{Quellcode der Funktionen X und Y}
-	\label{code:uvtoxy}
-\end{figure}
 
-Mit den Funktionen wird eine Position im Camera Space, auf der Clipping Plane, für u,v berechnet. Diese Position wird dann, mithilfe der cameraToWorldMatrix des SavedCameraState, in eine Position p des globalen Koordinatensystem umgewandelt. Damit wird die Position und Rotation der Kamera - und somit des Fotos - in der 3D Szene berücksichtigt. Siehe Abbildung \ref{code:castmethod}.
+Die Funktionen sind folgendermaßen umgesetzt:
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=0.6\textwidth]{images/code_uv_to_xy_scale.PNG}
+%	\caption[Quellcode der Funktionen X und Y]{Quellcode der Funktionen X und Y}
+%	\label{code:uvtoxy}
+%\end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1.2\textwidth]{images/code_cast_method.PNG}
-	\caption[Quellcode der Cast Methode]{Quellcode der Cast Methode}
-	\label{code:castmethod}
-\end{figure}
+\begin{lstlisting}
+//Picture u and v ranges
+private float umin = 0;//left
+private float umax = 1920;//right
+private float vmin = 0;//up
+private float vmax = 1080;//down
+//Offset Vektor x and y ranges
+private float xmin = -0.2949F;//left
+private float xmax = 0.230F;//right
+private float ymin = 0.1546F;//up
+private float ymax = -0.1507F;//down
+
+private float X(float u)
+{
+	float slope = ((xmax - xmin) / (umax - umin));
+	float b = xmin - slope * umin;
+	return slope * u + b;
+}
+private float Y(float v)
+{
+	float slope = ((ymax - ymin) / (vmax - vmin));
+	float b = ymin - slope * vmin;
+	return slope * v + b;
+}
+\end{lstlisting}
+
+Mit den Funktionen wird eine Position im Camera Space, auf der Clipping Plane, für u,v berechnet. Diese Position wird dann, mithilfe der \textit{cameraToWorldMatrix} des \textit{SavedCameraState}, in eine Position \textit{p} des globalen Koordinatensystems umgewandelt. Damit wird die Position und Rotation der Kamera – und somit des Fotos – in der 3D Szene berücksichtigt. %Siehe Abbildung \ref{code:castmethod}.
+
+\begin{lstlisting}
+public void Cast(float u, float v, SavedCameraState cpos,GameObject clippingPlaneMarker, string objectName, bool showClippingPlane, int material)
+	{
+	//scale v,v to x,y range
+	Vector3 offset = new Vector3(X(u), Y(v), -0.4F);
+	Vector3 p = cpos.cameratoWorldMatrix.MultiplyPoint(offset);
+	Raycast.instance.StartCast(Raycast.instance.CreateRaycastParams(cpos.ctransform, p), objectName, material);
+	if (showClippingPlane)// show point on clipping plane
+	{
+		GameObject sphere2 = Instantiate(clippingPlaneMarker, p, Quaternion.identity);
+	}
+}
+\end{lstlisting}
+
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=1.2\textwidth]{images/code_cast_method.PNG}
+%	\caption[Quellcode der Cast Methode]{Quellcode der Cast Methode}
+%	\label{code:castmethod}
+%\end{figure}
 \subsubsection{Raycast}
 
 \begin{figure}[H]
@@ -197,32 +262,49 @@ Mit den Funktionen wird eine Position im Camera Space, auf der Clipping Plane, f
 	\label{dia:raycast}
 \end{figure}
 
-Als Nächstes wird ein Raycast durch den Ursprung der Kamera und die Position p gesendet. MLRaycast wird genutzt, um einen Schnittpunkt mit der Rekonstitution der Welt von Lumin OS zu bestimmen. Die Stelle, die der Raycast trifft beschreibt die Position des DetectedObject im 3D Raum.
+Als Nächstes wird ein Raycast durch den Ursprung der Kamera und die Position \textit{p} gesendet. \textit{MLRaycast} wird genutzt, um einen Schnittpunkt mit der Rekonstitution der Welt von Lumin OS zu bestimmen. Die Stelle, die der Raycast trifft, beschreibt die Position des \textit{DetectedObject} im 3D Raum.
 
-Für den MLRaycast werden zwei Parameter benötigt:
+Für den \textit{MLRaycast} werden zwei Parameter benötigt:
 \begin{itemize}
-	\item Ein QueryParams Objekt, das Ursprung und Richtung für den Raycast beinhaltet.
+	\item Ein \textit{QueryParams} Objekt, das Ursprung und Richtung für den Raycast beinhaltet.
 	\begin{itemize}
-		\item Ursprung: Kamera-Ursprung aus SavedCameraState
-		\item Richtung: Richtungsvektor von dem Kamera-Ursprung zu der Position p
+		\item Ursprung: Kamera-Ursprung aus \textit{SavedCameraState}
+		\item Richtung: Richtungsvektor von dem Kamera-Ursprung zu der Position \textit{p}
 	\end{itemize}
 	\item Eine Methode die aufgerufen wird, wenn der Raycast fertig ist. 
 	\begin{itemize}
-		\item Callback Methode: HandleOnRecieveRaycast
+		\item Callback Methode: \textit{HandleOnRecieveRaycast}
 	\end{itemize}
 \end{itemize}
 
-Siehe Abbildung \ref{code:raycastparams}.
+%Siehe Abbildung \ref{code:raycastparams}.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1\textwidth]{images/code_raycastparams.PNG}
-	\caption[Quellcode Erzeugung der Raycast Parameter]{Quellcode Erzeugung der Raycast Parameter}
-	\label{code:raycastparams}
-\end{figure}
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=1\textwidth]{images/code_raycastparams.PNG}
+%	\caption[Quellcode Erzeugung der Raycast Parameter]{Quellcode Erzeugung der Raycast Parameter}
+%	\label{code:raycastparams}
+%\end{figure}
 
-Wenn der Raycast fertig ist, wird die Methode HandleOnRecieveRaycast aufgerufen. Der Parameter point beinhaltet dabei die getroffene Stelle der AR Umgebung.
-Diese wird an die Methode CreateMarker von der Klasse LabelCreater weitergegeben.
+\begin{lstlisting}
+public MLRaycast.QueryParams CreateRaycastParams(Transform ctransform, Vector3 target)
+{
+	MLRaycast.QueryParams _raycastParams = new MLRaycast.QueryParams
+	{
+		// Update the parameters with our Camera's transform
+		Position = ctransform.position,
+		Direction = target - ctransform.position,
+		UpVector = ctransform.up,
+		// Provide a size of our raycasting array (1x1)
+		Width = 1,
+		Height = 1
+	};
+	return _raycastParams;
+}
+\end{lstlisting}
+
+Wenn der Raycast fertig ist, wird die Methode \textit{HandleOnRecieveRaycast} aufgerufen. Der Parameter \textit{point} beinhaltet dabei die getroffene Stelle der AR Umgebung.
+Diese wird an die Methode \textit{CreateMarker} von der Klasse \textit{LabelCreater} weitergegeben.
 
 \subsubsection{LabelCreater}
 
@@ -233,9 +315,7 @@ Diese wird an die Methode CreateMarker von der Klasse LabelCreater weitergegeben
 %	\label{dia:labelcreater}
 %\end{figure}
 
-CreateMarker erhält den Punkt point, der getroffen wurde und die Bezeichnung für das DetectedObject. An der Position von point wird ein Prefab GameObject instanziiert, das als Markierung für das DetectedObject in der 3D Umgebung dient.
-
-Das Prefab besteht aus einer Kugel und einem Schriftzug, der den Namen des DetectedObject anzeigen soll. Dem neu instanziierten GameObject wird die Bezeichnung des DetectedObject als Schriftzug zugewiesen. Siehe Abbildung \ref{image:labels}.
+\textit{CreateMarker} erhält den Punkt \textit{point}, der getroffen wurde und die Bezeichnung für das \textit{DetectedObject}. An der Position von \textit{point} wird ein Prefab GameObject instanziiert, das als Markierung für das \textit{DetectedObject} in der 3D Umgebung dient. Das Prefab besteht aus einer Kugel und einem Schriftzug, der den Namen des \textit{DetectedObject} anzeigen soll. Dem neu instanziierten GameObject wird die Bezeichnung des \textit{DetectedObject} als Schriftzug zugewiesen. Siehe Abbildung \ref{image:labels}.
 
 \begin{figure}[H]
 	\centering
@@ -244,14 +324,20 @@ Das Prefab besteht aus einer Kugel und einem Schriftzug, der den Namen des Detec
 	\label{image:labels}
 \end{figure}
 
-Wenn ein Label nahe eines anderen Labels erzeugt werden soll, das denselben Schriftzug hat, wird davon ausgegangen, das ein Objekt der realen Welt erneut erkannt wurde. Daher wird kein neues Label erstellt, sondern das alte Label modifiziert.
-Die Positionen an denen das Objekt in der Szene lokalisiert wurde, werden mit jeweils einer grauen Sphäre markiert und das Label wird in den Mittelpunkt der grauen Sphären gesetzt.
-So  wird die Position des Objektes genauer, wenn es häufiger erkannt wurde. Siehe Abbildungen \ref{image:multi1} und \ref{image:multi2}.
+%todo read this over
+Wenn ein Label erzeugt werden soll, werden alle existierenden Label durchgegangen und nach dem Inhalt ihres Schriftzuges überprüft. 
+Wenn ein Label gefunden, das in der nähe liegt und denselben Schriftzug hat, wird davon ausgegangen, das sich beide auf dasselbe Objekt beziehen. Das Objekt der realen Welt wurde erneut erkannt. In diesem Falle wird kein neues Label erzeugt, sondern das Alte modifiziert. Diese Modifikation ist in der Methode \textit{UpdateLocation} des \textit{MarkerBehaviors} implementiert, das jedes Label besitzt. Der Methode wird die 3D Position übergeben, an der das neue Label erzeugt werden sollte.
+
+Das MarkerBehavior speichert alle 3D Positionen in einer Liste ab, die jemals für das Label angegeben wurden. Dazu gehört die Position des Labels, an der es initialisiert wurde, und alle Positionen die durch \textit{UpdateLocation} übergeben wurden. Eine neu übergebene 3D Position wird durch eine kleine Sphäre markiert und das Label wird in den Mittelpunkt aller gespeicherten Positionen gesetzt.
+
+Als Resultat werden alle Positionen, an denen das Objekt in der Szene lokalisiert wurden, jeweils mit einer kleinen Sphäre markiert und das Label sitzt in ihrem Mittelpunkt. Siehe Abbildungen \ref{image:multi1} und \ref{image:multi2}.
+
+%sondern das  ein Label nahe eines anderen Labels erzeugt werden soll, das denselben Schriftzug hat, wird davon ausgegangen, das ein Objekt der realen Welt erneut erkannt wurde. Daher wird kein neues Label erstellt, sondern das alte Label modifiziert. Die Positionen, an denen das Objekt in der Szene lokalisiert wurde, werden jeweils mit kleineren Sphäre markiert und das Label wird in den Mittelpunkt der kleinen Sphären gesetzt. So wird die Position des Objektes genauer, wenn es häufiger erkannt wurde. Siehe Abbildungen \ref{image:multi1} und \ref{image:multi2}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/ML_multi1.jpg}
-	\caption[Haarbürste zwei mal Erkannt]{Haarbürste zwei mal Erkannt. Graue Sphären hier in gelb markiert.}
+	\caption[Haarbürste zwei mal erkannt]{Haarbürste zwei mal erkannt.}
 	\label{image:multi1}
 \end{figure}
 
@@ -259,35 +345,27 @@ So  wird die Position des Objektes genauer, wenn es häufiger erkannt wurde. Sie
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{images/ML_multi2.jpg}
-	\caption[Haarbürste drei mal Erkannt]{Haarbürste drei mal Erkannt. Graue Sphären hier in gelb markiert.}
+	\caption[Haarbürste drei mal erkannt]{Haarbürste drei mal erkannt.}
 	\label{image:multi2}
 \end{figure}
 
-Die erzeugten Labels werden in den Listen MarkerCustomPredicton und MarkerObjectDetection gespeichert, je nachdem welcher Azure Service verwendet wurde. 
-Zu jedem Frame der Applikation werden die Labels in den Listen zur Kamera hingedreht sodass sie rechtwinklig zur Kamera ausgerichtet sind. Als Resultat werden die Labels der Bewegung der Kamera nachgeführt. Solange das Label in dem View Frustum liegt, kann der Nutzer es lesen. Siehe Anhang \ref{appendix:blickwinkel}.
+Die erzeugten Labels werden in den Listen \textit{MarkerCustomPredicton} und \textit{MarkerObjectDetection} gespeichert, je nachdem welcher Azure Service verwendet wurde. 
+Zu jedem Frame der Applikation werden die Labels in den Listen zur Kamera hingedreht, sodass sie rechtwinklig zur Kamera ausgerichtet sind. Als Resultat werden die Labels der Bewegung der Kamera nachgeführt. Solange das Label in dem View Frustum liegt, kann der Nutzer es lesen. Siehe Anhang \ref{appendix:blickwinkel}.
 
 \subsubsection{Azure Custom Vision}
 
-Neben der Bildanalyse mit Azure Object Detection wird auch Azure Custom Vision verwendet.
-Die AI wurde über die Webseite trainiert.
+Neben der Bildanalyse mit Azure Object Detection wird auch Azure Custom Vision verwendet. Die AI wurde über die Webseite trainiert. Die Anfrage an den Service geschieht in der Klasse \textit{AzureCustomPrediction}. Ähnlich wie bei \textit{AzureObjectDetection} wird ein Webrequest erstellt mit einem Authorization Key und einem Foto. Die Anfragen an die beiden REST-APIs werden parallel in unterschiedlichen Threads erstellt und bearbeitet.
 
-Die Anfrage an den Service geschieht in der Klasse AzureCustomPrediction. Ähnlich wie bei AzureObjectDetection wird ein Webrequest erstellt mit einem Authorization Key und einem Foto. Die Anfragen an die beiden REST-APIs werden parallel in unterschiedlichen Threads erstellt und bearbeitet.
+In der Antwort wird eine Json Datei zurückgeschickt, die die gefundenen Objekte angibt. Da die Json Datei eine etwas anderes Format hat, wurde eine eigene \textit{HandleJsonResponse} Methode dafür geschrieben. Azure Custom Vision gibt für jedes \textit{DetectedObject} eine Probability an. Diese gibt das Vertrauen des Modells darin an, dass das Objekt korrekt erkannt wurde. Es wurde ein Schwellwert definiert, der entscheidet wie hoch die Probability mindestens sein muss, um das Objekt zu akzeptieren und in der Szene zu markieren.
 
-In der Antwort wird eine Json Datei zurückgeschickt, die die gefundenen Objekte angibt.
-Da die Json Datei eine etwas anderes Format hat, wurde eine eigene HandleJsonResponse Methode dafür geschrieben.
-
-Azure Custom Vision gibt für jedes Detected Object eine Probability an. Diese gibt das Vertrauen des Modells darin an, dass das Objekt korrekt erkannt wurde.
-
-Es wurde ein Schwellwert definiert, der entscheidet wie hoch die Probability mindestens sein muss, um das Objekt zu akzeptieren und in der Szene zu markieren.
-
-Für jedes akzeptierte Objekt wird die Methode Cast von PixelToWorld aufgerufen, um das Objekt in der realen Welt zu lokalisieren und zu markieren.
+Für jedes akzeptierte Objekt wird die Methode \textit{Cast} von \textit{PixelToWorld} aufgerufen. Dannach werden das Objekt so behandeln, wie \textit{DetectedObjekts} von Azure Objekt Detection. Die Position des Objektes wird in der Szene mit Cast und einem Raycast lokalisiert. Dann erzeugt der LabelCreater ein Label an der entsprechenden Position. Das Label für das Objekt von Azure Custom Vision hat lediglich eine andere Farbe als ein Label, das durch Azure Objekt Detection erzeugt wurde. 
 
 \paragraph{Das Trainieren}
 
 Es wurde probiert das Custom Vision Modell auf drei unterschiedliche Objekte zu trainieren.
-Dabei wurden vier Iterationen erstellt. 
+Dabei wurden sechs Iterationen erstellt. 
 
-Iteration 1:
+\paragraph{Iteration 1}
 
 Zunächst wurde probiert Tuben von Acrylfarbe zu erkennen. In der Nutzung dieser Iteration traten viele fehlerhaften Objekterkennungen auf. Es wurden Acrylfarben an Stellen erkannt, an denen es keine gab. Siehe Abbildung \ref{image:customVisionPaint}. 
 
@@ -299,16 +377,16 @@ Zunächst wurde probiert Tuben von Acrylfarbe zu erkennen. In der Nutzung dieser
 \end{figure}
 
 Die Evaluierung des Modelles lautet: 66.7\% Precision, 66.7\% Recall, 89.7\% mean Average Precision.
-
+In einer Testphase konnte das Modell 66,7\% der Nivea Dosen auf den Bildern erkennen (Recall) und 66,7\% der Objekte die als Nivea Dosen markiert wurden, waren tatsächlich Nivea Dosen (Precision).
 \begin{itemize}
 	\item Precision - die Wahrscheinlichkeit das ein gefundenes Objekt, tatsächlich der angegeben Klasse angehört. (Die Wahrscheinlichkeit das es kein false positive ist.)
-	\item Recall - Aus einer Menge an Objekten die einer Klasse angehören, der Prozentsatz an Objekten, die das Modell korrekt lokalisieren und klassifizieren konnte.
-	\item m.a.p (mean Average Precision) - Eine Gesamtwertung für die Evaluierung basierend auf Precision und Recall. 
+	\item Recall - aus einer Menge an Objekten die einer Klasse angehören, der Prozentsatz an Objekten, die das Modell korrekt lokalisieren und klassifizieren konnte.
+	\item m.a.p (mean Average Precision) - eine Gesamtwertung für die Evaluierung basierend auf Precision und Recall. 
 \end{itemize}
 
 \paragraph{Iteration 2}
 
-In der zweiten Iteration wurde probiert, das Modell darauf zu trainieren, eine blaue Dose von Nivea Hautcreme zu erkennen. Die Form und Farbe der Dose ist sehr simpel, daher wurde davon ausgegangen, dass sie leichter zu erkennen ist. Die berechnete Prediction des Modells lag bei 80 Prozent. Wenn eine Nivea Dose erkannt wurde, ist das Modell sich zu 80 Prozent sicher, dass es sich tatsächlich um eine Nivea Dose handelt.
+In der zweiten Iteration wurde probiert, das Modell darauf zu trainieren, eine blaue Dose von Nivea Hautcreme zu erkennen. Form und Farbe der Dose sind sehr simpel, daher wurde davon ausgegangen, dass dieser Gegenstand leichter zu erkennen ist. Die berechnete Prediction des Modells lag bei 80 Prozent. Wenn eine Nivea Dose erkannt wurde, ist das Modell sich zu 80 Prozent sicher, dass es sich tatsächlich um eine Nivea Dose handelt.
 
 Die Evaluierung des Modells lautet: 80\% Precision, 100\% Recall, 100\% mean Average Precicion.
 In einer Testphase konnte das Modell alle auf den Bildern erhaltenen Nivea Dosen zu erkennen (100\% Recall), es hat jedoch auch Objekte fälschlicherweise als Dosen markiert (80\% Precision).
@@ -329,43 +407,37 @@ Dises Modell hat in der Testphase häufiger Objekte fälschlicherweise als Dosen
 
 In der vierten Iteration wurden zwei Fotos von der Nivea Dose entfernt, was die Precision auf 100 Prozent steigen ließ. In der Umsetzung mit der Magic Leap Anwendung wurden trotzdem häufig Objekte fälschlicherweise als Nivea Dose markiert.
 
-Neben der Dose wurde diese Iteration darauf trainiert eine bestimmte Holzhaarbürste zu erkennen. Aufgrund von dem komplexeren, und markanten Aussehen der Bürste wurde davon ausgegangen, das die Bürste besser von anderen Objekte zu unterschieden ist. 
+Neben der Dose wurde diese Iteration darauf trainiert eine bestimmte Holzhaarbürste zu erkennen. Aufgrund von dem komplexeren, und markanten Aussehen der Bürste wurde davon ausgegangen, das die Bürste besser von anderen Objekte zu unterscheiden ist. 
 Die Bürste wurde nur mit den Borsten nach oben fotografiert.
 
-Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion.
-
-Objekte die mit einer Wahrscheinlichkeit von über 80 Prozent als Haarbürsten markiert wurden, waren in der Anwendung tatsächlich Haarbürsten. Durch das Setzen dieses Schwellenwertes wurden keine Objekte fälschlicherweise als Haarbürste erkannt. Siehe Abbildung \ref{img:it4}.
+Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion. Objekte, die mit einer Wahrscheinlichkeit von über 80 Prozent als Haarbürsten markiert wurden, waren in der Anwendung tatsächlich Haarbürsten. Durch das Setzen dieses Schwellenwertes wurden keine Objekte fälschlicherweise als Haarbürste erkannt. Siehe Abbildung \ref{img:it4}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/it4notpretty.png}
-	\caption[Iteration 4 Analysebeispiel]{Iteration 4 Analysebeispiel. Die Tatsächliche Haarbürste wurde mit einer Probability von 92 Prozent erkannt. Eine Blume auf einer Decke wurde zu 71,3 Prozent als Haarbürste erkannt.}
+	\caption[Iteration 4 Analysebeispiel]{Iteration 4 Analysebeispiel. Die tatsächliche Haarbürste wurde mit einer Probability von 92 Prozent erkannt. Eine Blume auf einer Decke wurde zu 71,3 Prozent als Haarbürste erkannt.}
 	\label{img:it4}
 \end{figure}
 
-Wenn die Haarbürste in dem Foto kleiner abgebildet ist, sind die Probability so weit, das die Bürste sich nicht mehr anhand des Schwellenwert von anderen Objekten unterscheiden lässt.
+Wenn die Haarbürste in dem Foto kleiner abgebildet ist, wird sie mit einer geringeren Probability erkannt. Dadurch kann die Bürste nicht mehr durch einen Schwellwert von anderen Objekten unterscheiden werden.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/it4notpretty2.png}
-	\caption[Iteration 4 zweites Analysebeispiel]{Iteration 4 Analysebeispiel. Die Tatsächliche Haarbürste wurde mit einer Probability von 40,4 Prozent erkannt.}
+	\caption[Iteration 4 zweites Analysebeispiel]{Iteration 4 Analysebeispiel. Die tatsächliche Haarbürste wurde mit einer Probability von 40,4 Prozent erkannt.}
 	\label{img:it4}
 \end{figure}
 \paragraph{Iteration 5}
 
-Iteration 5 ist eine Variation von Iteration 4. Die Objekterkennung der Nivea Dose entfernt. Die Iteration ist nur noch darauf trainiert die Haarbürste zu erkennen. 
-
-Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion.
+Iteration 5 ist eine Variation von Iteration 4. Die Objekterkennung der Nivea Dose entfernt. Die Iteration ist nur noch darauf trainiert die Haarbürste zu erkennen. Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion.
 
 \paragraph{Iteration 6}
 
 In der Iteration 6 wurde die Erkennung der Haarbürste verbessert. Den Empfehlungen von Azure folgend, wurde die Menge an Trainingsbildern auf 51 erhöht. Auf den Trainingsbildern ist die Haarbürste teilweise recht klein zu sehen. Siehe Anhang \ref{appendix:it4train}. Dieser Iteration wurde eine Stunde Zeit gelassen, um das Training durchzuführen. Vorherige Iteration hatten ca. 10 Minuten.
 
-Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion.
+Die Evaluierung des Modells lautet: 100\% Precision, 100\% Recall, 100\% mean Average Precicion. 
 
-Haarbürsten, die kleiner in einem Foto sind, konnten von dieser Iteration erkannt werden. Siehe Abbildung \ref{img:it6}. Mit den vorherigen Iterationen war das nicht möglich. Die Haarbürste musste immer recht groß im Bild sein. 
-
-In den Bildern, die von Iteration 6 analysiert wurden, waren alle Objekte, die das Model mit einer Wahrscheinlichkeit von über 50 Prozent als Haarbürste markiert hatte, tatsächlich Haarbürsten.
+Haarbürsten, die kleiner in einem Foto sind, konnten von dieser Iteration erkannt werden. Siehe Abbildung \ref{img:it6}. Mit den vorherigen Iterationen war das nicht möglich. Die Haarbürste musste immer recht groß im Bild sein. In den Bildern, die von Iteration 6 analysiert wurden, waren alle Objekte, die das Model mit einer Wahrscheinlichkeit von über 50 Prozent als Haarbürste markiert hatte, tatsächlich Haarbürsten.
 
 \begin{figure}[H]
 	\centering
@@ -378,22 +450,16 @@ In den Bildern, die von Iteration 6 analysiert wurden, waren alle Objekte, die d
 \subsection{Entwicklung der Foto-Repräsentation}
 \label{section:devpixeltoworld}
 
-Um die u,v Foto-Koordinate eines gefundenen Objektes auf der Clipping Plane der Kamera zu lokalisieren, wurden ein paar Herangehensweisen ausprobiert.
+Um die u,v Foto-Koordinate eines gefundenen Objektes auf der Clipping Plane der Kamera zu lokalisieren, wurden ein paar Herangehensweisen ausprobiert. 
 
-Das Ziel ist das Setzten einer Markierung in den 3D Raum, basierend auf den Foto-Koordinaten. Das Foto beinhaltet keine Information über die Entfernung zu dem Objekt. Dafür muss ein Raycast durchgeführt werden. 
+Das Ziel ist das Setzten einer Markierung in den 3D Raum, basierend auf den Foto-Koordinaten. Das Foto beinhaltet keine Information über die Entfernung zu dem Objekt. Dafür muss ein Raycast durchgeführt werden. Mit einer Repräsentation des Fotos in dem 3D Raum ist es möglich diesen Raycast durchzuführen. Dazu muss das Foto nicht tatsächlich in dem 3D Raum vorhanden sein. Es muss jedoch mit dem Input der Foto-Koordinaten ein Output der x,y,z-Koordinaten in dem 3D Raum erzeugt werden, mit dem der Raycast durchgeführt werden kann.
 
-Mit einer Repräsentation des Fotos in dem 3D Raum ist es möglich diesen Raycast durchzuführen. 
-Dazu muss das Foto nicht tatsächlich in dem 3D Raum vorhanden sein. Es muss jedoch mit dem Input der Foto-Koordinaten ein Output der x,y,z-Koordinaten in dem 3D Raum erzeugt werden, mit dem der Raycast durchgeführt werden kann.
-
-Die Position des Fotos hängt mit der Kamera zusammen, daher kann das Foto durch den Camera Space simuliert werden. Als erstes wurde probiert ein Sphären-Objekt an eine gezielte Koordinate des Camera Space zu bewegen. 
-
-% make pretty after this
-Wenn die Kamera am Ursprung des globalen Koordinatensystem liegt und eine neutrale Rotation hat, stimmt der Camera Space mit dem globalen Koordinatensystem überein. Die Sphäre wurde in der Szene per Hand bewegt um markante Koordinaten des Camera Space abzulesen. Siehe Abbildung \ref{illustration:speretest}.
+Die Position des Fotos hängt mit der Kamera zusammen, daher kann das Foto durch den Camera Space simuliert werden. Als Erstes wurde probiert ein Sphären-Objekt an eine gezielte Koordinate des Camera Space zu bewegen. Wenn die Kamera am Ursprung des globalen Koordinatensystems liegt und eine neutrale Rotation hat, stimmt der Camera Space mit dem globalen Koordinatensystem überein. Die Sphäre wurde in der Szene per Hand bewegt, um markante Koordinaten des Camera Space abzulesen. Siehe Abbildung \ref{illustration:speretest}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/sphärenTest.PNG}
-	\caption[Ränder der Near Clipping Plane in Unity finden]{Die blaue Sphäre liegt auf dem linken Rand der Clipping Plane.}
+	\includegraphics[width=0.7\textwidth]{images/sphärenTestwhite.jpg}
+	\caption[Ränder der Near Clipping Plane in Unity finden]{Die weiße Sphäre liegt auf dem linken Rand der Clipping Plane.}
 	\label{illustration:speretest}
 \end{figure}
 
@@ -408,35 +474,27 @@ Dabei wurden folgende Camera Space Koordinaten gefunden:
 
 Die x und y Koordinaten hängen von den u,v Koordinaten des Fotos ab. Es wurden lineare Funktionen aufgestellt um u,v auf x,y abzubilden. Diese Abbildung dient als Repräsentation des Fotos im 3D Raum, unter Berücksichtigung der Position und Skalierung des Fotos im Verhältnis zu der Kamera.
 
-Dann wurde getestet wie genau DetectedObjects in der AR Umgebung lokalisiert werden. Es wurden testweise Fotos aufgenommen, analysiert und die DetectedObjects markiert. Die entstandenen Markierungen lagen in Sichtfeld, jedoch nicht an den erwarteten Stellen. 
+Dann wurde getestet wie genau \textit{DetectedObjects} in der AR Umgebung lokalisiert werden. Es wurden testweise Fotos aufgenommen, analysiert und die \textit{DetectedObjects} markiert. Die entstandenen Markierungen lagen in Sichtfeld, jedoch nicht an den erwarteten Stellen. 
 
-Um dem Problem auf den Grund zu gehen, wurde ein UI Objekt erstellt, das ein aufgenommenes Foto während der Laufzeit anzeigt.
-Das Foto wurde dann mit dem Display verglichen. Dabei fiel auf, das sie ein unterschiedliches Seitenverhältnis haben und das Display einen kleinen Bildausschnitt zeigt.  
+Um dem Problem auf den Grund zu gehen, wurde ein UI Objekt erstellt, das ein aufgenommenes Foto während der Laufzeit anzeigt. Das Foto wurde dann mit dem Display verglichen. Dabei fiel auf, das sie ein unterschiedliches Seitenverhältnis haben und das Display einen kleinen Bildausschnitt zeigt. Es gibt zwei Möglichkeiten die Unterschiede zwischen Foto und Display auszugleichen. Entweder wird das Foto auf das Display zugeschnitten oder das gesamte Foto wird verwendet. Im zweiten Fall würden auch Objekte erkannt, die außerhalb des Sichtfeldes liegen. Es wurde die Entscheidung getroffen das Foto zuzuschneiden. Damit gibt es ein besseres Feedback für den Nutzer, wenn ein Objekt gefunden wurde. 
 
-Es gibt zwei Möglichkeiten die Unterschiede zwischen Foto und Display auszugleichen. Entweder wird das Foto auf das Display zugeschnitten oder das gesamte Foto wird verwendet. Im zweiten Fall würden auch Objekte erkannt, die außerhalb des Sichtfeldes liegen.
-Es wurde die Entscheidung getroffen das Foto zuzuschneiden. Damit gibt es ein besseres Feedback für den Nutzer, wenn ein Objekt gefunden wurde. 
+Das Zuschneiden wurde realisiert, indem die Intervalle für u und v der Abbildungsfunktionen stärker eingegrenzt wurden. Alle Objekte, die außerhalb der Intervalle liegen, werden ignoriert. Um die Intervalle zu bestimmen wurde dem Fotoanzeige-UI-Element ein Gitter hinzugefügt. Mit dem Gitter kann die u,v Position von beliebigen Stellen des Fotos abgelesen werden. Durch Aufnehmen von Fotos und Vergleichen mit dem Sichtfeld des Displays wurde abgelesen, bei welcher u,v Position des Fotos die Ecken des Displays zu finden sind. Die Intervalle wurden dem entsprechend eingegrenzt. 
 
-Das Zuschneiden wurde realisiert, indem die Intervalle für u und v der Abbildungsfunktionen stärker eingegrenzt wurden. Alle Objekte die außerhalb der Intervalle liegen werden ignoriert. Um die Intervalle zu bestimmen wurde dem Fotoanzeige-UI-Element ein Gitter hinzugefügt. Mit dem Gitter kann die u,v Position von beliebigen Stellen des Fotos abgelesen werden. 
-Durch Aufnehmen von Fotos und Vergleichen mit dem Sichtfeld des Displays wurde abgelesen, bei welcher u,v Position des Fotos die Ecken des Displays zu finden sind. Die Intervalle wurden dem entsprechend eingegrenzt. 
+Mit den durchführten Veränderungen der Intervalle konnten \textit{DetectedObjects} korrekt in der Umgebung lokalisiert werden. Jedoch wurden sehr häufig Objekte nicht markiert, obwohl sie im Sichtfeld des Nutzers lagen, weil deren Mittelpunkt außerhalb eines Intervalls lag. Daher wurde entschieden die zweite Möglichkeit zu implementieren und das gesamte Foto zu verwenden und Objekte auch zu markieren, wenn sie komplett außerhalb des Sichtfeldes liegen. 
 
-Mit den durchführten Veränderungen der Intervalle konnten DetectedObjects korrekt in der Umgebung lokalisiert werden. Jedoch wurden sehr häufig Objekte nicht markiert, obwohl sie im Sichtfeld des Nutzers lagen, weil deren Mittelpunkt außerhalb eines Intervalls lag.
-
-Daher wurde entschieden die zweite Möglichkeit zu implementieren und das gesamte Foto zu verwenden und Objekte auch zu markieren, wenn sie komplett außerhalb des Sichtfeldes liegen. 
-Dafür wurden die Intervalle für u und v wieder auf die ursprünglichen Werte - [0,1920] und [0,1080] - gesetzt. Die Intervalle für x und y mussten vergrößert werden.
-
-Um die x und y Intervalle bestimmen zu können, wurde das Fotoanzeige-UI-Element Parallel zu der ClippingPlane gelegt. Das Element folgt den Bewegungen der Kamera und liegt möglichst nah an der Near Clipping Plane. Das Display der Magic Leap Brille zeigt selbst solide Objekte leicht durchsichtig an. Das wurde genutzt, um Fotos aufzunehmen, mit dem UI Element anzuzeigen und mit der realen Welt zu vergleichen. Durch Ausprobieren wurde das UI Element so skaliert und verschoben, dass das angezeigte Foto mit der realen Welt soweit wie möglich übereinstimmt. Siehe Abbildungen \ref{illustration:canvasinsourface} und \ref{illustration:canvasinsourfacetodown}.
+Dafür wurden die Intervalle für u und v wieder auf die ursprünglichen Werte – [0,1920] und [0,1080] –  gesetzt. Die Intervalle für x und y mussten vergrößert werden. Um die x und y Intervalle bestimmen zu können, wurde das Fotoanzeige-UI-Element Parallel zu der Clipping Plane gelegt. Das Element folgt den Bewegungen der Kamera und liegt möglichst nah an der Near Clipping Plane. Das Display der Magic Leap Brille zeigt selbst solide Objekte leicht durchsichtig an. Das wurde genutzt, um Fotos aufzunehmen, mit dem UI Element anzuzeigen und mit der realen Welt zu vergleichen. Durch Ausprobieren wurde das UI Element so skaliert und verschoben, dass das angezeigte Foto mit der realen Welt so weit wie möglich übereinstimmt. Siehe Abbildungen \ref{illustration:canvasinsourface} und \ref{illustration:canvasinsourfacetodown}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{images/canvasinyourface.PNG}
-	\caption[Ränder des Foto-Anzeige-Elements finden]{Das aufgenommene Foto füllt das gesamte Display aus, wenn es angezeigt wird. Die blaue Sphäre liegt auf dem linken Rand des Foto-Anzeige-Elementes.}
+	\includegraphics[width=0.8\textwidth]{images/canvasinyourface2.jpg}
+	\caption[Ränder des Foto-Anzeige-Elements finden]{Das aufgenommene Foto füllt das gesamte Display aus, wenn es angezeigt wird. Die weiße Sphäre liegt auf dem linken Rand des Foto-Anzeige-Elementes.}
 	\label{illustration:canvasinsourface}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/canvasinyourfaceTopDown.PNG}
-	\caption[Tiefe des Foto-Anzeige-Elements finden]{Die blaue Sphäre befindet sich nicht mehr in dem View Frustum und das Foto-Anzeige-Element befindet sich ein wenig hinter der Near Clipping Plane.}
+	\includegraphics[width=0.7\textwidth]{images/canvasinyourfaceTopDown2.jpg}
+	\caption[Tiefe des Foto-Anzeige-Elements finden]{Die weiße Sphäre befindet sich nicht mehr in dem View Frustum und das Foto-Anzeige-Element befindet sich ein wenig hinter der Near Clipping Plane.}
 	\label{illustration:canvasinsourfacetodown}
 \end{figure}
 
@@ -444,10 +502,10 @@ Die Ränder des UI Elementes wurden genutzt, um die Intervalle für x und y zu b
 \begin{itemize}
 	\item für x: [-0.2949, 0.2295]
 	\item für y: [0.1546, -0.1507]
-	\item Zusätzlich wurde z = -0.4 gesetzt. Das UI Element musste ein wenig weiter von der Clipping Plane entfernt sein um angezeigt zu werden.
+	\item Zusätzlich wurde z = -0.4 gesetzt. Das UI Element musste ein wenig weiter von der Clipping Plane entfernt sein, um angezeigt zu werden.
 \end{itemize}
 
-Mit diesen Intervallen konnten DetectedObjects gut lokalisiert werden und es wurden keine Objekte mehr weggelassen, von denen der Nutzer erwarten würden, dass sie markiert werden.
+Mit diesen Intervallen konnten \textit{DetectedObjects} gut lokalisiert werden und es wurden keine Objekte mehr weggelassen, von denen der Nutzer erwarten würden, dass sie markiert werden.
 
 \newpage
 \section{Auswertung}
@@ -456,16 +514,15 @@ In diesem Kapitel geht es um die Evaluierung und Auswertung der vorgestellten An
 
 \subsection{Laufzeitanalyse}
 
+\subsubsection{Netzwerk}
+
+Die genutzte Netzwerkverbindung hat eine Dowloadgeschwindigkeit von 180 Mbps und ein Uploadgeschwindigkeit von 18 Mbps. Mit einer Bildauflösung von 1090x1820 Pixeln, haben die Foto ein Größe von 5 Mb. 
+
+Der Netzwerk Delay zwischen den REST-APIs und der Applikation wurde getestet, indem HTTP-Anfragen mit einem inkorrekten Authentifizierungsschlüssel gestellt wurden. In dem Body der Anfrage wurde ein Bild mitgeschickt, dieses wurde jedoch nicht analysiert. Im Durchschnitt betrug die Round Trip Time 0,18 Sekunden in 14 Durchführungen dieses Tests (minimal 0,13 Sekunden und maximal 0,28 Sekunden).
+
+
+\subsubsection{Objekterkennung}
 Die Laufzeit der Objekterkennung wurde aufgezeichnet. Die Erkennung beginnt damit ein Foto aufzunehmen und endet mit der Erzeugung der Labels.
-
-Die genutzte Netzwerkverbindung hatte eine Dowloadgeschwindigkeit von 180 Mbps und ein Uploadgeschwindigkeit von 18 Mbps.
-
-Bilder haben Auflösung von 1090 x 1820 Pixel. Wenn sie in den HTTP-Anfragen verschickt haben, sie die Größe von 5 Mb.
-
-Der Netzwerk Delay zwischen den REST-APIs und der Applikation wurde getestet, indem HTTP-Anfragen mit einem inkorrekten Authentifizierungsschlüssel gestellt wurden. In dem Body des Anfrage wurde ein Bild mitgeschickt, dieses wurde jedoch nicht analysiert. 
-
-Im Durchschnitt beträgt die Round Trip Time 0,18 Sekunden in 14 Durchführungen dieses Tests. (Minimal 0,13 Sekunden, Maximal 0,28 Sekunden.)
-
 Siehe Abbildung \ref{img:laufzeit}
 
 \begin{figure}[H]
@@ -479,11 +536,11 @@ Siehe Abbildung \ref{img:laufzeit}
 
 Azure Object Detection und Azure Custom Vision werden parallel zueinander in unterschiedlichen Threads durchgeführt. Die durchschnittliche Gesamtlaufzeit der Objekterkennung liegt bei 2,95 Sekunden.
 
-Das Auslesen der Json Antworten, das Lokalisieren der Objekten in der 3D Szene und die Labelerstellung, benötigt weniger als eine Mikrosekunde. Siehe Abbildung \ref{table:laufzeitanalyse} und \ref{table:laufzeitanalyse2}.
+Das Auslesen der Json Antworten, das Lokalisieren der Objekte in der 3D Szene und die Labele-Erstellung, benötigt weniger als eine Mikrosekunde. Siehe Abbildung \ref{table:laufzeitanalyse} und \ref{table:laufzeitanalyse2}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{images/table_Laufzeitanalyseneu.PNG}
+	\includegraphics[width=1.1\textwidth]{images/table_Laufzeitanalyseneu.PNG}
 	\caption[Laufzeitanalyse über 13 Bild-Analysen]{Laufzeitanalyse über 13 Bild-Analysen.}
 	\label{table:laufzeitanalyse}
 \end{figure}
@@ -495,11 +552,7 @@ Das Auslesen der Json Antworten, das Lokalisieren der Objekten in der 3D Szene u
 	\label{table:laufzeitanalyse2}
 \end{figure}
 
-Der Prozess ist somit deutlich zu langsam um in Echtzeit ausgeführt zu werden. 
-
-Ein einziges neuronales Netzwerk für die Objekterkennung zu verwenden, würde die Laufzeit verringern. Allerdings geht dann die Möglichkeit verloren, mehrere neuronale Netze zu verwenden die unterschiedliche Computer Vision Aufgaben erledigen. Aus einem RGB-Bild können beispielsweise mehr semantische Informationen extrahiert werden, wenn Image Segmentation und Object Detection kombiniert werden.
-
-%Allerdings muss dann ein neuronales Netzwerk eingesetzt werden, dass speziell für die Applikation trainiert ist. Durch das verwenden von mehreren neuronalen Netzwerken besteht jedoch die Möglichkeit mehr semantische Informationen auf den RGB-Bilder zu erhalten als mit einem Netzwerk möglich wäre. So kann ein Netzwerk beispielsweise 
+Der Prozess ist somit deutlich zu langsam um in Echtzeit ausgeführt zu werden. Ein einziges neuronales Netzwerk für die Objekterkennung zu verwenden, würde die Laufzeit verringern. Allerdings geht dann die Möglichkeit verloren, mehrere neuronale Netze zu verwenden, die unterschiedliche Computer Vision Aufgaben erledigen. Aus einem RGB-Bild können beispielsweise mehr semantische Informationen extrahiert werden, wenn Image Segmentation und Object Detection kombiniert werden.
 
 Neben den Objekterkennung-Prozessen braucht das Aufnehmen der Fotos mit durchschnittlich 0.9 Sekunden einen großen Teil der Laufzeit. Durch ein Umstieg von Fotos auf Frames eines Videostreams kann die Aufnahmezeit reduziert werden.  
 
@@ -515,9 +568,7 @@ Azure Object Detection erkennt die Objekte mit unterschiedlicher Verlässlichkei
 
 Die Genauigkeit der Objekterkennungen durch Azure Custom Vision wird durch das Training des Modells bestimmt. Dieser Cloud Service hat sich als effektiv erweisen, um Azure Object Detection zu ergänzen. Mit der Iteration 6, die mit 51 Bildern eine Stunde lang trainiert wurde, kann die Haarbürste zuverlässig erkannt werden. 
 
-Für Regionen in denen sich keine Haarbürste befindet, berechnet das Modell eine Probability von weniger als 5 Prozent dafür, dass sich dort fälschlicherweise eine Haarbürste befindet. 
-
-Regionen, die mit einer Probability von über 50 Prozent einer Haarbürste enthalten, beinhalteten in der Anwendung immer eine Haarbürste.
+Für Regionen, in denen sich keine Haarbürste befindet, berechnet das Modell eine Probability von weniger als 5 Prozent dafür, dass sich dort fälschlicherweise eine Haarbürste befindet. Regionen, die mit einer Probability von über 50 Prozent einer Haarbürste enthalten, beinhalteten in der Anwendung immer eine Haarbürste.
 
 Durch die niedrige Rate an false positives konnte die Akzeptanzschwelle auf 60 Prozent gesetzt werden, um die Rate der false negatives zu verringern. Dadurch wird die Haarbüste fast immer korrekt erkannt, wenn sie auf einem Bild ist.
 
@@ -525,11 +576,11 @@ Durch die niedrige Rate an false positives konnte die Akzeptanzschwelle auf 60 P
 \subsection{Objekte in 3D Szene lokalisieren}
 
 In diesem Teil wird evaluiert wie akkurat Objekte, die in einem Foto erkannt wurden, in der 3D Umgebung markiert werden.
-Um die Lokalisierung zu evaluieren, wurden die RGB-Bild festgehalten, mit denen Objekterkennung durchgeführt wurde. Auf den RGB-Bildern wurde der Mittelpunkt der Bounding Boxen markiert. Siehe Abbildung \ref{img:markedonimage}. Das Label, das in der Szene gesetzt wird, soll mit dieser Position korrespondieren. Siehe Abbildung \ref{img:labelsszene}. 
+Um die Lokalisierung zu evaluieren, wurden die RGB-Bilder festgehalten, mit denen Objekterkennung durchgeführt wurde. Auf den RGB-Bildern wurde der Mittelpunkt der Bounding Boxen markiert. Siehe Abbildung \ref{img:markedonimage}. Das Label, das in der Szene gesetzt wird, soll mit dieser Position korrespondieren. Die Positionierungen der Labels weichen um weniger als 2 cm von der vorgesehenen Position ab. Siehe Abbildung \ref{img:labelsszene}. 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/ML_markedOnImage2.jpg}
-	\caption[Erkennt Objekte auf RGB-Bilde markiert]{Die Mittelpunkte der erkannten Objekte wurden, auf dem Foto per Hand in rot-gelb markiert. Die Klassen und die u,v Foto-Koordinaten der Objekten sind angegeben.}
+	\caption[Erkennt Objekte auf RGB-Bilde markiert]{Die Mittelpunkte der erkannten Objekte wurden, auf dem Foto per Hand markiert. Die Klassen und die u,v Foto-Koordinaten der Objekte sind angegeben.}
 	\label{img:markedonimage}
 \end{figure}
 
@@ -540,7 +591,7 @@ Um die Lokalisierung zu evaluieren, wurden die RGB-Bild festgehalten, mit denen 
 	\label{img:labelsszene}
 \end{figure}
 
-Die Positionierungen der Labels weichen um weniger als 2 cm von der vorgesehenen Position ab.
+
 
 
 %\begin{figure}[H]
@@ -559,22 +610,20 @@ Die Positionierungen der Labels weichen um weniger als 2 cm von der vorgesehenen
 
 Die Lokalisierung der Objekte hängt von dem geometrischen Verständnis der AR-Brille an. Objekte die häufig bewegt werden, wie beispielsweise ein Stuhl, werden erst in die Spatial Map eingefügt, wenn sie über längere Zeit nicht bewegt wurden. Das Einfügen des Objektes in die Map dauert ca. 2 Minuten. 
 
-Wenn der Objekte Detection Prozess auf ein Objekt angewandt wird, das noch nicht oder nicht komplett in der Spatial Map ist, wird es nicht korrekt markiert. Siehe Abbildung \ref{img:stuhl}. 
+Wenn der Objekte Detection Prozess auf ein Objekt angewandt wird, das noch nicht oder nicht komplett in der Spatial Map ist, wird es nicht korrekt markiert. In diesem Beispiel ist ein Stuhl noch nicht in der Spatial Map. Wenn die Applikation einen Raycast auf die Umgebung durchführt, um das gefundene Objekt zu markieren, schießt der Raycast durch das tatsächliche Objekt hindurch, da es  nicht in der Map ist. Der Raycast trifft den Boden hinter dem Objekt und markiert diesen. Der Stuhl wurde von der Objekterkennung korrekt erkannt, jedoch nicht korrekt in der Szene markiert. Siehe Abbildung \ref{img:stuhl}. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{images/ML_20201004_19.18.02_sup.jpg}
-	\caption[Label  setzten, bei fehlerhafter Spatial Map]{Spatial Map des Stuhles in weiß umrandet. Tatsächlicher Stuhl in orange umrandet. Label des Stuhls in gelb markiert. Das Label befindet sich in der Szene hinter dem Stuhl auf dem Boden.}
+	\caption[Label  setzten, bei fehlerhafter Spatial Map]{Spatial Map des Stuhles mit breiter Linie umrandet. Tatsächlicher Stuhl mit durchgebrochener Linie umrandet. Label des Stuhls markiert. Das Label befindet sich in der Szene hinter dem Stuhl auf dem Boden.}
 	\label{img:stuhl}
 \end{figure}
-
-In diesem Beispiel ist ein Stuhl noch nicht in der Spatial Map. Wenn die Applikation einen Raycast auf die Umgebung durchführt, um das gefundene Objekt zu markieren, schießt der Raycast durch das tatsächliche Objekte hindurch, da es  nicht in der Map ist. Der Raycast trifft den Boden hinter dem Objekt und markiert diesen. Der Stuhl wurde von der Objekterkennung korrekt erkannt, jedoch nicht korrekt in der Szene markiert.
 
 Halb transparente Objekte werden ebenfalls nicht korrekt gemapped. Daher wird das Label eines Flaschen-Objekts nicht korrekt positioniert. Siehe Abbildung \ref{img:flasche}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{images/ML_20201004_19.12.13.jpg}
-	\caption[Spatial Mapping Transparenter Objekte]{Das Label für Bottle liegt hinter dem tatsächlichen Objekt. Die Flasche wurde nicht korrekt gemapped.}
+	\includegraphics[width=0.8\textwidth]{images/ML_20201004_19.12.13_2.jpg}
+	\caption[Spatial Mapping transparenter Objekte]{Das Label der Flasche liegt hinter dem tatsächlichen Objekt, da die Flasche nicht korrekt gemapped wurde.}
 	\label{img:flasche}
 \end{figure}

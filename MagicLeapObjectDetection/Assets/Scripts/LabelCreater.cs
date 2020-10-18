@@ -56,18 +56,12 @@ public class LabelCreater : MonoBehaviour
         {
             markers = custompredictionMarkers;
         }
-
         foreach (GameObject m in markers)
-        {
-            //check if objects of same name have been detected
+        {//check if objects of same name have been detected
             if(m.GetComponent<MarkerBehavior>().GetText() == text)
-            {
-                //check if the objects are close
+            {//check if the objects are close
                 if(Vector3.Distance(m.transform.position,point) < 0.5f)
-                {
-                    //the same object has been detected again
-                    //change the position of the old label to midpoint
-                    //add gray shpere to indicate the two detected positions
+                {//the same object has been detected again
                     m.GetComponent<MarkerBehavior>().UpdateLocation(point);
                     return true;
                 }
