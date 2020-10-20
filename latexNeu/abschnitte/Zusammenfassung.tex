@@ -5,25 +5,26 @@ In diesem Kapitel werden die bearbeiteten Themen kurz zusammengefasst.
 
 \subsection{Konzepte und implementierte Funktionen}
 
-In dieser Arbeit wird Image Based Objekt Detection in eine Augmented Reality Brille integriert, um eine automatische Objekterkennung und Markierung von Objekten zu ermöglichen.
+In dieser Arbeit eine automatische Objekterkennung und Markierung für AR-Umgebungen mithilfe von Image Based Object Detection umgesetzt. 
 
-Es werden RGB-Fotos von der Umgebung der AR Brille aufgenommen und mit Machine Learning Modellen analysiert.
-Das Modell ist darauf trainiert Objekte und Lebewesen in einem Bild zu erkennen. Durch die Analyse werden Objekte auf den RGB-Fotos erkannt. Diese werden dann in der AR Umgebung lokalisiert und mit einem Label markiert.
+Die Umgebung der AR-Brille wird mit RGB-Fotos aufgenommen. Diese Fotos werden mit Machine Learning Modellen nach Objekten durchsucht. Die Positionen der gefundene Objekte werden in der AR-Umgebung lokalisiert und mit einem Label markiert. Objekte werden durch nur maximal ein Label annotiert.  
 
-Das automatische Erkennen und Labeln von Objekten kann für große und dynamische Umgebungen verwendet werden. Es bietet somit eine Grundlage für AR Anwendungen die in einer solchen Umgebung arbeiten sollen oder eine ausgeprägtes semantisches Verständnis der Umgebung benötigen. %Beispielsweise eine Blindenführung in unbekannten Umgebungen oder Applikationen aus den Gebieten Autonomous Driving und Robotics. \citep{cars} 
+Das automatische Erkennen und Labeln von Objekten kann für große und dynamische Umgebungen verwendet werden. Es bietet somit eine Grundlage für AR Anwendungen die in einer solchen Umgebung arbeiten sollen oder eine ausgeprägtes semantisches Verständnis der Umgebung benötigen.
+
+ %Beispielsweise eine Blindenführung in unbekannten Umgebungen oder Applikationen aus den Gebieten Autonomous Driving und Robotics. \citep{cars} 
 
 
 
-\subsection{Vergleich mit Realted Works}
+\subsection{Vergleich mit Related Works}
 %todo this diesen teil detailierter
-\subsubsection*{\cite{LabelingLanguageLearning}: In-Situ Labeling for Augmented Reality Language Lerning}
+\subsubsection*{Objekterkennung und Labeling in Echtzeit}
 Anders als das Framework von \cite{LabelingLanguageLearning} läuft die vorgestellte Objekterkennung nicht in Echtzeit. \cite{LabelingLanguageLearning} verwendet eine niedrige Kameraauflösung und Bildqualität, damit die Bildanalyse in 30 ms durchgeführt werden kann.
 
 Unser Ansatz zielt nicht auf Echtzeit ab, sondern auf ein breiteres semantisches Verständnis. Daher werden, anders als bei \cite{LabelingLanguageLearning}, mehrere neuronale Netzwerke verwendet. In unserer Applikation wird Azure Objekt Detection für den Großteil der Objekterkennung verwendet. Dieses Netz wird durch Azure Custom Prediction unterstützt. Durch die Kombination können insgesamt mehr Objekte erkannt werden. Der Nachteil in diesem Vorgenen besteht darin, das jedes der neuronalen Netze Zeit braucht um eine Analyse durchzuführen, unabhängig davon wie viele Objekte sie finden. Die Objekterkennung dauert damit insgesamt länger.
 
 In unserem Verfahren wird die höchste Kameraauflösung für die RGB-Bilder verwendet. Die Bilder beinhalten mehr Informationen, um den neuronalen Netzwerken die beste Möglichkeit zu geben Objekte zu erkennen. Die größeren Bilddateien brauchen mehr Zeit um sie an den Server zu verschicken und analysiert zu werden.\citep{LabelingLanguageLearning}
 
-\subsubsection*{\cite{contextawaremixedreality}: Context-Aware Mixed Reality: A Framework for Ubiquitous Interaction}
+\subsubsection*{Image Segmentation für kontextbezogene Interaktionen}
 Das Framework von \cite{contextawaremixedreality} nutzt Image Segmentation, um jedem Voxel der Umgebung eine semantische Bedeutung zuzuweisen. Die Segmentierung findet, so wie Objekterkennung, semantische Informationen einer AR Umgebung. Die Informationen unterscheiden sich jedoch darin, auf welcher Ebene sie angesetzt sind. Die Informationen, die \cite{contextawaremixedreality} erheben, sind low-level im Vergleich mit den Informationen durch Objekterkennung. In dem Beispiel der Shooter-Anwendung wird den Voxeln jeweils ein Material zugewiesen. Diese semantische Information ist vergleichsweise low-level und lässt sich sehr gut mit dem Szeneverständnis durch Objekterkennung kombinieren. So kann beispielsweise für jedes Objekt angegeben werden aus welchem Material es besteht.\citep{contextawaremixedreality}
 
 
@@ -34,7 +35,6 @@ Das View Management in unserer Applikation ist sehr minimal. Die Labels sind als
 Die Labels werden nur mit einer neuen Position aktualisiert, wenn ihr Anker versetzt wird.
 
 \subsection{Ausblick}
-%todo fix this
 Die automatische Erkennung von Objekten in einer AR Umgebung ist funktionsfähig und effektiv.
 
 Um die Lokalisierung eines Objektes in der AR Umgebung zu verbessern, können die geometrischen Informationen einer Spatial Map durch rohe Daten einer Tiefenkamera ergänzt werden. Da es rechenintensiv ist, die Spatial Map zu erstellen, kann es dazu kommen, dass stellenweise die Map noch nicht aufgebaut ist oder in einem veralteten Zustand vorliegt, wenn ein Objekt lokalisiert werden soll. Die rohen Daten der Tiefenkamera könnten dazu verwendet werden, die Spatial Map zu ergänzen.\citep{depththoughimage}
@@ -48,12 +48,3 @@ Die Objekte, die von der Applikation erkannt werden, hängen von den verwendeten
 Durch das automatische erkennen von Objekten in einer Umgebung, wird es möglich AR Anwendungen zu realisieren, die darauf beruhen die Objekte in dynamischen und großen Umgebung zu kennen. Beispielsweise kann eine Blindenführung entwickelt werden. Das semantische Verständnis der Umgebung kann genutzt werden, um einen Menschen durch einen Raum zu führen. Sowohl geometrische als auch semantische Informationen werden dabei verwendet, um eine Umgebung zu beschreiben und Anweisungen des Nutzers zu interpretieren.
 
 Eine andere Anwendungsmöglichkeit wäre ein künstliches fotografisches Gedächtnis. Wenn semantische Informationen und insbesondere Objekte der Umgebung über einen längeren Zeitraum gespeichert werden, kann eine AR Anwendung wiedergeben, wann ein bestimmtes Objekt zuletzt gesehen wurde und in welchem Kontext es sich befunden hat. Erweitert können periodisch Fotos der Umgebung aufgenommen werden und angezeigt werden, wenn der Nutzer nach Objekten fragt, die dort abgebildet sind.
-
-
-
-%Auch das Feld der Robotik profitiert von einem semantischen Verständnis der Umgebung. Beispielsweise können Roboter aufgrund von semantischen Informationen in einer Umgebung Navigieren, oder Anweisungen interpretieren.
-%Für Autonomous Driving sind semantische Informationen ebenfalls sehr wichtig. Sie sind die Grundlage für alle Entscheidungen, die die Kontrolle des Autos angehen. Durch Objekterkennung können beispielsweise In diesem Falle ist es jedoch wichtig, das die ...
-
-%Mit der größeren Menge an semantischen Informationen in einer Szene ist esJe mehr semantische Informationen eine Szene hat, umso mehr Labels hat sie. Daher ist es wichtig, besonders wenn meherere neuronale Netzwerke eingesetzt werden, View Management zu betreiben. Die Objekte müssen lesbar und eindeutig mit den Labels beschriftet sein, damit ein menschlicher Nutzer sehen kann welche Informationen das System hat.  
-
-%noch besser verbesserungen ilustrierst, zb. im Bereich view management, wo das ganze weiter genutzt werden kann (Leute mit seh-hilfen), etc.
